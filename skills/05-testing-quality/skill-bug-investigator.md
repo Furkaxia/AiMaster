@@ -18,7 +18,7 @@
 
 ### 2. REGRESSION LOCK
 - Fix the bug surgically. Run the reproduction test to prove it now passes.
-- Commit the test case alongside the fix as a permanent regression lock.
+- Bundle the reproduction test case alongside the fix in the changeset as a permanent regression lock. Never execute `git commit` or `git push` autonomously; preserve the verified changeset and create Git commits strictly when requested by the user.
 
 ---
 

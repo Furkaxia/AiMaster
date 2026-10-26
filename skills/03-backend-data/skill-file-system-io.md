@@ -16,8 +16,9 @@
 
 ---
 
-### 2. PATH TRAVERSAL DEFENSE
-- Strictly sanitize user-supplied file paths: Use `path.resolve` and verify that target paths start with the designated base directory. Block all `..` escape sequences.
+### 2. PATH TRAVERSAL & SYMLINK DEFENSE
+- **Relative Path Boundary Check:** Never rely on naive prefix checks (`targetPath.startsWith(baseDir)`) which mistakenly allow sibling directories with matching prefixes (e.g., `/data-secret` matching `/data`). Calculate `const rel = path.relative(baseDir, targetPath)` and enforce `!rel.startsWith('..') && !path.isAbsolute(rel)`.
+- **Symlink Resolution:** Resolve real filesystem paths using `fs.realpathSync` to prevent symlink traversal escaping the designated root sandbox. Strip all null-byte (`\0`) sequences.
 
 ---
 

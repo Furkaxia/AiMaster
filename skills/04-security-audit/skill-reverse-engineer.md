@@ -10,14 +10,16 @@
 
 ## 1. CORE PRINCIPLES & DOMAIN STANDARDS
 
-### 1. PAYLOAD DISSECTION & HAR ANALYSIS
-- Inspect API traffic via HTTP Archive (HAR), Burp Suite, or Wireshark captures. Identify authentication handshake patterns, CSRF tokens, and nonces.
-- Reconstruct undocumented wire formats into formal TypeScript/Python interface definitions.
+### 1. AUTHORIZATION, LEGAL SCOPE & COMPLIANCE GATE
+- **Strict Scope Boundaries:** Conduct reverse engineering activities strictly within authorized vulnerability disclosure programs (VDP), penetration testing engagements with explicit written Rules of Engagement (RoE), owned systems, or compliance security audits.
+- **Prohibitions:** Never analyze, disassemble, or tamper with third-party digital rights management (DRM), commercial license enforcement routines, copyright protection systems, or unauthorized proprietary software.
 
 ---
 
-### 2. BOUNDARY TESTING & INTEGRITY
-- Verify client-side signature algorithms and reverse-engineer proprietary hashing routines to evaluate tamper resistance.
+### 2. PAYLOAD DISSECTION & PROTOCOL RECONSTRUCTION
+- Inspect network traffic via HAR, Burp Suite, or Wireshark captures. Identify authentication handshake patterns, CSRF tokens, nonces, and session tokens.
+- Reconstruct undocumented wire formats into formal, type-safe TypeScript/Python interface definitions.
+- Verify message integrity checks and test client-side tamper resistance responsibly.
 
 ---
 

@@ -2,15 +2,14 @@
 
 <div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Skills Count](https://img.shields.io/badge/Skills-80%20Production%20Ready-emerald.svg?style=for-the-badge)](skills/README.md)
-[![Core Standards](https://img.shields.io/badge/Core%20Standards-10%20Bulletproof%20Rules-indigo.svg?style=for-the-badge)](RulesAI.md)
-[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#-token-ekonomisi-benchmark)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/M[![Skills Count](https://img.shields.io/badge/Skills-80%20Uzman%20Yetkinlik-emerald.svg?style=for-the-badge)](skills/README.md)
+[![Core Standards](https://img.shields.io/badge/Core%20Standards-10%20Temel%20Kural-indigo.svg?style=for-the-badge)](RulesAI.md)
+[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#-tahmini-token-ekonomisi-ve-verimlilik)
 [![Multi-Agent](https://img.shields.io/badge/Architecture-Agentic%20Boardroom-purple.svg?style=for-the-badge)](agent-boardroom-protocol-ai.md)
 
 **Yapay zeka ajanlarını (Claude, Cursor, Gemini, Windsurf, ChatGPT) kontrolsüz halüsinasyon gören spagetti kod üreticileri olmaktan çıkarıp, Staff Engineer disiplininde çalışan otonom bir mühendislik konseyine dönüştüren kurumsal işletim sistemi.**
 
-[🌍 English Documentation](README.md) • [Hızlı Başlangıç (30 Sn)](#-30-saniyede-hizli-baslangic) • [Boardroom Protokolü](#-agentic-boardroom-nasil-calisir) • [Yetenek Kataloğu (80 Skill)](skills/README.md)
+[🌍 English Documentation](README.md) • [Kurulum Seçenekleri](#-hizli-baslangic-ve-kurulum-secenekleri) • [Boardroom Protokolü](#-agentic-boardroom-nasil-calisir) • [Yetenek Kataloğu (80 Skill)](skills/README.md)
 
 </div>
 
@@ -41,10 +40,10 @@ AIMASTER bu problemi iki köklü devrimle çözer:
                                        │
             ┌──────────────────────────┴──────────────────────────┐
             ▼                                                     ▼
-   [BASİT / BUG-FIX]                                     [KOMPLEKS / YENİ ÖZELLİK]
+   [BASİT / SYNTAX-TYPO]                                 [KOMPLEKS / YENİ ÖZELLİK]
             │                                                     │
-    [FAST-TRACK MODU]                                    [BOARDROOM KONSEYİ]
-(Doğrudan Cerrahi Müdahale)                             (KOD YAZMADAN MÜZAKERE)
+     [FAST-TRACK MODU]                                    [BOARDROOM KONSEYİ]
+ (Doğrudan Cerrahi Müdahale)                             (KOD YAZMADAN MÜZAKERE)
                                                                   │
                                         ┌─────────────────────────┼─────────────────────────┐
                                         ▼                         ▼                         ▼
@@ -53,31 +52,31 @@ AIMASTER bu problemi iki köklü devrimle çözer:
                                         │                         │                         │
                                         └─────────────────────────┼─────────────────────────┘
                                                                   ▼
-                                                       [KONSENSÜS BLUEPRINT]
+                                                        [KONSENSÜS BLUEPRINT]
                                                                   │
                                                                   ▼
-                                                      [STAFF SYNTHESIZER]
-                                                 (Konsensüs Spec & Cerrahi Diff)
+                                                       [STAFF SYNTHESIZER]
+                                                  (Konsensüs Spec & Cerrahi Diff)
 ```
 
 1. **On-Demand Asgari Skill Kümesi:** 80 skill hafızaya aynı anda yığılmaz. Sadece o anda yapılan işin kapsamına giren asgari yeterli küme (genellikle 1 ila 3 on-demand skill) cerrahi olarak çağrılır.
-2. **Agentic Boardroom (Mikro-Ajan Konseyi):** Kod yazılmadan önce 3 mikro-rol (UX Architect, UI Systems, Red-Team Auditor) 30 satırlık bir Micro-Spec üzerinde uzlaşır. Kötü tasarım kararları ve maddi zafiyetler kod yazılmadan elenir.
-3. **One-Shot Synthesis:** Uzlaşı sağlandıktan sonra kod tek hamlede, cerrahi mikro-diff disipliniyle doğrulanmış olarak üretilir.
+2. **Agentic Boardroom (4 Rol Konseyi):** Kod yazılmadan önce 3 uzman rol ([UX-ARCHITECT], [UI-SYSTEMS], [RED-TEAM-AUDITOR]), [STAFF-SYNTHESIZER] liderliğinde 30–50 satırlık yapılandırılmış bir Micro-Spec üzerinde uzlaşır. Kötü tasarım kararları ve maddi zafiyetler kod yazılmadan elenir.
+3. **One-Shot İcra ve Doğrulama Kapıları:** Uzlaşı sağlandıktan sonra kod tek hamlede cerrahi mikro-diff ile üretilir; ardından test, build, lint ve güvenlik doğrulama kapıları çalıştırılır.
 4. **English-Pivot Cross-Lingual Akıl Yürütme:** Kullanıcı Türkçe talep verse dahi, model arka planda talebi endüstri standardı teknik İngilizce spesifikasyona derler; kuralları en katı şekilde işletir, yerel varlıkları (VKN, TCKN, İyzico) korur ve kullanıcıya doğrudan Türkçe yanıt verir.
 5. **Context Window Checkpoint & Handoff:** Uzun süren oturumlarda bağlam şiştiğinde sistem `.handoff/session-state.md` üreterek yeni sohbete sıfır token israfı ve tam hafızayla geçiş sağlar.
 
 ---
 
-## 📊 TOKEN EKONOMİSİ BENCHMARK
+## 📊 TAHMİNİ TOKEN EKONOMİSİ VE VERİMLİLİK
 
-| Metrik | Geleneksel Monolitik Model | AIMASTER Boardroom Modeli | Avantaj |
+| Aşama | Geleneksel Monolitik Model | AIMASTER Boardroom Modeli | Avantaj |
 | :--- | :--- | :--- | :--- |
-| **Bağlam Kirliliği** | 1000'lerce kural baştan yüklenir (~40K token) | 1 ana kural + asgari skill (~3K token) | **~%90 Daha Hafif** |
-| **Ön Hazırlık Maliyeti** | Körlemesine 2500 satır kod yazımı (~15K token) | 30 satırlık Micro-Spec müzakeresi (~1.5K token) | **~%90 Tasarruf** |
-| **Hata Düzeltme Turları** | 4 - 8 tur tekrar tekrar kod üretimi (~80K+ token) | 0 - 1 tur cerrahi rötuş (~5K token) | **Ciddi Azalma** |
-| **Toplam Görev Maliyeti** | **~120.000 - 180.000 Token** | **~18,000 - 25,000 Token** | **🔥 %85'e Varan Net Tasarruf** |
+| **Sistem Kuralları & Standartlar** | Monolitik kurallar baştan yüklenir (~40K–50K token) | Merkez anayasa + 1–3 asgari skill (~8K–12K token) | **~%75 Daha Hafif** |
+| **Ön Hazırlık & Planlama** | Körlemesine dosya yazımı (~15K token) | 30–50 satırlık yapılandırılmış Micro-Spec (~1K token) | **~%90 Tasarruf** |
+| **Hata Düzeltme & Rework** | 4–8 tur tekrar tekrar dosya üretimi (~80K+ token) | Cerrahi mikro-diff ve doğrulama kapıları (~5K token) | **Ciddi Azalma** |
+| **Toplam Görev Ayak İzi** | **~135.000 – 165.000 Token** | **~15.000 – 20.000 Token** | **🔥 %85'e Varan Net Tasarruf** |
 
-> *Not:* Veriler, AI IDE ortamlarında (Cursor, Windsurf, Claude Projects) yürütülen çok dosyalı karmaşık mühendislik kıyaslama senaryolarındaki gözlemleri yansıtır. Gerçek verimlilik kazanımları modelin bağlam önbelleklemesine (prompt caching) ve depo karmaşıklığına bağlıdır. AIMASTER, IDE istemcileri için anayasal bir prompt/talimat çerçevesidir.
+> *Not:* Veriler, çok dosyalı özellik geliştirmelerinde bayt-token oranına dayalı tahmini modelleri yansıtır. AIMASTER, IDE istemcileri için anayasal bir prompt/talimat çerçevesidir. Gerçek tüketim depo ölçeğine ve bağlam önbelleklemesine göre değişir.
 
 ---
 
@@ -95,18 +94,40 @@ Karmaşık bir istek geldiğinde sistem tek bir çıktı bloğunda 4 rolü konu�
 - State İhtiyacı: `currency: "USD" | "EUR"`, `monthlyVolume: number`
 
 **[UI-SYSTEMS]**
-- Palet (Kurumsal Slate): 60% `#090A0F`, 30% `#151823` (Border `#2D334A`), 10% `#6366F1` (Indigo CTA)
+- Palet (Kurumsal Slate): 60% `#090A0F`, 30% `#151823` (Border `#4B5563`), 10% `#6366F1` (Indigo CTA)
 - Tipografi: Outfit (Display) + Inter (Body)
 - Spacing: 8pt grid, 200ms ease-out transitions
 
 **[RED-TEAM-AUDITOR] ⚠️ ZORUNLU İTİRAZLAR (Anti-Rubber-Stamping)**
 1. *Mobil UX Hatası:* Bento grid mobilde tek sütuna düşürülmezse içerik sıkışır; `grid-cols-1 md:grid-cols-3` zorunlu.
 2. *Paket Şişkinliği:* İnteraktif hesaplayıcı için harici grafik kütüphanesi önerilmiş; bundle şişer, pure SVG gauge kullanılmalı.
-3. *Erişilebilirlik:* Fiyatlandırma kartındaki secondary buton kontrastı 2.9:1 kalmış; metin rengi `#E2E8F0` yapılmalı.
+3. *Erişilebilirlik:* Fiyatlandırma kartındaki secondary buton metin rengi `#E2E8F0` (14,37:1 WCAG AAA) olarak belirlendi; border ise `#4B5563` (3,2:1 WCAG 1.4.11 UI bileşen kontrastı) seviyesine yükseltildi.
 
 **[STAFF-SYNTHESIZER] 🎯 NİHAİ KONSENSÜS BLUEPRINT**
 - Harici grafik kütüphanesi elendi (Pure SVG Gauge).
 - Mobil grid ve kontrast itirazları kabul edildi.
+- **Statü:** CERRAHİ İCRA VE DOĞRULAMA İÇİN ONAYLANDI.
+```
+
+---
+
+## ⚡ HIZLI BAŞLANGIÇ VE KURULUM SEÇENEKLERİ
+
+İhtiyacınıza uygun kurulum yöntemini seçin:
+
+### Seçenek A: Tam Çerçeve Modu (Önerilen)
+80 skill'lik yönlendirme kataloğunu ve tam mimari standartları projenize dahil edin:
+1. `RulesAI.md` dosyasını ve `skills/` klasörünü projenizin kök dizinine kopyalayın.
+2. Kullandığınız geliştirme ortamına ait hazır şablonu `integrations/` altından seçin:
+   - **Cursor:** [`integrations/cursor/.cursorrules`](integrations/cursor/.cursorrules) dosyasını proje kök dizinine kopyalayın.
+   - **Claude Projects:** [`integrations/claude/claude-project-prompt.md`](integrations/claude/claude-project-prompt.md) içeriğini Project Instructions alanına yapıştırın.
+   - **Google Antigravity & Gemini CLI:** [`integrations/antigravity/GEMINI.md`](integrations/antigravity/GEMINI.md) dosyasını proje kök dizinine yerleştirin.
+   - **Windsurf:** [`integrations/windsurf/.windsurfrules`](integrations/windsurf/.windsurfrules) dosyasını kök dizine ekleyin.
+   - **GitHub Copilot:** [`integrations/copilot/copilot-instructions.md`](integrations/copilot/copilot-instructions.md) dosyasını `.github/copilot-instructions.md` yoluna kopyalayın.
+   - **ChatGPT:** [`integrations/chatgpt/custom-instructions.md`](integrations/chatgpt/custom-instructions.md) metnini Custom Instructions alanına yapıştırın.
+
+### Seçenek B: Sıfır-Kurulum Tekil Şablon Modu
+Projenizde `skills/` klasörünü saklamak istemiyorsanız, yalnızca ilgili IDE preset'ini (örneğin `.cursorrules`, `GEMINI.md` veya Claude prompt'u) projenize ekleyin. Şablon tek başına Boardroom protokolünü, Fast-Track kurallarını ve kalite bariyerlerini otonom bir Staff Engineer olarak çalıştırır; ihtiyaç anında merkezi repoya referans verir.rast itirazları kabul edildi.
 - **Statü:** İCRA İÇİN ONAYLANDI.
 ```
 

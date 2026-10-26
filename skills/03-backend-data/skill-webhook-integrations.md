@@ -12,6 +12,7 @@
 
 ### 1. HMAC SIGNATURE VERIFICATION & REPLAY WINDOW
 - Verify incoming webhook cryptographic HMAC signatures using raw request body buffers and constant-time equality (`crypto.timingSafeEqual`) to eliminate timing side-channel attacks.
+- **Buffer Length Safety:** Always check `sigBuffer.length === expectedBuffer.length` prior to calling `crypto.timingSafeEqual`. If lengths differ, immediately reject the signature without invoking the comparison to prevent unhandled `RangeError` process crashes.
 - Reject requests where the timestamp header deviates by more than **5 minutes** from current server time to prevent replay attacks.
 
 ---

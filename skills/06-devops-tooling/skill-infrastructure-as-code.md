@@ -10,9 +10,11 @@
 
 ## 1. CORE PRINCIPLES & DOMAIN STANDARDS
 
-### 1. REMOTE STATE & DISTRIBUTED LOCKING
-- Store Terraform state remotely (AWS S3, GCS, Terraform Cloud) with server-side encryption and distributed locking (DynamoDB).
-- Never commit `.tfstate` or `.tfstate.backup` files to version control.
+### 1. REMOTE STATE & BACKEND-SPECIFIC LOCKING
+- **AWS S3:** Use modern S3 native state locking via `use_lockfile = true` (Terraform 1.10+ and OpenTofu) with S3 versioning and KMS/AES-256 server-side encryption. Treat DynamoDB state locking strictly as legacy transition.
+- **Google Cloud Storage (GCS):** Rely on native GCS object versioning and atomic precondition locking.
+- **Terraform Cloud / Spacelift:** Rely on managed remote workspace execution and state lock management.
+- **State Security:** Never commit `.tfstate` or `.tfstate.backup` files to version control. Keep sensitive outputs (`sensitive = true`) protected.
 
 ---
 

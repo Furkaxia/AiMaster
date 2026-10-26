@@ -148,43 +148,62 @@ if (diskSkills.length === 80) {
   logFail(`Toplam skill sayısı 80 olmalıdır! Diskteki sayı: ${diskSkills.length}`);
 }
 
+const CATEGORY_NAMES = {
+  '01-architecture-planning': 'Architecture, Planning & System Design',
+  '02-frontend-ui': 'Frontend, UI/UX & Design Standards',
+  '03-backend-data': 'Backend, Database & Data Processing',
+  '04-security-audit': 'Security, Privacy & Vulnerability Auditing',
+  '05-testing-quality': 'Testing, Quality Assurance & Bug Investigation',
+  '06-devops-tooling': 'DevOps, Automation & Infrastructure Tooling',
+  '07-code-craft': 'Modern Code Craft, Refactoring & Platform Tools'
+};
+
 // RulesAI.md catalog check
 const rulesAiPath = path.join(ROOT_DIR, 'RulesAI.md');
-const rulesAiContent = fs.readFileSync(rulesAiPath, 'utf8');
-const rulesMatches = rulesAiContent.match(/skills\/[a-zA-Z0-9_-]+\/skill-[a-zA-Z0-9_-]+\.md/g) || [];
-const uniqueRulesSkills = Array.from(new Set(rulesMatches));
-
-checksCount++;
-if (uniqueRulesSkills.length === 80) {
-  logPass(`RulesAI.md içinde 80/80 skill kataloglanmış durumda`);
+let rulesAiContent = '';
+if (!fs.existsSync(rulesAiPath)) {
+  logFail('RulesAI.md dosyası EKSİK!');
 } else {
-  logFail(`RulesAI.md içinde 80 skill olmalı! Bulunan: ${uniqueRulesSkills.length}`);
+  rulesAiContent = fs.readFileSync(rulesAiPath, 'utf8');
+  const rulesMatches = rulesAiContent.match(/skills\/[a-zA-Z0-9_-]+\/skill-[a-zA-Z0-9_-]+\.md/g) || [];
+  const uniqueRulesSkills = Array.from(new Set(rulesMatches));
+
+  checksCount++;
+  if (uniqueRulesSkills.length === 80) {
+    logPass(`RulesAI.md içinde 80/80 skill kataloglanmış durumda`);
+  } else {
+    logFail(`RulesAI.md içinde 80 skill olmalı! Bulunan: ${uniqueRulesSkills.length}`);
+  }
 }
 
-// Check every disk skill is cataloged in RulesAI.md and skills/README.md
+// Check every disk skill is cataloged in RulesAI.md and skills/README.md via exact path
 const skillsReadmePath = path.join(skillsDir, 'README.md');
-const skillsReadmeContent = fs.readFileSync(skillsReadmePath, 'utf8');
+let skillsReadmeContent = '';
+if (!fs.existsSync(skillsReadmePath)) {
+  logFail('skills/README.md dosyası EKSİK!');
+} else {
+  skillsReadmeContent = fs.readFileSync(skillsReadmePath, 'utf8');
+}
 
 let orphanSkillsCount = 0;
 diskSkills.forEach(skillRelPath => {
-  if (!rulesAiContent.includes(skillRelPath)) {
+  if (rulesAiContent && !rulesAiContent.includes(skillRelPath)) {
     logFail(`Kayıtsız/Orphan Skill bulundu (RulesAI.md'de yok): ${skillRelPath}`);
     orphanSkillsCount++;
   }
-  const filename = path.basename(skillRelPath);
-  if (!skillsReadmeContent.includes(filename)) {
-    logFail(`Kayıtsız/Orphan Skill bulundu (skills/README.md'de yok): ${skillRelPath}`);
+  if (skillsReadmeContent && !skillsReadmeContent.includes(skillRelPath)) {
+    logFail(`Kayıtsız/Orphan Skill bulundu (skills/README.md'de tam yol yok): ${skillRelPath}`);
     orphanSkillsCount++;
   }
 });
 
 checksCount++;
-if (orphanSkillsCount === 0) {
-  logPass('Hiçbir kayıtsız/sahipsiz (orphan) skill bulunmuyor; katalog %100 senkronize');
+if (orphanSkillsCount === 0 && rulesAiContent && skillsReadmeContent) {
+  logPass('Hiçbir kayıtsız/sahipsiz (orphan) skill bulunmuyor; tam dosya yollarıyla katalog %100 senkronize');
 }
 
 // -----------------------------------------------------------------------------
-// 3. Semantic Metadata & Contract Linter across all 80 skills
+// 3. Semantic Metadata & Architecture Contract Linter (80 Skills)
 // -----------------------------------------------------------------------------
 console.log('\n📌 3. Semantik Sözleşme ve Metadata Linter Taraması (80 Skill)...');
 const footerPath = path.join(skillsDir, '_shared-skill-footer.md');
@@ -201,33 +220,50 @@ diskSkills.forEach(skillRelPath => {
   const content = fs.readFileSync(fullPath, 'utf8');
   const lines = content.split('\n').length;
   const bytes = Buffer.byteLength(content, 'utf8');
+  const category = skillRelPath.split('/')[1];
 
-  // 1. File Location assertion
-  if (!content.includes('File Location:') || !content.includes(skillRelPath)) {
-    logFail(`Geçersiz File Location başlığı: ${skillRelPath}`);
+  // 1. File Location assertion (exact relative path)
+  const locMatch = content.match(/> \*\*File Location:\*\*\s*`([^`]+)`/);
+  if (!locMatch || locMatch[1].trim() !== skillRelPath) {
+    logFail(`Geçersiz File Location başlığı: ${skillRelPath} (Bulunan: ${locMatch ? locMatch[1] : 'Yok'})`);
     semanticViolations++;
   }
   // 2. Role Definition assertion
-  if (!content.includes('Role Definition:')) {
-    logFail(`Eksik Role Definition metadata: ${skillRelPath}`);
+  const roleMatch = content.match(/> \*\*Role Definition:\*\*\s*(.+)/);
+  if (!roleMatch || roleMatch[1].trim().length < 5) {
+    logFail(`Eksik veya geçersiz Role Definition metadata: ${skillRelPath}`);
     semanticViolations++;
   }
   // 3. Core Mission assertion
-  if (!content.includes('Core Mission:')) {
-    logFail(`Eksik Core Mission metadata: ${skillRelPath}`);
+  const missionMatch = content.match(/> \*\*Core Mission:\*\*\s*(.+)/);
+  if (!missionMatch || missionMatch[1].trim().length < 10) {
+    logFail(`Eksik veya geçersiz Core Mission metadata: ${skillRelPath}`);
     semanticViolations++;
   }
-  // 4. Core Principles assertion
+  // 4. Category assertion (must match category folder mapping)
+  const catMatch = content.match(/> \*\*Category:\*\*\s*(.+)/);
+  const expectedCatName = CATEGORY_NAMES[category];
+  if (!catMatch || !catMatch[1].trim().includes(expectedCatName)) {
+    logFail(`Geçersiz Category metadata: ${skillRelPath} (Beklenen: "${expectedCatName}", Bulunan: "${catMatch ? catMatch[1].trim() : 'Yok'}")`);
+    semanticViolations++;
+  }
+  // 5. Standard Compliance assertion
+  const compMatch = content.match(/> \*\*Standard Compliance:\*\*\s*(.+)/);
+  if (!compMatch || !compMatch[1].trim().includes('AIMASTER Architectural OS Model')) {
+    logFail(`Eksik veya geçersiz Standard Compliance metadata: ${skillRelPath}`);
+    semanticViolations++;
+  }
+  // 6. Core Principles assertion
   if (!content.includes('CORE PRINCIPLES')) {
     logFail(`Eksik CORE PRINCIPLES bölümü: ${skillRelPath}`);
     semanticViolations++;
   }
-  // 5. Shared Footer reference assertion
+  // 7. Shared Footer reference assertion
   if (!content.includes('_shared-skill-footer.md')) {
     logFail(`Footer referansı eksik: ${skillRelPath}`);
     semanticViolations++;
   }
-  // 6. Non-empty / non-stub assertion (>15 lines, >500 bytes)
+  // 8. Non-empty / non-stub assertion (>15 lines, >500 bytes)
   if (lines < 15 || bytes < 500) {
     logFail(`Yetersiz içerik / stub skill: ${skillRelPath} (${lines} satır, ${bytes} bayt)`);
     semanticViolations++;
@@ -236,7 +272,7 @@ diskSkills.forEach(skillRelPath => {
 
 checksCount++;
 if (semanticViolations === 0) {
-  logPass('80 skill dosyasının tamamı semantik sözleşmeyi ve metadata standardını %100 karşılıyor');
+  logPass('80 skill dosyasının tamamı semantik sözleşmeyi (Role, Mission, Category, Compliance, Principles) %100 karşılıyor');
 }
 
 // -----------------------------------------------------------------------------
@@ -405,7 +441,18 @@ console.log('\n📌 8. Git Hijyeni ve .gitignore Güvenlik Doğrulaması...');
 const gitignorePath = path.join(ROOT_DIR, '.gitignore');
 if (fs.existsSync(gitignorePath)) {
   const gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
-  const requiredIgnores = ['.env', '.handoff/', 'ai-log.local.md'];
+  const requiredIgnores = [
+    '.env',
+    '.env.*',
+    '*.pem',
+    '*.key',
+    '*.p12',
+    '*.pfx',
+    'id_rsa',
+    '*.log',
+    '.handoff/',
+    'ai-log.local.md'
+  ];
 
   requiredIgnores.forEach(item => {
     checksCount++;

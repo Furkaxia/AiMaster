@@ -68,20 +68,21 @@ AI ajanının sonsuz düzeltme döngüsüne girmesini engelleyen kesin kurallar:
 
 Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonrası), kullanıcının kendi değişikliklerini ve çalışma dizinini korumak için şu katı adımlar izlenir:
 
-1. **Oturum Öncesi Durum Tespiti (Pre-Flight Snapshot):**
-   - Ajan bir dosyaya dokunmadan önce o dosyanın mevcut Git index (`staged`) ve çalışma ağacı (`unstaged`) durumunu inceler.
-   - Dosyada kullanıcının önceden sahnelediği (staged) değişiklikler varsa, ajan kendi müdahalesini dosya bazında değil, **hunk / patch bazında izole eder**.
-2. **Cerrahi Restorasyon & Patch Geri Alma (Hunk-Level Reversion):**
-   - Dosyada sadece ajanın değişiklikleri varsa: `git restore <dosya>` (ve gerekirse `git restore --staged <dosya>`).
-   - Dosyada kullanıcının önceden sahnelediği kodlar mevcutsa: `git restore --staged` dosya bazında çalıştırılarak kullanıcının stage durumu bozulmaz; ajanın ürettiği diff ters patch (`reverse patch`) veya in-memory diff geri alma ile cerrahi olarak çıkarılır.
-   - Ajan tarafından yeni oluşturulmuş hatalı dosyalar varsa: Yalnızca ajanın oluşturduğu o spesifik dosyalar silinir.
+1. **Oturum Öncesi Durum Tespiti (Pre-Flight Baseline):**
+   - Ajan herhangi bir dosyayı değiştirmeden önce çalışma dizininin ve Git index'inin anlık durumunu tespit eder (`git status --porcelain`, `git diff --staged`).
+   - Kullanıcının önceden sahnelediği (`staged`) veya çalışma dizininde bıraktığı değişiklikler "kullanıcı alanı" olarak işaretlenir ve dokunulmaz kabul edilir.
+2. **Cerrahi Restorasyon & Hunk Bazlı Geri Alma (Hunk-Level Reversion):**
+   - ⛔ **Karışık dosyalarda `git restore --staged <dosya>` çalıştırmak KESİNLİKLE YASAKTIR.** Çünkü `git restore --staged`, dosyanın tüm index içeriğini doğrudan `HEAD` üzerinden sıfırlayarak kullanıcının önceden stage ettiği değişiklikleri yok eder.
+   - **Yalnızca Ajanın Değiştirdiği Temiz Dosyalar:** Dosyada kullanıcının hiçbir önceki değişikliği yoksa, dosya `git restore <dosya>` (ve henüz stage edilmemişse) ile güvenle geri alınabilir.
+   - **Kullanıcı ile Ajanın Karışık Olduğu Dosyalar:** Geri alma işlemi asla dosya seviyesinde yapılmaz; yalnızca ajanın eklediği spesifik diff blokları ters patch (`git apply -R` veya satır bazlı geri alma) ile cerrahi olarak geri çekilir. Kullanıcının index (`staged`) ve working-tree durumu el değmeden korunur.
+   - **Ajanın Yeni Oluşturduğu Dosyalar:** Yalnızca ajanın oturumda oluşturduğu spesifik dosyalar silinir; kullanıcının mevcut dosyalarına dokunulmaz.
    - ⛔ **Körlemesine `git reset --hard` veya `git clean -fd` çalıştırmak KESİNLİKLE YASAKTIR.**
 3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**
-   - Eğer ajanın müdahale ettiği dosyada kullanıcının önceden yaptığı kaydedilmemiş düzenlemeler varsa, dosya körlemesine ezilmez; kullanıcıya diff gösterilip eskalasyon yapılır.
+   - Eğer ajanın dokunmak istediği kod bloğunda kullanıcının kaydedilmemiş bir değişikliği ile çakışma varsa, dosya ezilmez; durulur ve kullanıcıya diff gösterilerek onay istenir.
 4. **Kurtarma Doğrulaması:**
-   - Geri alma işlemi sonrasında derleme (`build`) veya sözdizimi kontrolü çalıştırılarak projenin önceki kararlı çalışma durumuna döndüğü doğrulanır.
+   - Geri alma sonrasında derleme (`build`) veya sözdizimi doğrulaması çalıştırılarak sistemin önceki kararlı baseline durumuna döndüğü doğrulanır.
 5. **Kök Neden & Eskalasyon Raporu:**
-   - Geri alınan spesifik dosyalar, başarısız olan 3 denemenin teknik kök nedeni ve kullanıcıya önerilen mimari alternatif tek blokta raporlanır.
+   - Geri alınan değişiklikler, başarısız denemelerin kök nedeni ve kullanıcıya sunulan alternatif çözümler açıkça raporlanır.
 
 ---
 

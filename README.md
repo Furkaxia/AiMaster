@@ -2,15 +2,14 @@
 
 <div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Skills Count](https://img.shields.io/badge/Skills-80%20Production%20Ready-emerald.svg?style=for-the-badge)](skills/README.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/M[![Skills Count](https://img.shields.io/badge/Skills-80%20Specialized%20Skills-emerald.svg?style=for-the-badge)](skills/README.md)
 [![Core Standards](https://img.shields.io/badge/Core%20Standards-10%20Bulletproof%20Rules-indigo.svg?style=for-the-badge)](RulesAI.md)
-[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#-token-economics-benchmark)
+[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#-estimated-token-economics--efficiency)
 [![Multi-Agent](https://img.shields.io/badge/Architecture-Agentic%20Boardroom-purple.svg?style=for-the-badge)](agent-boardroom-protocol-ai.md)
 
 **An enterprise AI Agent operating system that transforms AI coding models (Claude, Cursor, Gemini, Windsurf, ChatGPT) from hallucinating spaghetti-code generators into an autonomous, Staff-Engineer-level engineering council.**
 
-[🇹🇷 Türkçe Dokümantasyon](README.tr.md) • [Quickstart (30s)](#-quickstart-in-30-seconds) • [How Boardroom Works](#-how-the-agentic-boardroom-works) • [Skills Directory (80 Skills)](skills/README.md)
+[🇹🇷 Türkçe Dokümantasyon](README.tr.md) • [Quickstart Options](#-quickstart--deployment-options) • [How Boardroom Works](#-how-the-agentic-boardroom-works) • [Skills Directory (80 Skills)](skills/README.md)
 
 </div>
 
@@ -41,7 +40,7 @@ AIMASTER solves this with two foundational pillars:
                                        │
             ┌──────────────────────────┴──────────────────────────┐
             ▼                                                     ▼
-   [SIMPLE / BUG-FIX]                                    [COMPLEX / NEW SYSTEM]
+   [SIMPLE / SYNTAX-TYPO]                                [COMPLEX / NEW SYSTEM]
             │                                                     │
      [FAST-TRACK MODE]                                     [BOARDROOM COUNCIL]
   (Surgical Edit Directly)                               (NO CODE WRITTEN YET)
@@ -61,22 +60,22 @@ AIMASTER solves this with two foundational pillars:
 ```
 
 1. **On-Demand Minimal Skill Sets:** All 80 skills are modularized. The agent dynamically loads only the minimal relevant skill set (typically 1-3 on-demand skills strictly within task scope) rather than dumping thousands of rules into context.
-2. **Agentic Boardroom (Micro-Agent Council):** Before touching code, 3 micro-personas (UX Architect, UI Systems, Red-Team Critic) debate a 30-line Micro-Spec. Bad design decisions and material vulnerabilities are eliminated before burning code tokens.
-3. **One-Shot Synthesis:** Once consensus is signed, code is generated in a single pass with verified requirements and surgical micro-diffs.
+2. **Agentic Boardroom (4-Role Council):** Before touching code, 3 specialist personas ([UX-ARCHITECT], [UI-SYSTEMS], [RED-TEAM-AUDITOR]) debate a 30–50 line Micro-Spec synthesized by [STAFF-SYNTHESIZER]. Bad design decisions and material vulnerabilities are eliminated before burning code tokens.
+3. **One-Shot Synthesis with Verification Gates:** Once consensus is signed, code is generated in a single pass with verified requirements and surgical micro-diffs, followed by mandatory test, build, lint, and security verification.
 4. **English-Pivot Cross-Lingual Reasoning:** No matter what language the user speaks in (e.g., Turkish), the model deconstructs the request into rigorous technical English internally, enforces strict engineering standards, preserves local domain entities (e.g., VKN, TCKN, Iyzico), and delivers back in the user's native tongue.
 
 ---
 
-## 📊 TOKEN ECONOMICS BENCHMARK
+## 📊 ESTIMATED TOKEN ECONOMICS & EFFICIENCY
 
-| Metric | Monolithic Prompts | AIMASTER Boardroom | Advantage |
+| Phase | Monolithic Prompts | AIMASTER Architecture | Advantage |
 | :--- | :--- | :--- | :--- |
-| **Context Pollution** | 1000s of rules loaded upfront (~40K tokens) | 1 core rule + minimal skills (~3K tokens) | **~90% Lighter** |
-| **Pre-Flight Cost** | Blindly writing 2500 lines of code (~15K tokens) | 30-line Micro-Spec debate (~1.5K tokens) | **~90% Cheaper** |
-| **Debugging Cycles** | 4 - 8 rounds of regenerating files (~80K+ tokens) | 0 - 1 rounds of surgical micro-diffs (~5K tokens) | **Drastically Reduced** |
-| **Total Task Cost** | **~120,000 - 180,000 Tokens** | **~18,000 - 25,000 Tokens** | **🔥 Up to 85% Net Savings** |
+| **System Rules & Standards** | Monolithic prompt dump (~40K–50K tokens) | Central OS + 1–3 skills on demand (~8K–12K tokens) | **~75% Lighter** |
+| **Pre-Flight Spec** | Blind code generation (~15K tokens) | Structured 30–50 line Micro-Spec (~1K tokens) | **~90% Cheaper** |
+| **Rework & Bug Debugging** | 4–8 cycles of regenerating entire files (~80K+ tokens) | Surgical diffs with verification gates (~5K tokens) | **Drastically Reduced** |
+| **Total Task Footprint** | **~135,000 – 165,000 Tokens** | **~15,000 – 20,000 Tokens** | **🔥 Up to 85% Net Savings** |
 
-> *Note:* Figures reflect comparative token consumption observed during complex multi-file engineering tasks in internal AI IDE evaluation benchmarks (Cursor, Windsurf, Claude Projects). Actual efficiency gains vary depending on model context caching and repository complexity. AIMASTER operates as a prompt-level constitutional instruction framework.
+> *Note:* Figures represent estimated comparative token consumption for typical multi-file features based on byte-to-token ratios. AIMASTER operates as a prompt-level constitutional instruction framework. Actual consumption varies based on codebase scale, file count, and model context caching.
 
 ---
 
@@ -94,29 +93,40 @@ When receiving a complex instruction, the system convenes the 4 specialized role
 - State Requirements: `billingInterval: "monthly" | "yearly"`, `activeTier: string`
 
 **[UI-SYSTEMS]**
-- Corporate Slate Palette: 60% `#090A0F`, 30% `#151823` (Border `#2D334A`), 10% `#4F46E5` (Electric Indigo CTA)
+- Corporate Slate Palette: 60% `#090A0F`, 30% `#151823` (Border `#4B5563`), 10% `#4F46E5` (Electric Indigo CTA)
 - Typography: Outfit (Display) + Inter (Body)
 - Transitions: 150ms cubic-bezier ease-out
 
 **[RED-TEAM-AUDITOR] ⚠️ MANDATORY COUNTER-OBJECTIONS (Anti-Rubber-Stamping)**
 1. *Mobile UX Flaw:* The Bento grid will cramp on viewports < 768px; must enforce `grid-cols-1 md:grid-cols-3`.
 2. *Package Bloat:* UI proposed an external charting library for the calculator; banned to prevent bundle bloat. Pure SVG gauge required.
-3. *Accessibility (A11y):* Secondary button contrast on `#151823` is 2.8:1; text color adjusted to `#E2E8F0` (4.6:1 WCAG AA).
+3. *Accessibility (A11y):* Secondary button text on `#151823` adjusted to `#E2E8F0` (14.37:1 WCAG AAA), border upgraded to `#4B5563` (3.2:1 WCAG 1.4.11 UI component contrast).
 
 **[STAFF-SYNTHESIZER] 🎯 FINAL CONSENSUS BLUEPRINT**
 - External charting library discarded (Pure SVG Gauge locked).
 - Mobile responsive grid and A11y contrast updates approved.
-- **Status:** APPROVED FOR ONE-SHOT CODE GENERATION.
+- **Status:** APPROVED FOR SURGICAL CODE GENERATION & VERIFICATION.
 ```
 
 ---
 
-## ⚡ QUICKSTART IN 30 SECONDS
+## ⚡ QUICKSTART & DEPLOYMENT OPTIONS
 
-Pick your preferred AI IDE / client and drop in the pre-configured preset from `integrations/`:
+Choose the installation mode that best fits your workflow:
 
-### 1. Cursor AI Users
-Copy [`integrations/cursor/.cursorrules`](integrations/cursor/.cursorrules) to your project root. That's it!
+### Option A: Full Framework Mode (Recommended)
+Unlock the full 80-skill routing catalog and architectural standards in your codebase:
+1. Copy or submodule `RulesAI.md` and the `skills/` directory into your project root.
+2. Add your tool-specific preset from `integrations/`:
+   - **Cursor:** Copy [`integrations/cursor/.cursorrules`](integrations/cursor/.cursorrules) to project root.
+   - **Claude Projects:** Paste [`integrations/claude/claude-project-prompt.md`](integrations/claude/claude-project-prompt.md) into Project Instructions.
+   - **Google Antigravity & Gemini CLI:** Place [`integrations/antigravity/GEMINI.md`](integrations/antigravity/GEMINI.md) in project root.
+   - **Windsurf:** Copy [`integrations/windsurf/.windsurfrules`](integrations/windsurf/.windsurfrules) to project root.
+   - **GitHub Copilot:** Copy [`integrations/copilot/copilot-instructions.md`](integrations/copilot/copilot-instructions.md) to `.github/copilot-instructions.md`.
+   - **ChatGPT:** Paste [`integrations/chatgpt/custom-instructions.md`](integrations/chatgpt/custom-instructions.md) into Custom Instructions.
+
+### Option B: Zero-Config Standalone Preset
+If you do not want `skills/` stored inside your local repository, simply copy the single preset file (e.g. `.cursorrules`, `GEMINI.md`, or Claude instructions). The preset acts as an autonomous Staff Engineer guardrail with built-in Boardroom protocol, Fast-Track rules, and quality gates, consulting central skills remotely when needed.ons/cursor/.cursorrules) to your project root. That's it!
 
 ### 2. Claude Projects Users
 Create a new Project on Claude.ai and paste the contents of [`integrations/claude/claude-project-prompt.md`](integrations/claude/claude-project-prompt.md) into the **Project Instructions** box.

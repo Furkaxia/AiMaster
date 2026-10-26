@@ -28,7 +28,10 @@
     "url": "https://github.com/Furkaxia/AiMaster.git"
   },
   "bugs": {
-    "url": "https://github.com/Furkaxia/aimaster/issues"
+    "url": "https://github.com/Furkaxia/AiMaster/issues"
   },
-  "homepage": "https://github.com/Furkaxia/aimaster#readme"
+  "homepage": "https://github.com/Furkaxia/AiMaster#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
