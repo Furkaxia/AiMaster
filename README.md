@@ -127,19 +127,7 @@ Unlock the full 80-skill routing catalog and architectural standards in your cod
    - **ChatGPT:** Paste [`integrations/chatgpt/custom-instructions.md`](integrations/chatgpt/custom-instructions.md) into Custom Instructions.
 
 ### Option B: Zero-Config Standalone Preset
-If you do not want `skills/` stored inside your local repository, simply copy the single preset file (e.g. `.cursorrules`, `GEMINI.md`, or Claude instructions). The preset acts as an autonomous Staff Engineer guardrail with built-in Boardroom protocol, Fast-Track rules, and quality gates, consulting central skills remotely when needed.ons/cursor/.cursorrules) to your project root. That's it!
-
-### 2. Claude Projects Users
-Create a new Project on Claude.ai and paste the contents of [`integrations/claude/claude-project-prompt.md`](integrations/claude/claude-project-prompt.md) into the **Project Instructions** box.
-
-### 3. Google Antigravity & Gemini CLI
-Place [`integrations/antigravity/GEMINI.md`](integrations/antigravity/GEMINI.md) in your project root or workspace.
-
-### 4. Windsurf Users
-Copy [`integrations/windsurf/.windsurfrules`](integrations/windsurf/.windsurfrules) into your project root.
-
-### 5. ChatGPT Users
-Paste [`integrations/chatgpt/custom-instructions.md`](integrations/chatgpt/custom-instructions.md) into ChatGPT Settings -> Custom Instructions.
+If you do not want `skills/` stored inside your local repository, simply copy the single preset file matching your editor (e.g. `integrations/cursor/.cursorrules`, `integrations/antigravity/GEMINI.md`, or `integrations/claude/claude-project-prompt.md`) directly into your project. The preset acts as an autonomous Staff Engineer guardrail with built-in Boardroom protocol, Fast-Track rules, and quality gates, consulting central standards remotely when needed.
 
 ---
 

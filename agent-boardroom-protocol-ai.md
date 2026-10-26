@@ -2,7 +2,7 @@
 
 > **Dosya Konumu:** `agent-boardroom-protocol-ai.md`  
 > **Rol Tanımı:** Çoklu Ajan Müzakere, Karşıt Denetim ve Token-Tasarruflu Konsensüs Protokolü  
-> **Temel Amaç:** Karmaşık görevlerde tekil ajanın kararsızlığını ve halüsinasyonunu engellemek; uzmanlaşmış mikro-roller arasında kodsuz bir ön müzakere yürüterek tek seferde (one-shot) sıfır hatalı üretim sağlamak.
+> **Temel Amaç:** Karmaşık görevlerde tekil ajanın kararsızlığını ve halüsinasyonunu engellemek; uzmanlaşmış mikro-roller arasında kodsuz bir ön müzakere yürüterek tek seferde (one-shot) üretimde hata, kaskat arıza ve token israfı olasılığını en aza indirmeyi hedeflemek.
 
 ---
 

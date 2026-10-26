@@ -64,7 +64,7 @@ AIMASTER bu problemi iki köklü devrimle çözer:
 2. **Agentic Boardroom (4 Rol Konseyi):** Kod yazılmadan önce 3 uzman rol ([UX-ARCHITECT], [UI-SYSTEMS], [RED-TEAM-AUDITOR]), [STAFF-SYNTHESIZER] liderliğinde 30–50 satırlık yapılandırılmış bir Micro-Spec üzerinde uzlaşır. Kötü tasarım kararları ve maddi zafiyetler kod yazılmadan elenir.
 3. **One-Shot İcra ve Doğrulama Kapıları:** Uzlaşı sağlandıktan sonra kod tek hamlede cerrahi mikro-diff ile üretilir; ardından test, build, lint ve güvenlik doğrulama kapıları çalıştırılır.
 4. **English-Pivot Cross-Lingual Akıl Yürütme:** Kullanıcı Türkçe talep verse dahi, model arka planda talebi endüstri standardı teknik İngilizce spesifikasyona derler; kuralları en katı şekilde işletir, yerel varlıkları (VKN, TCKN, İyzico) korur ve kullanıcıya doğrudan Türkçe yanıt verir.
-5. **Context Window Checkpoint & Handoff:** Uzun süren oturumlarda bağlam şiştiğinde sistem `.handoff/session-state.md` üreterek yeni sohbete sıfır token israfı ve tam hafızayla geçiş sağlar.
+5. **Context Window Checkpoint & Handoff:** Uzun süren oturumlarda bağlam şiştiğinde sistem `.handoff/session-state.md` üreterek yeni sohbete minimum token israfı ve kritik mimari hafıza aktarımıyla geçiş sağlar.
 
 ---
 
@@ -128,30 +128,7 @@ Karmaşık bir istek geldiğinde sistem tek bir çıktı bloğunda 4 rolü konu�
    - **ChatGPT:** [`integrations/chatgpt/custom-instructions.md`](integrations/chatgpt/custom-instructions.md) metnini Custom Instructions alanına yapıştırın.
 
 ### Seçenek B: Sıfır-Kurulum Tekil Şablon Modu
-Projenizde `skills/` klasörünü saklamak istemiyorsanız, yalnızca ilgili IDE preset'ini (örneğin `.cursorrules`, `GEMINI.md` veya Claude prompt'u) projenize ekleyin. Şablon tek başına Boardroom protokolünü, Fast-Track kurallarını ve kalite bariyerlerini otonom bir Staff Engineer olarak çalıştırır; ihtiyaç anında merkezi repoya referans verir.rast itirazları kabul edildi.
-- **Statü:** İCRA İÇİN ONAYLANDI.
-```
-
----
-
-## ⚡ 30 SANİYEDE HIZLI BAŞLANGIÇ
-
-Hangi aracı kullanıyorsanız ilgili şablonu kopyalayın:
-
-### 1. Cursor Kullanıcıları
-Projenizin kök dizinine [`integrations/cursor/.cursorrules`](integrations/cursor/.cursorrules) dosyasını kopyalayın. Hepsi bu!
-
-### 2. Claude Projects Kullanıcıları
-Claude.ai üzerinde yeni bir Project açın. Project Instructions alanına [`integrations/claude/claude-project-prompt.md`](integrations/claude/claude-project-prompt.md) dosyasının içeriğini yapıştırın.
-
-### 3. Google Antigravity & Gemini CLI
-Proje kök dizinine [`integrations/antigravity/GEMINI.md`](integrations/antigravity/GEMINI.md) dosyasını yerleştirin.
-
-### 4. Windsurf Kullanıcıları
-Proje kök dizinine [`integrations/windsurf/.windsurfrules`](integrations/windsurf/.windsurfrules) dosyasını ekleyin.
-
-### 5. ChatGPT Kullanıcıları
-Custom Instructions alanına [`integrations/chatgpt/custom-instructions.md`](integrations/chatgpt/custom-instructions.md) metnini yapıştırın.
+Projenizde `skills/` klasörünü yerel olarak barındırmak istemiyorsanız, yalnızca kullandığınız araca ait tek bir şablon dosyasını (örneğin `integrations/cursor/.cursorrules`, `integrations/antigravity/GEMINI.md` veya `integrations/claude/claude-project-prompt.md`) projenizin kök dizinine ekleyin. Şablon tek başına Boardroom protokolünü, Fast-Track kurallarını ve kalite bariyerlerini otonom bir Staff Engineer disiplininde çalıştırır; ihtiyaç duyulduğunda merkezi standartlara başvurur.
 
 ---
 

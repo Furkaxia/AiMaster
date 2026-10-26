@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * ==============================================================================
- * AIMASTER ADVERSARIAL INTEGRITY FIXTURE TEST SUITE (v2.0)
+ * AIMASTER ADVERSARIAL INTEGRITY FIXTURE TEST SUITE (v2.2)
  * ==============================================================================
  * Proves that the integrity linter is not a rubber-stamp:
  * 1. Establishes a POSITIVE BASELINE to prove a clean mock passes with exit code 0.
@@ -18,12 +18,15 @@
  * 0. Positive Baseline: Clean repository fixture passes (exit code 0)
  * 1. Missing Role Definition metadata
  * 2. Corrupted / Mismatched Category metadata
- * 3. Missing Standard Compliance metadata
- * 4. Alien / Unexpected Category directory under skills/
- * 5. Orphan / Unregistered skill on disk (not in RulesAI / README catalog)
- * 6. Broken Markdown relative link / missing anchor heading
- * 7. Preset Drift (Missing constitutional security precedence clause)
- * 8. Cross-platform path leak detection (/home, /Users, C:\Users)
+ * 3. Strict Metadata Equality (trailing text on Category)
+ * 4. Missing Standard Compliance metadata
+ * 5. Alien / Unexpected Category directory under skills/
+ * 6. Isolated Orphan Skill (strict catalog path disparity without changing total count 80)
+ * 7. Broken Relative Markdown File Link
+ * 8. Broken Heading Anchor on Existing File (#non-existent-header-anchor)
+ * 9. Preset Drift (Missing constitutional security precedence clause)
+ * 10. Cross-platform path leak detection (Linux /home, macOS /Users, Windows C:\Users)
+ * 11. Unbalanced Markdown Code Fence Detection (odd number of ```)
  * ==============================================================================
  */
 
@@ -46,7 +49,7 @@ function logTestFail(name, reason) {
 }
 
 console.log('\n🧪 ======================================================');
-console.log('   AIMASTER ADVERSARIAL LINTER FIXTURE TESTS (v2.0)');
+console.log('   AIMASTER ADVERSARIAL LINTER FIXTURE TESTS (v2.2)');
 console.log('======================================================\n');
 
 // Create isolated unique temp directory inside os.tmpdir()
@@ -156,112 +159,168 @@ try {
   }
 
   // ---------------------------------------------------------------------------
-  // Test 3: Missing Standard Compliance Metadata
+  // Test 3: Strict Metadata Equality (Trailing noise / extra text on Category)
   // ---------------------------------------------------------------------------
   totalTests++;
-  const test3Dir = path.join(TEMP_SANDBOX, 't3-bad-compliance');
+  const test3Dir = path.join(TEMP_SANDBOX, 't3-strict-category');
   createMockRepo(test3Dir);
-  const skill3 = path.join(test3Dir, 'skills', '03-backend-data', 'skill-api.md');
+  const skill3 = path.join(test3Dir, 'skills', '01-architecture-planning', 'skill-software-architecture.md');
   let skill3Content = fs.readFileSync(skill3, 'utf8');
-  skill3Content = skill3Content.replace(/> \*\*Standard Compliance:\*\*.+/, '> **Standard Compliance:** Arbitrary Custom Standard');
+  skill3Content = skill3Content.replace(
+    /> \*\*Category:\*\*.+/,
+    '> **Category:** Architecture, Planning & System Design - Extra Noise'
+  );
   fs.writeFileSync(skill3, skill3Content, 'utf8');
 
   const res3 = runLinterOnFixture(test3Dir);
-  if (res3.exitCode !== 0 && res3.output.includes('Eksik veya geçersiz Standard Compliance metadata')) {
-    logTestPass('NEGATIVE: Linter anayasal şemaya uymayan Standard Compliance alanını yakaladı ve FAIL verdi');
+  if (res3.exitCode !== 0 && res3.output.includes('Geçersiz Category metadata')) {
+    logTestPass('NEGATIVE: Linter Category alanına eklenmiş fazlalık metni (strict match ihlali) yakaladı ve FAIL verdi');
   } else {
-    logTestFail('Test 3', 'Bozuk Standard Compliance tespit edilemedi!');
+    logTestFail('Test 3', 'Strict metadata kontrolü fazlalık metni yakalayamadı!');
   }
 
   // ---------------------------------------------------------------------------
-  // Test 4: Alien / Unexpected Category Directory under skills/
+  // Test 4: Missing Standard Compliance Metadata
   // ---------------------------------------------------------------------------
   totalTests++;
-  const test4Dir = path.join(TEMP_SANDBOX, 't4-alien-category');
+  const test4Dir = path.join(TEMP_SANDBOX, 't4-bad-compliance');
   createMockRepo(test4Dir);
-  const alienDir = path.join(test4Dir, 'skills', '08-alien-category');
+  const skill4 = path.join(test4Dir, 'skills', '03-backend-data', 'skill-api.md');
+  let skill4Content = fs.readFileSync(skill4, 'utf8');
+  skill4Content = skill4Content.replace(/> \*\*Standard Compliance:\*\*.+/, '> **Standard Compliance:** Arbitrary Custom Standard');
+  fs.writeFileSync(skill4, skill4Content, 'utf8');
+
+  const res4 = runLinterOnFixture(test4Dir);
+  if (res4.exitCode !== 0 && res4.output.includes('Eksik veya geçersiz Standard Compliance metadata')) {
+    logTestPass('NEGATIVE: Linter anayasal şemaya uymayan Standard Compliance alanını yakaladı ve FAIL verdi');
+  } else {
+    logTestFail('Test 4', 'Bozuk Standard Compliance tespit edilemedi!');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Test 5: Alien / Unexpected Category Directory under skills/
+  // ---------------------------------------------------------------------------
+  totalTests++;
+  const test5Dir = path.join(TEMP_SANDBOX, 't5-alien-category');
+  createMockRepo(test5Dir);
+  const alienDir = path.join(test5Dir, 'skills', '08-alien-category');
   fs.mkdirSync(alienDir, { recursive: true });
   fs.writeFileSync(path.join(alienDir, 'skill-rogue.md'), '# Rogue Skill\n', 'utf8');
 
-  const res4 = runLinterOnFixture(test4Dir);
-  if (res4.exitCode !== 0 && res4.output.includes('Beklenmeyen / Yabancı kategori dizini tespit edildi')) {
+  const res5 = runLinterOnFixture(test5Dir);
+  if (res5.exitCode !== 0 && res5.output.includes('Beklenmeyen / Yabancı kategori dizini tespit edildi')) {
     logTestPass('NEGATIVE: Linter şema dışı yabancı kategori dizinini yakaladı ve FAIL verdi');
   } else {
-    logTestFail('Test 4', 'Yabancı kategori dizini tespit edilemedi!');
+    logTestFail('Test 5', 'Yabancı kategori dizini tespit edilemedi!');
   }
 
   // ---------------------------------------------------------------------------
-  // Test 5: Orphan / Unregistered Skill on Disk
+  // Test 6: Strict Orphan Skill Detection (80 skills on disk, but 1 path differs from catalog)
   // ---------------------------------------------------------------------------
   totalTests++;
-  const test5Dir = path.join(TEMP_SANDBOX, 't5-orphan-skill');
-  createMockRepo(test5Dir);
-  // Add a 10th skill into 01-architecture-planning which is NOT in RulesAI.md or README.md
-  const orphanSkillPath = path.join(test5Dir, 'skills', '01-architecture-planning', 'skill-unregistered-ghost.md');
-  const validSampleContent = fs.readFileSync(
-    path.join(test5Dir, 'skills', '01-architecture-planning', 'skill-software-architecture.md'),
-    'utf8'
-  ).replace('skill-software-architecture.md', 'skill-unregistered-ghost.md');
-  fs.writeFileSync(orphanSkillPath, validSampleContent, 'utf8');
-
-  const res5 = runLinterOnFixture(test5Dir);
-  if (
-    res5.exitCode !== 0 &&
-    (res5.output.includes('Kayıtsız/Orphan Skill bulundu') || res5.output.includes('Toplam skill sayısı 80 olmalıdır'))
-  ) {
-    logTestPass('NEGATIVE: Linter diskte bulunan fakat anayasada kayıtlı olmayan orphan skill dosyasını yakaladı ve FAIL verdi');
-  } else {
-    logTestFail('Test 5', 'Orphan / Kayıtsız skill tespit edilemedi!');
-  }
-
-  // ---------------------------------------------------------------------------
-  // Test 6: Broken Relative Markdown Link / Missing Anchor Heading
-  // ---------------------------------------------------------------------------
-  totalTests++;
-  const test6Dir = path.join(TEMP_SANDBOX, 't6-broken-link');
+  const test6Dir = path.join(TEMP_SANDBOX, 't6-strict-orphan');
   createMockRepo(test6Dir);
-  const testReadme = path.join(test6Dir, 'README.md');
-  fs.appendFileSync(testReadme, '\n\n[Kırık Link Testi](non_existent_folder/fake_file.md)\n');
+  // Rename a skill on disk without changing total count (remains 80 skills)
+  const oldPath = path.join(test6Dir, 'skills', '01-architecture-planning', 'skill-software-architecture.md');
+  const newPath = path.join(test6Dir, 'skills', '01-architecture-planning', 'skill-custom-untracked.md');
+  let fileContent = fs.readFileSync(oldPath, 'utf8');
+  fileContent = fileContent.replace('skill-software-architecture.md', 'skill-custom-untracked.md');
+  fs.writeFileSync(newPath, fileContent, 'utf8');
+  fs.unlinkSync(oldPath);
 
   const res6 = runLinterOnFixture(test6Dir);
-  if (res6.exitCode !== 0 && res6.output.includes('Kırık bağıl link bulundu')) {
-    logTestPass('NEGATIVE: Linter kırık markdown bağlantısını yakaladı ve FAIL verdi');
+  if (res6.exitCode !== 0 && res6.output.includes('Kayıtsız/Orphan Skill bulundu')) {
+    logTestPass('NEGATIVE: Linter sayı 80 iken dahi katalogda yer almayan orphan skill yolunu doğrudan yakaladı ve FAIL verdi');
   } else {
-    logTestFail('Test 6', 'Kırık link tespit edilemedi!');
+    logTestFail('Test 6', 'Katalog uyumsuzluğu doğrudan orphan olarak tespit edilemedi!');
   }
 
   // ---------------------------------------------------------------------------
-  // Test 7: Preset Drift (Missing Security Precedence Clause)
+  // Test 7: Broken Relative Markdown Link (Non-existent file)
   // ---------------------------------------------------------------------------
   totalTests++;
-  const test7Dir = path.join(TEMP_SANDBOX, 't7-preset-drift');
+  const test7Dir = path.join(TEMP_SANDBOX, 't7-broken-file-link');
   createMockRepo(test7Dir);
-  const cursorrulesPath = path.join(test7Dir, 'integrations', 'cursor', '.cursorrules');
+  const testReadme = path.join(test7Dir, 'README.md');
+  fs.appendFileSync(testReadme, '\n\n[Kırık Dosya Linki](non_existent_folder/fake_file.md)\n');
+
+  const res7 = runLinterOnFixture(test7Dir);
+  if (res7.exitCode !== 0 && res7.output.includes('Kırık bağıl link bulundu')) {
+    logTestPass('NEGATIVE: Linter kırık dosya bağlantısını yakaladı ve FAIL verdi');
+  } else {
+    logTestFail('Test 7', 'Kırık dosya linki tespit edilemedi!');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Test 8: Broken Heading Anchor Link on Existing Markdown File
+  // ---------------------------------------------------------------------------
+  totalTests++;
+  const test8Dir = path.join(TEMP_SANDBOX, 't8-broken-anchor');
+  createMockRepo(test8Dir);
+  const testReadme8 = path.join(test8Dir, 'README.md');
+  fs.appendFileSync(testReadme8, '\n\n[Mevcut Dosya Var Olmayan Başlık](README.md#this-heading-definitely-does-not-exist)\n');
+
+  const res8 = runLinterOnFixture(test8Dir);
+  if (
+    res8.exitCode !== 0 &&
+    (res8.output.includes('Kırık başlık anchor linki') || res8.output.includes('Kırık dosya-içi anchor linki'))
+  ) {
+    logTestPass('NEGATIVE: Linter var olan dosyada bulunmayan başlık anchor bağlantısını yakaladı ve FAIL verdi');
+  } else {
+    logTestFail('Test 8', 'Kırık başlık anchor linki tespit edilemedi!');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Test 9: Preset Drift (Missing Security Precedence Clause)
+  // ---------------------------------------------------------------------------
+  totalTests++;
+  const test9Dir = path.join(TEMP_SANDBOX, 't9-preset-drift');
+  createMockRepo(test9Dir);
+  const cursorrulesPath = path.join(test9Dir, 'integrations', 'cursor', '.cursorrules');
   let cursorContent = fs.readFileSync(cursorrulesPath, 'utf8');
   cursorContent = cursorContent.replace(/NEVER overrides.+/, 'can override security');
   fs.writeFileSync(cursorrulesPath, cursorContent, 'utf8');
 
-  const res7 = runLinterOnFixture(test7Dir);
-  if (res7.exitCode !== 0 && res7.output.includes('Güvenlik üstünlüğü kuralı EKSİK')) {
+  const res9 = runLinterOnFixture(test9Dir);
+  if (res9.exitCode !== 0 && res9.output.includes('Güvenlik üstünlüğü kuralı EKSİK')) {
     logTestPass('NEGATIVE: Linter preset içindeki anayasal güvenlik kuralı eksikliğini yakaladı ve FAIL verdi');
   } else {
-    logTestFail('Test 7', 'Preset kural sapması tespit edilemedi!');
+    logTestFail('Test 9', 'Preset kural sapması tespit edilemedi!');
   }
 
   // ---------------------------------------------------------------------------
-  // Test 8: Cross-Platform Path Leak Detection (/home/*)
+  // Test 10: Cross-Platform Path Leak Detection (Linux, macOS, Windows)
   // ---------------------------------------------------------------------------
   totalTests++;
-  const test8Dir = path.join(TEMP_SANDBOX, 't8-path-leak');
-  createMockRepo(test8Dir);
-  const contributingPath = path.join(test8Dir, 'CONTRIBUTING.md');
-  fs.appendFileSync(contributingPath, '\n\nPath leak: /home/developer/secrets.json\n');
+  const test10Dir = path.join(TEMP_SANDBOX, 't10-path-leak');
+  createMockRepo(test10Dir);
+  const contributingPath = path.join(test10Dir, 'CONTRIBUTING.md');
+  fs.appendFileSync(
+    contributingPath,
+    '\n\nPath leak 1: /home/developer/secrets.json\nPath leak 2: /Users/developer/secrets.json\nPath leak 3: C:\\Users\\Developer\\secrets.json\n'
+  );
 
-  const res8 = runLinterOnFixture(test8Dir);
-  if (res8.exitCode !== 0 && res8.output.includes('Mutlak yol sızıntısı bulundu')) {
-    logTestPass('NEGATIVE: Linter Linux/macOS/Windows mutlak yol sızıntısını yakaladı ve FAIL verdi');
+  const res10 = runLinterOnFixture(test10Dir);
+  if (res10.exitCode !== 0 && res10.output.includes('Mutlak yol sızıntısı bulundu')) {
+    logTestPass('NEGATIVE: Linter çoklu platform (Linux/macOS/Windows) mutlak yol sızıntısını yakaladı ve FAIL verdi');
   } else {
-    logTestFail('Test 8', 'Mutlak yol sızıntısı tespit edilemedi!');
+    logTestFail('Test 10', 'Çoklu platform mutlak yol sızıntısı tespit edilemedi!');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Test 11: Unbalanced Markdown Code Fence Detection (odd number of ```)
+  // ---------------------------------------------------------------------------
+  totalTests++;
+  const test11Dir = path.join(TEMP_SANDBOX, 't11-unbalanced-code-fence');
+  createMockRepo(test11Dir);
+  const securityPath = path.join(test11Dir, 'SECURITY.md');
+  fs.appendFileSync(securityPath, '\n\n```javascript\nconst a = 1;\n// unclosed fence without ending triple backticks\n');
+
+  const res11 = runLinterOnFixture(test11Dir);
+  if (res11.exitCode !== 0 && res11.output.includes('Dengesiz kod çiti')) {
+    logTestPass('NEGATIVE: Linter kapanmamış/dengesiz Markdown kod çitini yakaladı ve FAIL verdi');
+  } else {
+    logTestFail('Test 11', 'Dengesiz kod çiti tespit edilemedi!');
   }
 
 } finally {

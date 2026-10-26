@@ -84,8 +84,8 @@ Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonra
 3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**
    - Eğer ajanın dokunmak istediği kod bloğunda kullanıcının kaydedilmemiş bir değişikliği ile çakışma varsa, dosya ezilmez; durulur ve kullanıcıya diff gösterilerek onay istenir.
 4. **Kurtarma ve Kullanıcı Durumu Eşitlik Doğrulaması (State Equivalence Verification):**
-   - Geri alma sonrasında alınan güncel `git status --porcelain`, `git diff` ve `git diff --cached` çıktıları, oturum başında kaydedilen baseline snapshot içerikleriyle birebir karşılaştırılır.
-   - Başlangıç durumu ile geri alma sonrası durumun tam eşitliği kanıtlanmadan "kullanıcı durumu korundu" onayı verilemez.
+   - Geri alma sonrasında alınan güncel `git status --porcelain`, `git diff`, `git diff --cached` ve `git ls-files --others --exclude-standard` çıktıları, oturum başında kaydedilen 4 parçalı baseline snapshot içerikleriyle birebir (hash/diff bazında) karşılaştırılır.
+   - Başlangıç durumu ile geri alma sonrası durumun tam eşitliği kanıtlanmadan "kullanıcı durumu korundu" onayı verilemez; en ufak bir fark dahi kullanıcıya açıkça raporlanır.
    - Derleme (`build`) veya sözdizimi doğrulaması çalıştırılarak sistemin önceki kararlı baseline durumuna döndüğü teyit edilir.
 5. **Kök Neden & Eskalasyon Raporu:**
    - Geri alınan değişiklikler, başarısız denemelerin kök nedeni ve kullanıcıya sunulan alternatif çözümler açıkça raporlanır.

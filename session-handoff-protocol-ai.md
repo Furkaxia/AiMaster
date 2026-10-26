@@ -2,7 +2,7 @@
 
 > **Dosya Konumu:** `session-handoff-protocol-ai.md`  
 > **Rol Tanımı:** Oturum Sürekliliği, Bağlam Sıkıştırma (Compaction) ve Yeni Chat Geçiş Mimarı  
-> **Temel Amaç:** Uzun süren oturumlarda bağlam penceresi (context-window) dolduğunda yaşanan hafıza kaybını, dikkat erimesini (attention drift) ve fahiş token israfını engellemek; tüm oturumu tek bir `.handoff/session-state.md` dosyasına mühürleyip sıfır bilgi kaybıyla yeni sohbete aktarmak.
+> **Temel Amaç:** Uzun süren oturumlarda bağlam penceresi (context-window) dolduğunda yaşanan hafıza kaybını, dikkat erimesini (attention drift) ve fahiş token israfını engellemek; tüm oturumu tek bir `.handoff/session-state.md` dosyasına mühürleyip kritik mimari bağlamı ve karar geçmişini koruyarak yeni sohbete aktarmak.
 
 ---
 
@@ -13,7 +13,7 @@ Yapay zeka modelleri 50-100k+ tokenlık geçmişe ulaştığında:
 2. **Fahiş Maliyet:** Her küçük "şurayı düzelt" dediğinizde tüm 100k geçmiş tekrar işlenir ve token sayacı çıldırır.
 3. **Sapıtma ve Kararsızlık:** Model aynı dosyalarda çelişkili veya döngüsel düzeltmeler yapmaya başlar.
 
-**Çözüm:** Temiz bir hafızayla taze bir chat penceresine geçmek; ancak **projeyi nerede bıraktıysan santimine kadar hatırlayan bir "Masterprompt" ile.**
+**Çözüm:** Temiz bir hafızayla taze bir chat penceresine geçmek; ancak **projede alınan mimari kararları, tamamlanan aşamaları ve bir sonraki adımı eksiksiz özetleyen bir "Masterprompt" ile.**
 
 ---
 

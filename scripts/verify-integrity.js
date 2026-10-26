@@ -128,15 +128,20 @@ const skillsDir = path.join(ROOT_DIR, 'skills');
 function getSkillsOnDisk(dir) {
   let results = [];
   if (!fs.existsSync(dir)) return results;
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      results = results.concat(getSkillsOnDisk(fullPath));
-    } else if (entry.isFile() && entry.name.startsWith('skill-') && entry.name.endsWith('.md')) {
-      const rel = path.relative(ROOT_DIR, fullPath).replace(/\\/g, '/');
-      results.push(rel);
+  try {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        results = results.concat(getSkillsOnDisk(fullPath));
+      } else if (entry.isFile() && entry.name.startsWith('skill-') && entry.name.endsWith('.md')) {
+        const rel = path.relative(ROOT_DIR, fullPath).replace(/\\/g, '/');
+        results.push(rel);
+      }
     }
+  } catch (err) {
+    logFail(`Skill dizini okunamadı: ${dir} (${err.message})`);
+    scanErrorsCount++;
   }
   return results;
 }
@@ -290,17 +295,18 @@ diskSkills.forEach(skillRelPath => {
     logFail(`Eksik veya geçersiz Core Mission metadata: ${skillRelPath}`);
     semanticViolations++;
   }
-  // 4. Category assertion (must match category folder mapping)
+  // 4. Category assertion (must match category folder mapping EXACTLY)
   const catMatch = content.match(/> \*\*Category:\*\*[ \t]*(.+)/);
   const expectedCatName = CATEGORY_NAMES[category];
-  if (!catMatch || !catMatch[1].trim().includes(expectedCatName)) {
+  if (!catMatch || catMatch[1].trim() !== expectedCatName) {
     logFail(`Geçersiz Category metadata: ${skillRelPath} (Beklenen: "${expectedCatName}", Bulunan: "${catMatch ? catMatch[1].trim() : 'Yok'}")`);
     semanticViolations++;
   }
-  // 5. Standard Compliance assertion
+  // 5. Standard Compliance assertion (must match EXACTLY)
   const compMatch = content.match(/> \*\*Standard Compliance:\*\*[ \t]*(.+)/);
-  if (!compMatch || !compMatch[1].trim().includes('AIMASTER Architectural OS Model')) {
-    logFail(`Eksik veya geçersiz Standard Compliance metadata: ${skillRelPath}`);
+  const expectedCompliance = 'AIMASTER Architectural OS Model';
+  if (!compMatch || compMatch[1].trim() !== expectedCompliance) {
+    logFail(`Eksik veya geçersiz Standard Compliance metadata: ${skillRelPath} (Beklenen: "${expectedCompliance}", Bulunan: "${compMatch ? compMatch[1].trim() : 'Yok'}")`);
     semanticViolations++;
   }
   // 6. Core Principles assertion
@@ -322,7 +328,7 @@ diskSkills.forEach(skillRelPath => {
 
 checksCount++;
 if (semanticViolations === 0) {
-  logPass('80 skill dosyasının tamamı semantik sözleşmeyi (Role, Mission, Category, Compliance, Principles) %100 karşılıyor');
+  logPass('80 skill dosyasının tamamı zorunlu metadata ve yapısal sözleşme kontrollerini (Role, Mission, Category, Compliance, Principles) başarıyla karşıladı');
 }
 
 // -----------------------------------------------------------------------------
@@ -475,6 +481,14 @@ allMarkdownFiles.forEach(mdFile => {
   const content = fs.readFileSync(mdFile, 'utf8');
   const dir = path.dirname(mdFile);
   const relFile = path.relative(ROOT_DIR, mdFile).replace(/\\/g, '/');
+
+  // Assert balanced code fences (```)
+  const codeFenceMatches = content.match(/^[ \t]*```/gm) || [];
+  if (codeFenceMatches.length % 2 !== 0) {
+    logFail(`Dengesiz kod çiti (unbalanced code fence) tespit edildi: [${relFile}] (Çit sayısı tek: ${codeFenceMatches.length})`);
+    brokenLinksCount++;
+  }
+
   const links = extractAllMarkdownLinks(content);
 
   links.forEach(rawTarget => {
