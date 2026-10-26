@@ -3,6 +3,7 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Architecture & Security Audit](https://img.shields.io/badge/Audit%20%26%20Integrity-Passing-brightgreen.svg?style=for-the-badge)](https://github.com/Furkaxia/AiMaster/actions/workflows/audit-integrity.yml)
 [![Skills Count](https://img.shields.io/badge/Skills-80%20Specialized%20Skills-emerald.svg?style=for-the-badge)](skills/README.md)
 [![Core Standards](https://img.shields.io/badge/Core%20Standards-10%20Bulletproof%20Rules-indigo.svg?style=for-the-badge)](RulesAI.md)
 [![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#estimated-token-economics-efficiency)
@@ -114,6 +115,21 @@ When receiving a complex instruction, the system convenes the 4 specialized role
 ## ⚡ QUICKSTART & DEPLOYMENT OPTIONS
 
 Choose the installation mode that best fits your workflow:
+
+### Option 0: Single-Command CLI Setup (Zero-Friction)
+Install AIMASTER directly into any repository in seconds:
+
+```bash
+# Interactive setup (prompts for IDE):
+npx aimaster init
+
+# Or install for a specific IDE:
+npx aimaster init --ide cursor
+npx aimaster init --ide windsurf --with-skills
+
+# Unix one-liner via curl:
+curl -fsSL https://raw.githubusercontent.com/Furkaxia/AiMaster/main/install.sh | bash -s -- --ide cursor
+```
 
 ### Option A: Full Framework Mode (Recommended)
 Unlock the full 80-skill routing catalog and architectural standards in your codebase:

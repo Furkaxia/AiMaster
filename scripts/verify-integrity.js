@@ -775,6 +775,28 @@ PRESET_FILES.forEach(preset => {
   if (!hasContradiction) {
     logPass(`[${preset}] -> Semantik çelişki / Güvenlik bypass taraması temiz`);
   }
+
+  // 7. Top-Loaded Security Invariants check (First 1,500 characters)
+  checksCount++;
+  const headPrefix = content.slice(0, 1500);
+  if (
+    headPrefix.includes('TOP-LOADED SECURITY INVARIANTS') ||
+    headPrefix.includes('GÖMÜLÜ GÜVENLİK VE GÜVENİLMEZ İÇERİK KALKANI')
+  ) {
+    logPass(`[${preset}] -> Top-Loaded Security Invariants ilk 1.500 karakter içinde mevcut (Fail-Closed koruması)`);
+  } else {
+    logFail(`[${preset}] -> Top-Loaded Security Invariants ilk 1.500 karakter içinde BULUNAMADI!`);
+  }
+
+  // 8. Preset Character Budget & Truncation Guard
+  checksCount++;
+  if (preset.includes('windsurf') && content.length > 6000) {
+    logFail(`[${preset}] -> Windsurf Cascade kural sınırı aşıldı! (${content.length} > 6000 char)`);
+  } else if (content.length > 8000) {
+    logFail(`[${preset}] -> Preset boyut sınırı aşıldı! (${content.length} > 8000 char)`);
+  } else {
+    logPass(`[${preset}] -> Karakter bütçesi güvenli (${content.length} char)`);
+  }
 });
 
 // -----------------------------------------------------------------------------

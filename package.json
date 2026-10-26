@@ -2,10 +2,24 @@
   "name": "aimaster",
   "version": "1.0.0",
   "description": "The Constitutional Agentic Instruction Framework & Boardroom Architecture for AI IDEs",
+  "bin": {
+    "aimaster": "./bin/aimaster.js"
+  },
+  "files": [
+    "bin",
+    "integrations",
+    "skills",
+    "RulesAI.md",
+    "install.sh",
+    "README.md",
+    "README.tr.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "test": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js",
-    "verify": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js",
-    "test:fixtures": "node scripts/test-integrity-fixtures.js"
+    "test": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js",
+    "verify": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js",
+    "test:fixtures": "node scripts/test-integrity-fixtures.js",
+    "test:evals": "node scripts/test-adversarial-evals.js"
   },
   "keywords": [
     "ai",

@@ -22,4 +22,10 @@
 
 ---
 
+### 3. SECRET READ BAN & TERMINAL EXFILTRATION DEFENSE
+- **Strict Read Ban:** Absolute prohibition on reading raw `.env*`, `*.pem`, `*.key`, `credentials.json`, or `id_rsa` file contents into context or terminal output (`cat .env`, `printenv`, `env`, `Get-Content`).
+- **Key-Only Auditing:** Configuration audits must strictly operate against `.env.example` templates or key-only extractions (e.g., `cut -d= -f1 .env`) where secret values remain strictly masked.
+
+---
+
 > For common prohibitions, execution protocol, and QA checklist: see [_shared-skill-footer.md](../_shared-skill-footer.md)

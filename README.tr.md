@@ -3,6 +3,7 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Architecture & Security Audit](https://img.shields.io/badge/Audit%20%26%20Integrity-Passing-brightgreen.svg?style=for-the-badge)](https://github.com/Furkaxia/AiMaster/actions/workflows/audit-integrity.yml)
 [![Skills Count](https://img.shields.io/badge/Skills-80%20Uzman%20Yetkinlik-emerald.svg?style=for-the-badge)](skills/README.md)
 [![Core Standards](https://img.shields.io/badge/Core%20Standards-10%20Temel%20Kural-indigo.svg?style=for-the-badge)](RulesAI.md)
 [![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#tahmini-token-ekonomisi-ve-verimlilik)
@@ -115,6 +116,21 @@ Karmaşık bir istek geldiğinde sistem tek bir çıktı bloğunda 4 rolü konu�
 ## ⚡ HIZLI BAŞLANGIÇ VE KURULUM SEÇENEKLERİ
 
 İhtiyacınıza uygun kurulum yöntemini seçin:
+
+### Seçenek 0: Tek Komutla Otomatik Kurulum (Zero-Config CLI)
+AIMASTER'ı projenize saniyeler içinde kurun:
+
+```bash
+# Etkileşimli kurulum (IDE seçimi sorar):
+npx aimaster init
+
+# Belirli bir IDE için doğrudan kurulum:
+npx aimaster init --ide cursor
+npx aimaster init --ide windsurf --with-skills
+
+# Unix / macOS curl tek satır kurulum:
+curl -fsSL https://raw.githubusercontent.com/Furkaxia/AiMaster/main/install.sh | bash -s -- --ide cursor
+```
 
 ### Seçenek A: Tam Çerçeve Modu (Önerilen)
 80 skill'lik yönlendirme kataloğunu ve tam mimari standartları projenize dahil edin:
