@@ -1,0 +1,25 @@
+# SKILL: BUG INVESTIGATION & ROOT CAUSE ANALYSIS (skill-bug-investigator.md)
+
+> **File Location:** `skills/05-testing-quality/skill-bug-investigator.md`  
+> **Role Definition:** Principal Debugging Specialist & Root Cause Investigator  
+> **Core Mission:** Systematically reproduce anomalies, isolate root causes via the 5 Whys, and apply regression-proof fixes.  
+> **Category:** Testing, Quality Assurance & Bug Investigation  
+> **Standard Compliance:** AIMASTER Architectural OS Model
+
+---
+
+## 1. CORE PRINCIPLES & DOMAIN STANDARDS
+
+### 1. REPRODUCE BEFORE REMEDIATION
+- Never write fix code without first reproducing the defect via an isolated, failing automated test case.
+- Apply the **5 Whys Methodology** to uncover the systemic cause rather than treating superficial symptoms.
+
+---
+
+### 2. REGRESSION LOCK
+- Fix the bug surgically. Run the reproduction test to prove it now passes.
+- Commit the test case alongside the fix as a permanent regression lock.
+
+---
+
+> For common prohibitions, execution protocol, and QA checklist: see [_shared-skill-footer.md](../_shared-skill-footer.md)

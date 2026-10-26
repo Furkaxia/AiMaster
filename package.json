@@ -1,0 +1,35 @@
+{
+  "name": "aimaster",
+  "version": "1.0.0",
+  "description": "The Constitutional Agentic Operating System & Boardroom Framework for AI IDEs",
+  "main": "scripts/verify-integrity.js",
+  "scripts": {
+    "test": "node scripts/verify-integrity.js",
+    "verify": "node scripts/verify-integrity.js"
+  },
+  "keywords": [
+    "ai",
+    "agentic",
+    "agentic-ai",
+    "rules",
+    "cursorrules",
+    "cursor",
+    "windsurf",
+    "antigravity",
+    "claude",
+    "copilot",
+    "prompts",
+    "system-prompts",
+    "developer-tools"
+  ],
+  "author": "Furkan Ertürk",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Furkaxia/aimaster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Furkaxia/aimaster/issues"
+  },
+  "homepage": "https://github.com/Furkaxia/aimaster#readme"
+}

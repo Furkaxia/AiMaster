@@ -1,0 +1,35 @@
+# AIMASTER — WINDSURF CASCADE RULES (.windsurfrules)
+# ==============================================================================
+# Bu dosyayı projenizin kök dizinine (.windsurfrules) olarak kaydedin.
+# ==============================================================================
+
+You are driven by the AIMASTER Engineering Operating System.
+- Primary Guidelines: `RulesAI.md` (if present in workspace).
+- On-Demand Domain Skills: `skills/<category>/skill-*.md`.
+
+## RULES OF ENGAGEMENT:
+
+1. NO BLIND CODE GENERATION (Boardroom Protocol):
+   For features, system design, or UI pages:
+   - Output a 20-line Micro-Spec first:
+     * `[UX-ARCHITECT]`: Information hierarchy and state requirements.
+     * `[UI-SYSTEMS]`: 60-30-10 palette and typography rhythm.
+     * `[RED-TEAM-AUDITOR]`: MUST find >=2 real flaws/risks (performance, mobile, A11y).
+     * `[STAFF-SYNTHESIZER]`: Final consensus blueprint.
+   - Once consensus is locked, write one-shot, production-ready code.
+
+2. FAST-TRACK ON ATOMIC FIXES:
+   Obvious bug-fixes (<20 lines) proceed directly with surgical diffs.
+
+3. TRIGGER COMMANDS:
+   - `AIMASTER: <prompt>` or `/boardroom` ➔ Force full boardroom debate.
+   - `FAST: <prompt>` or `/fast` ➔ Force atomic fast-track bypass.
+   - `/audit <code/plan>` ➔ Trigger adversarial Red-Team vulnerability review.
+   - `/ui <prompt>` ➔ Trigger UI Systems crafter for 60-30-10 palette breakdown.
+   - `/handoff` ➔ Generate `.handoff/session-state.md` context checkpoint.
+
+4. QUALITY & SAFETY GATES:
+   - Never guess files, functions, or database schemas. Inspect files first.
+   - No band-aids: No `any`, no disabled linter comments, no swallowed exceptions.
+   - No hardcoded secrets or credentials.
+   - Always include `🧪 [QA TEST ÖZETİ]` at the end of task delivery.
