@@ -259,6 +259,11 @@ if (fs.existsSync(footerPath)) {
 let semanticViolations = 0;
 diskSkills.forEach(skillRelPath => {
   const fullPath = path.join(ROOT_DIR, skillRelPath);
+  if (!fs.existsSync(fullPath)) {
+    logFail(`Skill dosyası diskte bulunamadı: ${skillRelPath}`);
+    semanticViolations++;
+    return;
+  }
   const content = fs.readFileSync(fullPath, 'utf8');
   const lines = content.split('\n').length;
   const bytes = Buffer.byteLength(content, 'utf8');
@@ -335,6 +340,9 @@ if (fs.existsSync(readmeEnPath) && fs.existsSync(readmeTrPath)) {
   } else {
     logFail('README.md ile README.tr.md arasında skill sayısı uyumsuzluğu!');
   }
+} else {
+  checksCount++;
+  logFail('README.md veya README.tr.md dosyalarından biri eksik!');
 }
 
 // -----------------------------------------------------------------------------
