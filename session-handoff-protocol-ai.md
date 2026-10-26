@@ -1,96 +1,96 @@
 # SESSION HANDOFF & CONTEXT RECOVERY PROTOCOL (session-handoff-protocol-ai.md)
 
-> **Dosya Konumu:** `session-handoff-protocol-ai.md`  
-> **Rol Tanımı:** Oturum Sürekliliği, Bağlam Sıkıştırma (Compaction) ve Yeni Chat Geçiş Mimarı  
-> **Temel Amaç:** Uzun süren oturumlarda bağlam penceresi (context-window) dolduğunda yaşanan hafıza kaybını, dikkat erimesini (attention drift) ve fahiş token israfını engellemek; tüm oturumu tek bir `.handoff/session-state.md` dosyasına mühürleyip kritik mimari bağlamı ve karar geçmişini koruyarak yeni sohbete aktarmak.
+> **File Location:** `session-handoff-protocol-ai.md`  
+> **Role Definition:** Session Continuity, Context Compaction & Fresh-Session Transition Architect  
+> **Core Mission:** Eliminate attention drift, memory degradation, and catastrophic token waste during deep multi-turn engineering sessions by sealing active architectural state, cryptographic git baselines, and rejected approaches into `.handoff/session-state.md` for zero-loss recovery in fresh chat sessions.
 
 ---
 
-## 1. MİMARİ NEDEN & BAĞLAM ERİMESİ TEHLİKESİ
+## 1. ARCHITECTURAL RATIONALE & CONTEXT DRIFT DANGERS
 
-Yapay zeka modelleri 50-100k+ tokenlık geçmişe ulaştığında:
-1. **Lost-in-the-Middle:** Eski kararları ve kuralları unutmaya, halüsinasyon görmeye başlar.
-2. **Fahiş Maliyet:** Her küçük "şurayı düzelt" dediğinizde tüm 100k geçmiş tekrar işlenir ve token sayacı çıldırır.
-3. **Sapıtma ve Kararsızlık:** Model aynı dosyalarda çelişkili veya döngüsel düzeltmeler yapmaya başlar.
+When frontier LLMs reach 50k–100k+ token conversation histories:
+1. **Lost-in-the-Middle:** Past constraints and architectural decisions fade from attention, triggering hallucinations.
+2. **Exponential Token Burn:** Every minor prompt re-processes the entire 100k history, escalating cost and latency.
+3. **Instability & Regressions:** Models cycle through contradictory edits on the same files.
 
-**Çözüm:** Temiz bir hafızayla taze bir chat penceresine geçmek; ancak **projede alınan mimari kararları, tamamlanan aşamaları ve bir sonraki adımı eksiksiz özetleyen bir "Masterprompt" ile.**
-
----
-
-## 2. EL SIKIŞMA (HANDOFF) TETİKLEME KRİTERLERİ
-
-Aşağıdaki durumlardan biri gerçekleştiğinde Handoff Protokolü devreye girer:
-
-1. **Mesaj Sayısı Eşiği:** Aynı sohbette 15-20+ tur derin kodlama yapıldıysa.
-2. **Aşama Tamamlanması:** Büyük bir modül (örneğin Auth, Ödeme veya UI Layout) bitip yenisine başlanacağı an.
-3. **Kullanıcı Komutu:** Kullanıcı `/handoff`, `HANDOFF` veya `AIMASTER: HANDOFF` komutu verdiğinde.
-4. **Dikkat / Bellek Sızıntısı:** Ajan aynı hatayı 2 kez tekrarlarsa veya bağlam sınırına yaklaşıldığını fark ederse.
+**The Solution:** Transition to a clean, fresh context window backed by a lossless **Masterprompt** preserving milestones, active skill state, rejected approaches, and next immediate steps.
 
 ---
 
-## 3. `.handoff/session-state.md` STANDART ŞABLONU
+## 2. HANDOFF TRIGGER CRITERIA
 
-Handoff tetiklendiğinde ajan projenin kök dizininde `.handoff/session-state.md` dosyasını oluşturur ve içeriğini şu katı şablona göre doldurur:
+The Handoff Protocol activates upon encountering any of the following triggers:
+
+1. **Turn-Count Threshold:** 15–20+ deep coding turns in the active conversation.
+2. **Milestone Completion:** Major module completed (e.g. Auth, Payments, or Core Layout) prior to embarking on the next subsystem.
+3. **Explicit User Command:** The user invokes `/handoff`, `HANDOFF`, or `AIMASTER: HANDOFF`.
+4. **Attention Degradation:** The Agent repeats an identical mistake twice or recognizes context boundary saturation.
+
+---
+
+## 3. `.handoff/session-state.md` LOSSLESS SCHEMA
+
+Upon trigger, the Agent creates or updates `.handoff/session-state.md` in the project root following this strict schema:
 
 ```markdown
 # 🔄 AIMASTER SESSION STATE & RESUME MASTERPROMPT
-> **Oluşturulma Tarihi:** [YYYY-MM-DD HH:mm]
-> **Aktif Proje:** [Proje Adı / Dizini]
-> **Handoff Nedeni:** [Context Sınırı / Aşama Tamamlama / Kullanıcı Talebi]
+> **Timestamp:** [YYYY-MM-DD HH:mm]
+> **Active Project:** [Project Name / Root Path]
+> **Handoff Trigger:** [Context Threshold / Milestone Completion / User Command]
 
 ---
 
-## 1. TAMAMLANAN İŞLER (COMPLETED MILESTONES)
-- [x] [Modül / Özellik 1 tamamlandı ve test edildi]
-- [x] [Modül / Özellik 2 tamamlandı]
+## 1. COMPLETED MILESTONES
+- [x] [Module / Feature 1 implemented and verified]
+- [x] [Module / Feature 2 verified]
 
-## 2. ETKİLENEN DOSYALAR VE MİMARİ DEĞİŞİKLİKLER
-- `src/components/Header.tsx`: Responsive menü ve A11y eklendi.
-- `src/services/api.ts`: Idempotency header eklendi.
+## 2. AFFECTED FILES & ARCHITECTURAL DELTAS
+- `src/components/Header.tsx`: Responsive navigation and accessibility attributes added.
+- `src/services/api.ts`: Idempotency headers and retry strategies implemented.
 
-## 3. AKTİF BAĞLAM, SKİLLER VE KRİPTOGRAFİK İZOLASYON
+## 3. ACTIVE CONTEXT, LOADED SKILLS & CRYPTOGRAPHIC BASELINE
 - **Active Skills Loaded:** `[skills/03-backend-data/skill-api.md, skills/04-security-audit/skill-auth-security.md]`
 - **Git State Verification:** `git_head_sha: [commit_sha]`, `dirty_files_sha256: [hash_or_clean]`
-- **Verification Command:** `[npm test / npx vitest run]` (Yeni ajanın ilk adımda mevcut bütünlüğü teyit edeceği tek satırlık test komutu)
-- **Aktif Mimari Sözleşmeler:** 60-30-10 renk paleti (#090A0F / #151823 / #4F46E5), Zustand state persist.
+- **Verification Command:** `[npm test / npx vitest run]` (Single-line test command executed by the successor agent in Step 1)
+- **Active Architectural Contracts:** 60-30-10 palette tokens (#090A0F / #151823 / #4F46E5), Zustand state persistence.
 
-## 4. ELENEN YAKLAŞIMLAR VE BAŞARISIZ YOLLAR (REJECTED APPROACHES)
-- ❌ **Denenen ve Reddedilen Yol 1:** [X yöntemi/algoritması denendi ancak Y yarış durumu (race condition) nedeniyle elendi]
-- ❌ **Denenen ve Reddedilen Yol 2:** [Z paketi bundle şişkinliği nedeniyle reddedildi]
-*(Yeni ajanın aynı başarısız çözümü tekrar denemesini kesin olarak önleyen hafıza kilidi)*
+## 4. REJECTED APPROACHES & FAILURE MODES
+- ❌ **Rejected Path 1:** [Attempted algorithm X, rejected due to race condition under high concurrency]
+- ❌ **Rejected Path 2:** [Evaluated package Y, rejected due to bundle bloat]
+*(Crucial memory lock preventing the successor agent from re-attempting known failing solutions)*
 
-## 5. BİR SONRAKİ İLK ADIM (NEXT IMMEDIATE OBJECTIVE)
-- [ ] [Yeni chat başladığında tam olarak ilk yapılacak cerrahi iş nedir?]
+## 5. NEXT IMMEDIATE OBJECTIVE
+- [ ] [Exact surgical task to execute immediately upon resuming]
 
 ---
 
-## 6. 🚀 YENİ SOHBET MASTERPROMPTU (COPY & PASTE INTO NEW CHAT)
-[Aşağıdaki metni kopyalayıp yepyeni bir temiz sohbet penceresine yapıştırın:]
+## 6. 🚀 NEW CHAT RESUME MASTERPROMPT (COPY & PASTE INTO NEW CHAT)
+[Copy and paste the block below into a fresh chat session:]
 
 ```text
-AIMASTER OS KAPSAMINDA ÖNCEKİ OTURUMDAN DEVAM EDİYORUZ.
-Proje kök dizinindeki RulesAI.md ve .handoff/session-state.md dosyalarını oku.
+RESUMING AIMASTER SESSION FROM PRIOR CONTEXT CHECKPOINT.
+Read RulesAI.md and .handoff/session-state.md in the project root.
 
-ŞU ANKİ DURUMUMUZ:
-- Tamamlananlar: [Özet]
-- Doğrulama Komutu: [Verification Command]
-- Elenen Yaklaşımlar: [Rejected Approaches - Asla tekrar deneme]
-- Sırada Yapılacak İş: [Bir sonraki ilk adım]
+CURRENT SESSION BASELINE:
+- Completed: [Milestone summary]
+- Verification Command: [Verification Command]
+- Rejected Approaches: [Rejected Approaches - DO NOT re-attempt]
+- Next Immediate Objective: [Next immediate surgical task]
 
-Hemen .handoff/session-state.md dosyasını incele, doğrulama komutunu çalıştırarak mevcut durumu teyit et ve doğrudan sıradaki adıma başla!
+Inspect .handoff/session-state.md, execute the verification command to confirm baseline health, and proceed immediately with the next objective!
 ```
 ```
 
 ---
 
-## 4. KULLANICIYA BİLDİRİM FORMATI
+## 4. USER NOTIFICATION FORMAT
 
-Ajan handoff dosyasını yazdıktan sonra kullanıcıya yanıtının en altına şu resmi uyarı bloğunu ekler:
+After generating the handoff document, conclude the response with this official notification:
 
 ```text
-⚠️ [AIMASTER BAĞLAM UYARISI / CONTEXT CHECKPOINT]
-Bu oturumda bağlam derinliği optimum sınırı aştı. Bağlam kaybını ve tekrar işleme maliyetini azaltmayı hedefler; gerçek tasarruf göreve ve modele bağlıdır, sıfır bilgi kaybı garantisi vermez:
-1. Projenizde `.handoff/session-state.md` oluşturuldu ve güncellendi.
-2. Yeni ve temiz bir sohbet penceresi açın.
-3. Dosyanın en altındaki Masterprompt'u yeni sohbete yapıştırarak kaldığınız yerden devam edin!
+⚠️ [AIMASTER CONTEXT CHECKPOINT]
+Session context depth has reached the optimal boundary. To prevent attention degradation and eliminate redundant token spend:
+1. `.handoff/session-state.md` has been generated and sealed in the repository root.
+2. Open a fresh, clean chat session.
+3. Paste the Resume Masterprompt from the bottom of `.handoff/session-state.md` into the new chat to resume with zero loss!
 ```

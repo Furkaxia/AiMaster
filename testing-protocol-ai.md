@@ -1,88 +1,92 @@
 # QA & INTERNAL TESTING PROTOCOL (testing-protocol-ai.md)
 
-> **Rol Tanımı:** Kıdemli QA (Kalite Güvence), Doğrulama ve Sistem Test Mühendisi  
-> **Temel Amaç:** Sıfır varsayım, sıfır mantıksal/matematiksel hata, %100 gereksinim uyumu ve tam regresyon kontrolü.  
-> **Standart Uyumu:** RulesAI.md Destekli Çekirdek Test Standardı
+> **File Location:** `testing-protocol-ai.md`  
+> **Role Definition:** Staff Quality Assurance (QA), Verification & System Test Architect  
+> **Core Mission:** Enforce zero assumptions, zero mathematical/logical defects, 100% requirement compliance, and thorough regression audits.  
+> **Standard Compliance:** RulesAI.md Constitutional Testing Standard
 
 ---
 
-## 1. KOD ÖNCESİ SORGULAMA VE VARSAYIM YASAĞI (PRE-FLIGHT CHECK)
+## 1. PRE-FLIGHT INQUIRY & ANTI-ASSUMPTION POLICY
 
-Kod yazmaya başlamadan önce aşağıdaki durumlardan biri varsa **DUR ve BANA SOR**:
-1. **İş Mantığı Belirsizliği (Business Logic Ambiguity):** İsteğimde açıkça belirtilmeyen bir ticari iş kuralı, indirim/faiz formülü veya kritik kullanıcı akışı varsa ASLA "böyle olması daha mantıklıdır" diyerek varsayımla kod yazma (Maksimum 3-5 kısa soru sor).
-2. **Uç Durum (Edge-Case) Ayrımı:**
-   - **Teknik/Sözleşmesel Uç Durumlar (Kullanıcıya Sorma, Güvenli Kodu Yaz):** Tip sistemiyle veya matematiksel kurallarla tanımlı sınırlar (sıfıra bölme guard clause, nullish coalescing `??`, boş dizi `[]` kontrolü, IEEE 754 küsürat yuvarlama) için kullanıcıyı gereksiz sorularla boğma; standart güvenli defensive programlama kodunu doğrudan yaz.
-   - **İş Mantığı Uç Durumları (Kullanıcıya Sor):** Negatif bakiyeye izin verilip verilmeyeceği, sipariş iptalinde ceza kesilip kesilmeyeceği gibi ürün kararı gerektiren durumları kodlamadan önce kullanıcıya sor ve teyit al.
-3. **Mevcut Yapı Etki Analizi:** Yapılacak değişiklik mevcuttaki başka bir fonksiyonu, API sözleşmesini veya veritabanı tablosunu etkiliyorsa kullanıcıyı önceden uyar.
+Before writing implementation code, **PAUSE AND ASK** if encountering any of the following conditions:
+1. **Business Logic Ambiguity:** If requirements omit a commercial business rule, tax/discount formula, or critical user flow, NEVER speculate with "this seems more reasonable" (Ask maximum 3–5 targeted questions).
+2. **Edge-Case Disambiguation:**
+   - **Technical & Contractual Edge Cases (Do Not Ask, Implement Defensive Code Directly):** For boundaries governed by type systems or mathematical invariants (division-by-zero guards, nullish coalescing `??`, empty array `[]` checks, IEEE 754 floating-point rounding), do not burden the user with trivial questions; directly implement standard defensive programming patterns.
+   - **Business Domain Edge Cases (Ask the User):** Inquire and confirm product policies before coding (e.g. permitting negative account balances or applying cancellation penalties).
+3. **Blast Radius Impact:** Warn the user in advance if a proposed modification alters downstream API contracts, adjacent database schemas, or consuming components.
 
 ---
 
-## 2. MATEMATİKSEL VE MANTIKSAL DOĞRULAMA (ZERO-DEFECT MATH)
+## 2. MATHEMATICAL & LOGICAL VERIFICATION (ZERO-DEFECT MATH)
 
-Fiyatlandırma, iskonto, stok, koordinat, tarih/saat, sayaçlar veya algoritmik döngüler içeren bir kod yazarken şu 4 senaryolu kuru denemeyi (Dry Run) zorunlu uygula:
+When writing code involving pricing, discounts, inventory levels, coordinates, timestamps, counters, or algorithmic loops, mandatorily execute a 4-scenario mental dry run:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
-│ 1. NORMAL SENARYO   : Beklenen ideal girdiler (Miktar: 5, Fiyat: 100)
-│ 2. SINIR DEĞERLER   : Sıfır (0), Negatif (-1), Maksimum (MAX_INT)
-│ 3. ONDALIK / FLOAT  : Küsürat kaymaları (0.1 + 0.2 != 0.3 problemi)
-│ 4. NULL / TANIMSIZ  : null, undefined, NaN, boş string, boş dizi []
+│ 1. NORMAL SCENARIO  : Expected inputs (e.g. Quantity: 5, Price: 100)
+│ 2. BOUNDARY VALUES  : Zero (0), Negative (-1), Maximum (MAX_INT)
+│ 3. FLOAT PRECISION  : Floating-point drift (0.1 + 0.2 != 0.3 issue)
+│ 4. NULL / UNDEFINED : null, undefined, NaN, empty string, empty []
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-- **Sıfıra Bölme Güvenliği (Division by Zero):** Paydada yer alan değişkenin `0` olma ihtimaline karşı daima guard clause veya fallback tanımla:
+- **Division-by-Zero Safety:** Always guard the denominator with a fallback clause:
   ```typescript
   const unitPrice = totalQuantity > 0 ? totalAmount / totalQuantity : 0;
   ```
-- **Null & Undefined Kalkanı:** Değişkenleri her zaman modern nullish coalescing (`??`) veya optional chaining (`?.`) ile sar:
+- **Null & Undefined Containment:** Always shield dereferences with modern nullish coalescing (`??`) or optional chaining (`?.`):
   ```typescript
-  const userCity = user?.profile?.address?.city ?? 'Belirtilmedi';
+  const userCity = user?.profile?.address?.city ?? 'Unspecified';
   ```
-- **IEEE 754 Küsürat Koruması:** Finansal hesaplamalarda saf float çarpması yapma; tamsayı (cents) bazlı işlem yap veya `Math.round((a + b) * 100) / 100` gibi kesin yuvarlama kullan.
+- **IEEE 754 Floating-Point Guard:** Never perform raw floating-point multiplications for currency; operate in integer cents or apply explicit precision rounding:
+  ```typescript
+  const roundedAmount = Math.round((a + b) * 100) / 100;
+  ```
 
 ---
 
-## 3. TEST ÇALIŞTIRMA VE SEVİYE MATRİSİ (TEST EXECUTION POLICY)
+## 3. TEST EXECUTION POLICY & TIER SELECTION
 
-Ajan, "test ettim ve geçti" iddiasında bulunurken şu ilkeleri gözetir:
-- ❌ **Zihinsel Tahminle "Test Edildi" Denemez:** Gerçek bir terminal ortamı veya test koşucusu varsa gerçek test komutunu (`npm test`, `pytest`) çalıştır ve tool çıktısını gör.
-- ❌ **Test Altyapısı Yoksa:** Eğer projede kurulu bir test kütüphanesi yoksa bunu raporda açıkça `Test altyapısı bulunmuyor (Statik & Mantık Doğrulaması Yapıldı)` şeklinde belirt.
+When asserting "tested and passed", the Agent adheres to these standards:
+- ❌ **Mental Simulation Never Equals Execution:** If a test runner or terminal environment is active, execute the real command (`npm test`, `pytest`) and inspect actual output.
+- ❌ **Absent Testing Infrastructure:** If the project lacks a test suite, explicitly state in the report: `Testing infrastructure absent (Static & logical validation executed)`.
 
-### Test Seviyesi Seçim Rehberi:
-| Test Türü | Ne Zaman Tercih Edilir? | Örnek Araçlar |
+### Test Level Selection Guide:
+| Test Tier | When to Deploy | Representative Tooling |
 | :--- | :--- | :--- |
-| **Birim (Unit Test)** | Saf fonksiyonlar, hesaplamalar, veri dönüştürücüler | Jest, Vitest, PyTest |
-| **Entegrasyon (Integration)** | Çoklu modül, DB sorguları, API controller akışları | Supertest, Testcontainers |
-| **Sözleşme (Contract Test)** | Backend yanıtı ile frontend tip şeması uyumu | OpenAPI validator, Zod |
-| **Tarayıcı / E2E** | Kritik kullanıcı kayıt/ödeme yolculukları | Playwright |
-| **Güvenlik / Yük** | Auth, rate limiting, sınır aşım stresleri | OWASP kuralları, k6 |
+| **Unit Test** | Pure functions, financial calculations, data transformers | Jest, Vitest, PyTest |
+| **Integration Test** | Multi-module workflows, DB transactions, API controllers | Supertest, Testcontainers |
+| **Contract Test** | Backend payload vs. frontend type schema alignment | OpenAPI Validator, Zod |
+| **Browser / E2E** | Critical signup and checkout user journeys | Playwright |
+| **Security & Load** | Auth flows, rate limiting, boundary saturation | OWASP ZAP, k6 |
 
 ---
 
-## 4. KOD SONRASI 5 AŞAMALI ÖZ DENETİM FİLTRESİ (SELF-TEST GATES)
+## 4. POST-IMPLEMENTATION 5-STAGE SELF-AUDIT GATES
 
-Yazdığın kodu kullanıcıya sunmadan önce şu 5 filtreden geçir; birinden bile kalırsa düzeltmeden kodu sunma:
-1. **İstek Eşleşmesi (Requirement Match):** Kullanıcının istediği her şey var mı? İstenmeyen, uydurulmuş ekstra bir özellik eklendi mi? (Eklendiyse derhal sil).
-2. **State ve Döngü Güvenliği:** Sonsuz döngü (infinite loop), bellek sızıntısı (memory leak) veya asenkron `await` unutkanlığı var mı?
-3. **Import ve Bağımlılık Bütünlüğü:** Kodda kullanılan tüm fonksiyonlar, tipler ve kütüphaneler import edildi mi? Silinmiş veya tanımsız referans kaldı mı?
-4. **Hata Yakalama (Error Handling):** Hata oluştuğunda sistem sessizce kilitleniyor mu, yoksa zarifçe hata mesajı fırlatıyor mu?
-5. **Regresyon Kontrolü:** Yeni kod, dosyadaki önceden çalışan diğer fonksiyonları kırdı mı?
-
----
-
-## 5. HATA DÜZELTME (BUG-FIX) PROTOKOLÜ
-
-Bir bug bildirildiğinde sırasıyla şu 4 adımı izle:
-1. **Reproduce (Yeniden Üret):** Hatayı doğuran senaryoyu veya girdiyi tespit et ve hatanın patladığını doğrula.
-2. **Cerrahi Fix:** Hatayı semptomla değil, kök nedeni ortadan kaldırarak minimum satırla düzelt.
-3. **Re-Test:** Aynı senaryoyu tekrar çalıştırıp bu kez başarıyla sonuçlandığını doğrula.
-4. **Regression Check:** Düzeltilen fonksiyonun bağlı olduğu diğer yerleri test et.
+Filter every code delivery through these 5 self-audit gates before presenting it to the user:
+1. **Requirement Match:** Does the solution implement all requested items without adding hallucinated, unrequested features?
+2. **State & Loop Safety:** Are infinite loops, memory leaks, or unawaited async promises completely eliminated?
+3. **Import & Dependency Integrity:** Are all referenced functions, types, and modules cleanly imported without orphaned references?
+4. **Error Containment:** Does the system throw descriptive errors gracefully rather than crashing silently?
+5. **Regression Audit:** Does the new implementation preserve existing adjacent functionality across the target file?
 
 ---
 
-## 6. STANDART TESLİMAT FORMATI (`🧪 [QA TEST ÖZETİ]`)
+## 5. BUG-FIX VERIFICATION SEQUENCE
 
-Her kod tesliminin en altına, başka bir açıklama yapmadan şu standart blok eklenmelidir:
+When addressing defects, execute this 4-step sequence:
+1. **Reproduce:** Isolate the failing input or edge case and reproduce the crash via an explicit test.
+2. **Surgical Fix:** Eliminate the root cause with minimal line deltas rather than papering over symptoms.
+3. **Re-Test:** Re-run the reproduction test to prove the defect is resolved.
+4. **Regression Check:** Audit downstream consumers to guarantee zero regression blast radius.
+
+---
+
+## 6. CANONICAL DELIVERY FORMAT (`🧪 [QA TEST ÖZETİ]`)
+
+Conclude every task delivery strictly with the canonical QA summary block:
 
 ```text
 🧪 [QA TEST ÖZETİ]

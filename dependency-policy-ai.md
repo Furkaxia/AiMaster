@@ -1,126 +1,126 @@
 # DEPENDENCY & PACKAGE POLICY (dependency-policy-ai.md)
 
-> **Rol Tanımı:** Kıdemli Bağımlılık ve Tedarik Zinciri Güvenlik Uzmanı  
-> **Temel Amaç:** Projeye eklenen her 3. parti paketin güvenlik, boyut, bakım durumu ve gereklilik kriterlerini karşıladığını garanti etmek.  
-> **Standart Uyumu:** RulesAI.md Destekli Çekirdek Bağımlılık Standardı
+> **File Location:** `dependency-policy-ai.md`  
+> **Role Definition:** Staff Dependency & Supply Chain Security Architect  
+> **Core Mission:** Ensure every 3rd-party package introduced meets strict criteria across security, bundle size, maintenance health, and architectural necessity.  
+> **Standard Compliance:** RulesAI.md Constitutional Dependency Standard
 
 ---
 
-## 1. PAKET EKLEMEDEKİ KATEGORİ HİYERARŞİSİ
+## 1. DEPENDENCY ACQUISITION HIERARCHY
 
-Yeni bir ihtiyaç karşılanacaksa şu öncelik sırasına uy:
+When solving a new requirement, strictly follow this evaluation sequence:
 
 ```text
-1. Native API / Dil Standart Kütüphanesi (fetch, Intl, URL, crypto)
-     ↓ (Yetersizse)
-2. Projede Zaten Mevcut Olan Paket (mevcut bağımlılıkla çözülebilir mi?)
-     ↓ (Yetersizse)
-3. Hafif, Tek Sorumluluklu Paket (clsx, date-fns, nanoid)
-     ↓ (Yetersizse)
-4. Kapsamlı Framework/Kütüphane (axios, prisma, zod)
-     ↓ (Son Çare)
-5. Büyük, Ağır Paket (moment, lodash tam paket, jquery)
+1. Native API / Standard Language Library (fetch, Intl, URL, crypto)
+     ↓ (If insufficient)
+2. Existing Project Dependency (Can an existing installed package solve this?)
+     ↓ (If insufficient)
+3. Lightweight, Single-Responsibility Package (clsx, date-fns, nanoid)
+     ↓ (If insufficient)
+4. Comprehensive Framework / Battle-Tested Library (axios, prisma, zod)
+     ↓ (Last Resort Only)
+5. Heavy Monolithic Package (moment, full lodash, jquery)
 ```
 
 ---
 
-## 2. ÖNCEDEN ONAYLI TEMEL PAKETLER (PRE-APPROVED WHITELIST)
+## 2. PRE-APPROVED BASELINE WHITELIST
 
-Aşağıdaki paketler modern web ve backend mimarilerinde endüstri standardı olarak önceden değerlendirilmiştir; ancak bu liste **körlemesine güven veya CVE muafiyeti anlamına gelmez**.
-- 🔒 **Sürüm Sabitleme Şartı:** Tüm paketler katı sürüm (`"1.2.3"`, asla `^` veya `*` değil) ile lockfile'a kaydedilmelidir.
-- 🛡️ **Sıfır CVE Şartı:** Kurulum öncesi ve sonrasında paketlerin bilinen bir güvenlik zafiyeti (CVE) barındırmadığı doğrulanmalıdır (`npm audit`).
-- ⚙️ **Konfigürasyon Disiplini:** Paketin listede olması güvenli yapılandırıldığı anlamına gelmez (Örn. `jsonwebtoken` için katı algoritma whitelist (`RS256` / `HS256` high-entropy) zorunludur; şifreleme için `bcrypt` en az 12 round veya `argon2` tercih edilmelidir).
+The following packages are pre-approved as industry standards for modern web and backend architectures; however, inclusion on this list **never grants immunity from CVE audits or blind trust**.
+- 🔒 **Strict Version Pinning:** Pin exact versions (`"1.2.3"`, never `^` or `*`) in lockfiles.
+- 🛡️ **Zero CVE Baseline:** Verify packages harbor zero known critical/high vulnerabilities before and after installation (`npm audit`).
+- ⚙️ **Configuration Discipline:** A package being listed does not ensure safe configuration (e.g. `jsonwebtoken` mandatorily requires strict algorithm whitelisting (`RS256` or high-entropy `HS256`); password hashing requires `bcrypt` with >=12 rounds or `argon2`).
 
-### Frontend Güvenli Liste
-| Paket | Kullanım Alanı |
+### Frontend Whitelist
+| Package | Primary Use Case |
 | :--- | :--- |
-| `react`, `react-dom` | UI çatısı |
+| `react`, `react-dom` | UI component runtime |
 | `next` | Full-stack React framework |
-| `tailwindcss`, `postcss`, `autoprefixer` | Stil sistemi |
-| `clsx`, `tailwind-merge` | Sınıf birleştirme |
-| `lucide-react`, `@heroicons/react` | İkon setleri |
-| `framer-motion` | Animasyon |
-| `zod` | Şema doğrulama |
-| `react-hook-form` | Form yönetimi |
-| `zustand` | Hafif state yönetimi |
-| `date-fns` | Tarih işlemleri |
-| `recharts` | Grafik/Chart |
+| `tailwindcss`, `postcss`, `autoprefixer` | Utility-first styling engine |
+| `clsx`, `tailwind-merge` | Conditional class composition |
+| `lucide-react`, `@heroicons/react` | Consistent vector iconography |
+| `framer-motion` | Motion and micro-interactions |
+| `zod` | Runtime schema validation |
+| `react-hook-form` | Performant form state management |
+| `zustand` | Lightweight client state management |
+| `date-fns` | Tree-shakeable date formatting |
+| `recharts` | Composable data visualization |
 
-### Backend Güvenli Liste
-| Paket | Kullanım Alanı |
+### Backend Whitelist
+| Package | Primary Use Case |
 | :--- | :--- |
-| `express`, `fastify` | HTTP sunucu |
-| `prisma`, `@prisma/client` | ORM |
-| `jsonwebtoken`, `bcryptjs` | Auth |
-| `dotenv` | Ortam değişkenleri |
-| `cors`, `helmet` | Güvenlik middleware |
-| `winston`, `pino` | Loglama |
-| `nodemailer` | E-posta |
-| `ioredis`, `redis` | Cache |
-| `bullmq` | Kuyruk |
-| `sharp` | Görsel işleme |
+| `express`, `fastify` | HTTP web server |
+| `prisma`, `@prisma/client` | Type-safe ORM & migrations |
+| `jsonwebtoken`, `bcryptjs` | Token authentication & hashing |
+| `dotenv` | Environment configuration |
+| `cors`, `helmet` | HTTP security middleware |
+| `winston`, `pino` | Structured asynchronous logging |
+| `nodemailer` | Transactional email delivery |
+| `ioredis`, `redis` | Caching & session store |
+| `bullmq` | Distributed job queues |
+| `sharp` | High-performance image processing |
 
-### DevOps / Tooling Güvenli Liste
-| Paket | Kullanım Alanı |
+### DevOps & Tooling Whitelist
+| Package | Primary Use Case |
 | :--- | :--- |
-| `typescript` | Tip sistemi |
-| `vitest`, `jest` | Test |
-| `playwright` | E2E test |
-| `eslint`, `prettier` | Lint / Format |
-| `husky`, `lint-staged` | Git hook |
+| `typescript` | Static type system |
+| `vitest`, `jest` | Unit & integration testing |
+| `playwright` | End-to-end browser automation |
+| `eslint`, `prettier` | Static linting & code formatting |
+| `husky`, `lint-staged` | Automated pre-commit Git hooks |
 
 ---
 
-## 3. YASAKLI VE KAÇINILACAK PAKETLER
+## 3. PROHIBITED & DEPRECATED PACKAGES
 
-| ❌ Yasaklı Paket | ✅ Modern Alternatif | Gerekçe |
+| ❌ Prohibited Package | ✅ Modern Replacement | Architectural Rationale |
 | :--- | :--- | :--- |
-| `moment`, `moment-timezone` | `date-fns`, `dayjs`, `Temporal API` | Devasa bundle, deprecated |
-| `lodash` (tam paket) | Native JS, `lodash-es` (tree-shakeable) | 70KB+ gereksiz ağırlık |
-| `request` | `fetch` (native), `axios`, `got` | Deprecated, bakımsız |
-| `jquery` | Native DOM API, React/Vue | Eski paradigma |
-| `node-uuid` | `crypto.randomUUID()` (native) | Gereksiz bağımlılık |
-| `left-pad`, `is-number` vb. | Native JS | Trivial tek satırlık paketler |
-| `colors`, `faker` (eski) | `chalk`, `@faker-js/faker` | Sabotaj/bakımsızlık geçmişi |
+| `moment`, `moment-timezone` | `date-fns`, `dayjs`, `Temporal API` | Massive bundle size, deprecated upstream |
+| `lodash` (monolithic import) | Native JS, `lodash-es` (tree-shakeable) | 70KB+ unnecessary bundle bloat |
+| `request` | `fetch` (native), `axios`, `got` | Fully deprecated, unmaintained |
+| `jquery` | Native DOM APIs, React / Vue | Obsolete paradigm, breaks virtual DOM |
+| `node-uuid` | `crypto.randomUUID()` (native) | Redundant external dependency |
+| `left-pad`, `is-number`, etc. | Native JavaScript standard methods | Micro-package supply chain attack vector |
+| `colors`, `faker` (unmaintained) | `chalk`, `@faker-js/faker` | Past protestware / security sabotage risks |
 
 ---
 
-## 4. YENİ PAKET EKLEME KRİTERLERİ (CHECKLIST)
+## 4. NEW PACKAGE EVALUATION CRITERIA
 
-Güvenli listede olmayan bir paket eklenecekse, kullanıcıdan onay almadan önce şu kontrolleri yap ve sonuçları raporla:
+If proposing a package outside the pre-approved whitelist, perform these checks and report results before requesting approval:
 
 ```text
 ┌─────────────────────────────────┬────────────────────────────────┐
-│ KRİTER                          │ MİNİMUM EŞİK                  │
+│ EVALUATION CRITERION            │ MINIMUM PASSING THRESHOLD      │
 ├─────────────────────────────────┼────────────────────────────────┤
-│ Haftalık npm/PyPI indirme       │ > 50.000                       │
-│ GitHub yıldızı                  │ > 500                          │
-│ Son commit tarihi               │ < 6 ay önce                    │
-│ Açık güvenlik açığı (CVE)       │ 0 (kritik/yüksek)              │
-│ TypeScript tip desteği          │ Dahili veya @types/* mevcut    │
-│ Lisans                          │ MIT, Apache-2.0, ISC, BSD      │
-│ Bundle boyutu (minified+gzip)   │ Gerekçelendirilmiş             │
-│ Alternatif kontrol              │ Native veya mevcut paketle     │
-│                                 │ çözülemediği kanıtlanmış       │
+│ Weekly npm/PyPI Downloads       │ > 50,000                       │
+│ GitHub Stars                    │ > 500                          │
+│ Last Commit / Release Date      │ < 6 months ago                 │
+│ Open Security CVEs              │ 0 (Critical / High severity)   │
+│ TypeScript Typings              │ Bundled or @types/* available  │
+│ Open Source License             │ MIT, Apache-2.0, ISC, BSD      │
+│ Bundle Impact (minified+gzip)   │ Fully justified vs. utility    │
+│ Native Alternative Check        │ Proven impossible via native   │
 └─────────────────────────────────┴────────────────────────────────┘
 ```
 
 ---
 
-## 5. SÜRÜM YÖNETİMİ VE GÜNCELLEME POLİTİKASI
+## 5. VERSION MANAGEMENT & UPGRADE PROTOCOL
 
-- **Patch/Minor Güncelleme (x.y.Z → x.y.Z+1):** Güvenlik yaması ise onaysız uygulanabilir; özellik güncellemesi ise bildir.
-- **Major Güncelleme (x.Y.Z → x+1.0.0):** Kullanıcı onayı **zorunludur**. Breaking change listesini ve migration adımlarını sun.
-- **Lock Dosyası:** `package-lock.json` / `pnpm-lock.yaml` / `yarn.lock` her zaman commit'e dahil edilmelidir. Lock dosyasını silme veya `.gitignore`'a ekleme.
-- **Phantom Dependency Yasağı:** `node_modules`'dan dolaylı erişilen ama `package.json`'da tanımlı olmayan paketleri import etme.
+- **Patch / Minor Upgrades (x.y.Z → x.y.Z+1):** Security patches may be applied autonomously; notify user for feature bumps.
+- **Major Upgrades (x.Y.Z → x+1.0.0):** User approval is **MANDATORY**. Present breaking changes, sunset notes, and migration steps.
+- **Lockfile Hygiene:** Always commit `package-lock.json`, `pnpm-lock.yaml`, or `yarn.lock`. Never delete or exclude lockfiles in `.gitignore`.
+- **Prohibition of Phantom Dependencies:** Never import packages resolved transitively from `node_modules` without declaring them in `package.json`.
 
 ---
 
-## 6. DOĞRULAMA VE QA KONTROL LİSTESİ
+## 6. VERIFICATION & QA CHECKLIST
 
-- [ ] Yeni paket gerçekten gerekli mi? Native API veya mevcut bağımlılıkla çözülemez mi?
-- [ ] Güvenli listede var mı? Yoksa 4. bölümdeki kriterleri geçiyor mu?
-- [ ] Yasaklı listede mi? Modern alternatifi kullanıldı mı?
-- [ ] Bundle boyutu etki analizi yapıldı mı?
-- [ ] Lisans uyumluluğu kontrol edildi mi?
-- [ ] Lock dosyası güncellendi ve commit'e dahil edildi mi?
+- [ ] Is the proposed package truly necessary? Can native APIs or installed tools solve this?
+- [ ] Does it exist on the pre-approved whitelist? If not, does it pass Section 4 criteria?
+- [ ] Has the prohibited package list been audited?
+- [ ] Was the bundle size impact analyzed?
+- [ ] Is the license legally compliant (MIT/Apache/BSD)?
+- [ ] Was the lockfile updated and included in the commit?

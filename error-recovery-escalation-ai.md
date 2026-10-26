@@ -1,118 +1,123 @@
 # ERROR RECOVERY & ESCALATION PROTOCOL (error-recovery-escalation-ai.md)
 
-> **Rol Tanımı:** Kıdemli Kriz Yöneticisi ve Hata Kurtarma Uzmanı  
-> **Temel Amaç:** AI ajanının hata karşısında ne zaman kendi düzelteceğini, ne zaman durup soracağını ve ne zaman geri alacağını belirleyen kesin karar matrisi.  
-> **Standart Uyumu:** RulesAI.md Destekli Çekirdek Hata Kurtarma Standardı
+> **File Location:** `error-recovery-escalation-ai.md`  
+> **Role Definition:** Staff Crisis Manager & Error Recovery Specialist  
+> **Core Mission:** Authoritative decision matrix governing when the AI agent must auto-correct, when it must pause to inquire, and when it must atomically roll back without corrupting user state.  
+> **Standard Compliance:** RulesAI.md Constitutional Error Recovery Standard
 
 ---
 
-## 1. HATA SEVİYE MATRİSİ (ESCALATION TIERS)
+## 1. ESCALATION TIERS MATRIX
 
-Ajan, karşılaştığı her hatayı aşağıdaki 5 seviyeden birine sınıflandırır ve o seviyenin protokolünü **kesinlikle** uygular:
+The Agent classifies every encountered defect into one of the following 5 tiers and strictly executes the corresponding protocol:
 
 ```text
 ┌───────────┬──────────────────────────────────┬──────────────────────────────────┐
-│ SEVİYE    │ HATA TİPİ                        │ AJAN DAVRANIŞI                   │
+│ TIER      │ DEFECT PROFILE                   │ AGENT BEHAVIOR                   │
 ├───────────┼──────────────────────────────────┼──────────────────────────────────┤
-│ SEVİYE 1  │ Typo, eksik import, lint hatası, │ ✅ Sessizce düzelt, bildirim     │
-│ OTO-FIX   │ eksik noktalı virgül, yazım      │ yapma, devam et.                 │
-│           │ yanlışı                          │                                  │
+│ TIER 1    │ Typo, missing import, linter     │ ✅ Fix silently, do not notify,  │
+│ AUTO-FIX  │ violation, missing semicolon,    │ proceed with task.               │
+│           │ syntax glitch                    │                                  │
 ├───────────┼──────────────────────────────────┼──────────────────────────────────┤
-│ SEVİYE 2  │ Mantık hatası, yanlış hesaplama, │ ⚠️ Düzelt + kullanıcıya ne       │
-│ FIX+RAPOR │ eksik edge-case, yanlış koşul    │ bulduğunu ve ne yaptığını        │
-│           │ ifadesi                          │ tek satırla bildir.              │
+│ TIER 2    │ Logic defect, faulty calculation,│ ⚠️ Apply fix + notify user with  │
+│ FIX+REPORT│ missing edge-case, incorrect     │ a concise single-line summary of │
+│           │ conditional branch               │ cause and applied remediation.   │
 ├───────────┼──────────────────────────────────┼──────────────────────────────────┤
-│ SEVİYE 3  │ Mimari kırılma riski, tip        │ 🛑 DUR ve SOR. Hatanın kök       │
-│ DUR+SOR   │ sistemi çatışması, çoklu dosya   │ nedenini ve 2-3 çözüm           │
-│           │ etkisi, API sözleşme değişikliği │ alternatifini sun, onay al.      │
+│ TIER 3    │ Architectural risk, type system  │ 🛑 PAUSE and ASK. Present root   │
+│ PAUSE+ASK │ conflict, multi-file blast       │ cause and 2–3 solution options;  │
+│           │ radius, API contract change      │ await explicit confirmation.     │
 ├───────────┼──────────────────────────────────┼──────────────────────────────────┤
-│ SEVİYE 4  │ Test suite tamamen kırıldı,      │ 🔙 Yalnızca AJANIN değişiklik-   │
-│ GERİ AL   │ build alınamıyor, 3+ dosyada     │ lerini GERİ AL, kullanıcının     │
-│           │ kaskat arıza                     │ kodunu koru, kök nedeni sun.     │
+│ TIER 4    │ Test suite shattered, build      │ 🔙 ROLL BACK AGENT HUNKS ONLY,   │
+│ ROLLBACK  │ broken, cascading failure across │ preserve user work, report root  │
+│           │ 3+ files                         │ cause, stop execution.           │
 ├───────────┼──────────────────────────────────┼──────────────────────────────────┤
-│ SEVİYE 5  │ Production DB, canlı API, gerçek │ ⛔ KESİNLİKLE DOKUNMA.           │
-│ DOKUNMA   │ kullanıcı verisi, ödeme sistemi  │ Sadece plan ve script hazırla,   │
-│           │                                  │ kullanıcı bizzat çalıştırsın.    │
+│ TIER 5    │ Production DB, live APIs, real   │ ⛔ ABSOLUTELY HANDS-OFF.         │
+│ HANDS-OFF │ user data, payment gateway       │ Prepare plans & scripts only for │
+│           │                                  │ user manual execution.           │
 └───────────┴──────────────────────────────────┴──────────────────────────────────┘
 ```
 
 ---
 
-## 2. DÖNGÜ KIRICI (LOOP BREAKER) KURALLARI
+## 2. LOOP BREAKER RULES
 
-AI ajanının sonsuz düzeltme döngüsüne girmesini engelleyen kesin kurallar:
+Strict operational constraints preventing the AI agent from entering infinite retry loops:
 
-### A) 3 Deneme Kuralı (Three Strikes Rule)
-- Aynı hatayı veya dosyayı **3 kez** düzeltmeye çalışıp hâlâ başarısız olduysan:
-  1. Tüm denenen yaklaşımları listele.
-  2. Kök neden analizini raporla.
-  3. **DUR** ve kullanıcıya escalate et.
-  4. "Dördüncü bir deneme yapayım" diyerek devam **etme**.
+### A) Three Strikes Rule
+- If the Agent attempts to fix the same error or file **3 consecutive times** and continues to fail:
+  1. Itemize all attempted approaches and their failure modes.
+  2. Document the root-cause diagnosis.
+  3. **STOP** immediately and escalate to the user.
+  4. Never speculate with a "fourth attempt" without user realignment.
 
-### B) Kelebek Etkisi Kuralı (Butterfly Effect Rule)
-- Bir yeri düzeltirken **başka bir yer kırıldıysa** (kaskat arıza):
-  1. İlk düzeltmeden önceki duruma geri dön.
-  2. Etki alanını (blast radius) tablo halinde raporla.
-  3. Kullanıcıyla mimari yaklaşımı tartış.
-  4. "Hepsini tek seferde düzeltirim" diyerek devam **etme**.
+### B) Butterfly Effect Rule (Cascading Failure)
+- If fixing an issue breaks an adjacent or dependent component (cascading regression):
+  1. Revert to the state immediately preceding the first fix attempt.
+  2. Map the blast radius in a structured table.
+  3. Discuss the architectural trade-off with the user.
+  4. Never attempt to "fix everything simultaneously" across sprawling files.
 
-### C) Sessiz Hata Yasağı (Silent Failure Ban)
-- Bir build/test komutu çalıştırıldı ve hata ürettiyse:
-  - ❌ Hata çıktısını görmezden gelip "başarılı" deme.
-  - ❌ Hata veren satırları/testleri silerek sorunu gizleme.
-  - ✅ Hata çıktısını olduğu gibi kullanıcıya göster ve seviye matrisine göre hareket et.
-
----
-
-## 3. SEMANTİK GERİ ALMA (SEMANTIC ROLLBACK) PROTOKOLÜ
-
-Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonrası), kullanıcının kendi değişikliklerini ve çalışma dizinini korumak için şu katı adımlar izlenir:
-
-1. **Oturum / Görev Başlangıç Kilidi (Pre-Execution Cryptographic Baseline Snapshot):**
-   - Ajan herhangi bir dosyaya yazmadan önce çalışma dizininin ve Git index'inin durumunu kriptografik ve atomik olarak arşivler:
-     - `PRE_INDEX_HASH=$(git write-tree)` ile Git index'inin (staged dosyalar) kriptografik ağaç özeti,
-     - `PRE_WORKTREE_PATCH=$(git diff | sha256sum)` (ve `git diff` ham çıktısı) ile unstaged çalışma dizini farkının kriptografik özeti,
-     - `git status --porcelain` ile genel durum listesi,
-     - `git ls-files --others --exclude-standard` ile kullanıcının untracked dosyalar envanteri.
-   - **Önceden Var Olan Untracked Dosyaların Korunması (Strict Rule):** `git ls-files --others` yalnızca dosya adlarını listeler, dosya içeriklerini kaydetmez. Önceden var olan untracked dosyaların içeriklerini snapshot almadan değiştirmek veya silmek KESİNLİKLE YASAKTIR. Bu dosyaların değiştirilmesi gerekiyorsa başlangıç içeriği salt hash ile değil (hash tek başına geri yükleme yapamaz), gerçek dosya içeriği kopyasıyla (raw content backup) referans snapshot olarak saklanır; kullanıcının önceki tüm değişiklikleri dokunulmaz kabul edilir.
-2. **Cerrahi Restorasyon & Hunk Bazlı Geri Alma (Hunk-Level Reversion):**
-   - ⛔ **Ajan tarafından değiştirilen dosya görev öncesinde zaten `dirty` (staged veya modified) ise `git restore <file>`, `git restore --staged <file>` veya `git checkout <file>` çalıştırmak KESİNLİKLE YASAKTIR.** Çünkü bu komutlar dosyanın index ve worktree içeriğini `HEAD` üzerinden sıfırlayarak kullanıcının önceden yaptığı değişiklikleri yok eder.
-   - **Kullanıcı ile Ajanın Karışık Olduğu Dosyalar:** Geri alma işlemi asla dosya seviyesinde yapılamaz; yalnızca ajanın ürettiği diff blokları ters patch (`git apply --reverse <agent_patch>` veya cerrahi hunk geri alma) ile geri çekilir. Kullanıcının index (`staged`) ve working-tree durumu el değmeden korunur.
-   - **Yalnızca Ajanın Değiştirdiği Temiz Dosyalar:** Görev öncesinde dosyada kullanıcının hiçbir değişikliği yoksa, dosya `git restore <dosya>` (ve henüz stage edilmemişse) ile güvenle geri alınabilir.
-   - **Ajanın Yeni Oluşturduğu Dosyalar vs. Önceden Var Olan Untracked Dosyalar:** Yalnızca ajanın oturumda kendisinin sıfırdan oluşturduğu spesifik dosyalar silinebilir. Oturum öncesinde var olan untracked dosyalara dokunulmaz; eğer oturumda değiştirilmişlerse gerçek içerik yedeğinden başlangıç durumuna restore edilir, asla körlemesine silinmez veya ezilmez.
-   - ⛔ **Körlemesine `git reset --hard` veya `git clean -fd` çalıştırmak KESİNLİKLE YASAKTIR.**
-3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**
-   - Eğer ajanın dokunmak istediği kod bloğunda kullanıcının kaydedilmemiş bir değişikliği ile çakışma varsa, dosya ezilmez; durulur ve kullanıcıya diff gösterilerek onay istenir.
-4. **Matematiksel Doğrulama Kapısı (Post-Rollback State Equivalence Verification):**
-   - Geri alma sonrasında alınan güncel `git write-tree` çıktısı oturum başındaki `PRE_INDEX_HASH` ile, `git diff | sha256sum` çıktısı ise `PRE_WORKTREE_PATCH` ile birebir (kriptografik eşitlik düzeyinde) karşılaştırılır.
-   - Ayrıca `git ls-files --others --exclude-standard` çıktısı ve değiştirilen untracked dosya içerikleri gerçek içerik yedekleriyle doğrulanır.
-   - Eğer `git write-tree` veya diff hash çıktıları başlangıç snapshot'ı ile uyuşmuyorsa rollback **başarısız** sayılır; ajan derhal çalışmayı durdurur, durumu gizlemez ve kullanıcıya tam eskalasyon raporu sunar.
-   - Derleme (`build`) veya sözdizimi doğrulaması çalıştırılarak sistemin önceki kararlı baseline durumuna döndüğü teyit edilir.
-5. **Kök Neden & Eskalasyon Raporu:**
-   - Geri alınan değişiklikler, başarısız denemelerin kök nedeni ve kullanıcıya sunulan alternatif çözümler açıkça raporlanır.
+### C) Silent Failure Ban
+- When a build, lint, or test command outputs a failure:
+  - ❌ Never ignore error logs or falsely declare "success".
+  - ❌ Never delete failing lines or skip tests to mask the underlying bug.
+  - ✅ Surface exact error diagnostics to the user and follow the escalation tier matrix.
 
 ---
 
-## 4. HATA SINIFLANDIRMA KARAR AĞACI
+## 3. SEMANTIC & ATOMIC ROLLBACK PROTOCOL
 
-Bir hatayla karşılaştığında şu karar ağacını izle:
+When rollback is triggered (Tier 4 cascade failure or upon reaching 3 failed attempts), the Agent executes the following protocol to protect pre-existing staged and unstaged user work:
+
+1. **Pre-Execution Cryptographic Baseline Snapshot:**
+   - Before writing to any file, the Agent cryptographically locks the active working tree and index:
+     - `PRE_INDEX_HASH=$(git write-tree)` locks the Git index state (staged files),
+     - `PRE_WORKTREE_PATCH=$(git diff | sha256sum)` (plus raw `git diff` output) locks unstaged working tree deltas,
+     - `git status --porcelain` captures total working tree status,
+     - `git ls-files --others --exclude-standard` inventories untracked user files.
+   - **Protection of Pre-Existing Untracked Files:** `git ls-files --others` lists filenames but does not capture contents. Modifying or deleting pre-existing untracked files without backups is STRICTLY PROHIBITED. If an untracked file must be modified, its initial state is backed up as a raw content snapshot (not merely a hash), treating prior user work as inviolable.
+
+2. **Surgical Hunk-Level Reversion:**
+   - ⛔ **If a file modified by the Agent was already `dirty` (staged or modified) prior to the task, executing `git restore <file>`, `git restore --staged <file>`, or `git checkout <file>` is STRICTLY FORBIDDEN.** These commands reset the index and working tree to `HEAD`, permanently wiping out the user's uncommitted work.
+   - **Files with Blended User & Agent Edits:** Reversion must never be executed at the file level; only the agent-generated diff hunks are reversed via inverse patch (`git apply --reverse <agent_patch>` or surgical hunk rejection). The user's index (`staged`) and working-tree state remain intact.
+   - **Clean Files Modified Exclusively by the Agent:** If a file was clean prior to the task, it may safely be restored via `git restore <file>` (if unstaged).
+   - **Agent-Created Files vs. Pre-Existing Untracked Files:** Only files generated from scratch by the Agent during the current session may be removed. Pre-existing untracked files must never be deleted; if modified, restore them from raw content backups.
+   - ⛔ **Executing `git reset --hard` or `git clean -fd` is STRICTLY BANNED.**
+
+3. **User Conflict Safety:**
+   - If an agent-planned edit conflicts with unsaved user changes in the same code block, do not overwrite the file; pause, display the diff, and request clarification.
+
+4. **Post-Rollback State Equivalence Verification:**
+   - Following rollback, the active `git write-tree` hash is compared against `PRE_INDEX_HASH`, and `git diff | sha256sum` is compared against `PRE_WORKTREE_PATCH`.
+   - Untracked file inventories and content backups are verified for exact match.
+   - If `git write-tree` or diff hashes fail to match the initial snapshot with zero variance, rollback is deemed **FAILED**; the Agent stops execution immediately and escalates to the user.
+   - A build or syntax check is run to confirm the system has returned to its prior stable baseline.
+
+5. **Root-Cause Escalation Report:**
+   - Document reverted edits, failure causes across all attempts, and recommended architectural alternatives.
+
+---
+
+## 4. ERROR CLASSIFICATION DECISION TREE
+
+When a failure occurs, traverse this decision tree:
 
 ```text
-Hata mı var?
-  ├── Tek dosya, <5 satır, yeni import yok → SEVİYE 1 (Oto-fix)
-  ├── Tek dosya, mantıksal düzeltme → SEVİYE 2 (Fix + Rapor)
-  ├── Çoklu dosya etkileniyor veya API/tip değişikliği → SEVİYE 3 (Dur + Sor)
-  ├── Build/test tamamen kırık veya kaskat arıza → SEVİYE 4 (Geri Al)
-  └── Canlı ortam, gerçek veri, ödeme → SEVİYE 5 (Dokunma)
+Defect Encountered?
+  ├── Single file, <5 lines, no new imports → TIER 1 (Auto-Fix)
+  ├── Single file, logical adjustment → TIER 2 (Fix + Report)
+  ├── Multi-file impact or API/type boundary change → TIER 3 (Pause + Ask)
+  ├── Build/test shattered or cascading regressions → TIER 4 (Rollback)
+  └── Production environment, real user data, billing → TIER 5 (Hands-Off)
 ```
 
 ---
 
-## 5. DOĞRULAMA VE QA KONTROL LİSTESİ
+## 5. VERIFICATION & QA CHECKLIST
 
-- [ ] Hata doğru seviyeye sınıflandırıldı mı?
-- [ ] Seviye 1-2 dışında kullanıcı bilgilendirildi mi?
-- [ ] 3 deneme kuralı aşıldıysa escalate edildi mi?
-- [ ] Kaskat arıza tespit edildiyse geri alındı mı?
-- [ ] Geri alma sonrası build/test doğrulaması yapıldı mı?
-- [ ] Sessiz hata gizlenmedi mi?
+- [ ] Was the defect classified into the correct tier?
+- [ ] Was the user informed for all Tier 2+ defects?
+- [ ] Was the task escalated immediately upon reaching 3 failed attempts?
+- [ ] Were cascading regressions stopped via hunk-level rollback?
+- [ ] Was post-rollback cryptographic equivalence verified before reporting?
+- [ ] Were silent failures prevented from being masked?

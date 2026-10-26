@@ -1,100 +1,101 @@
 # UI/UX DESIGN & FRONTEND STANDARDS (ui-standards-ai.md)
 
-> **Rol Tanımı:** Kıdemli Ürün Tasarımcısı (Lead Product Designer / UI-UX) ve Frontend Mimarı  
-> **Temel Amaç:** Amatör ve jenerik "AI görünümünden" uzak, Linear/Vercel/Shadcn kalitesinde, niş, modern ve yüksek dönüşümlü arayüzler inşa etmek.  
-> **Standart Uyumu:** RulesAI.md Destekli Çekirdek UI/UX Standardı
+> **File Location:** `ui-standards-ai.md`  
+> **Role Definition:** Staff Product Designer (UI/UX) & Frontend Systems Architect  
+> **Core Mission:** Engineer niche, modern, high-converting interfaces rivaling Linear, Vercel, and Shadcn standards while strictly eliminating amateur and generic "AI boilerplate aesthetics".  
+> **Standard Compliance:** RulesAI.md Constitutional Frontend Standard
 
 ---
 
-## 1. TEMA SEÇİMİ VE SORGULAMA PROTOKOLÜ (ÖNCE ONAY AL)
+## 1. THEME SELECTION & INQUIRY PROTOCOL (CONFIRM CONTEXT FIRST)
 
-Projeye yeni bir arayüz, sayfa veya bileşen eklemeden önce belirlenmiş bir tasarım sistemi yoksa ve **kullanıcı özel bir tema belirtmemişse** DUR ve kullanıcıya aşağıdaki açıklayıcı soru formatıyla danış:
+Before introducing a new interface, page, or layout to a repository lacking an established design system, and **when the user has not specified a concrete visual theme**, PAUSE and consult the user using this descriptive inquiry format:
 
-> 💡 **Not:** Tilki (Fox) teması çerçevenin kurucusunun şahsi tasarım imzasıdır; ancak AIMASTER kurumsal, modüler ve globale açık bir arayüz mimarisine sahiptir. Bu doğrultuda kullanıcıya seçenekler her zaman proje bağlamını netleştirecek açıklamalarla sunulmalıdır:
+> 💡 **Architectural Note:** The Fox theme is the framework founder's signature aesthetic; however, AIMASTER features a modular, enterprise-ready, globally adaptable design architecture. Accordingly, options must always be presented to the user with clear explanations clarifying the project context:
 
 ```text
-🎨 [AIMASTER UI TEMA VE MİMARİ TERCİHİ]
-Arayüz tasarımına başlamadan önce lütfen proje türünüzü ve tercih ettiğiniz paleti seçin:
-1. Şahsi Site (Açıklayın): Portfolyo, kişisel blog, bot veya geliştirici aracı (Kişisel imza: Tilki / Fox teması veya özel bireysel stil)
-2. Kurumsal Site (Açıklayın): B2B, SaaS platformu, yönetim paneli veya kurumsal firma sitesi (Slate/Mavi veya Zümrüt yeşili dengesi)
-3. Ticaret / Mağaza vs. (Açıklayın): E-ticaret, ürün kataloğu veya vitrin (Aydınlık ferah zemin, yüksek dönüşümlü net CTA)
-(Farklı bir estetik istiyorsanız lütfen belirtin: Cyberpunk, Minimalist, Brutalist vb. - WCAG 2.1 AA kontrastı daima korunur)
+🎨 [AIMASTER UI THEME & ARCHITECTURAL PREFERENCE]
+Before designing the interface, please select your project archetype and preferred aesthetic:
+1. Personal Site (Explain): Portfolio, personal blog, bot, or developer tool (Signature: Fox / Amber aesthetic or custom personal style)
+2. Corporate Site (Explain): B2B, SaaS platform, administrative dashboard, or corporate firm (Balanced Slate/Blue or Emerald Green)
+3. Commerce / Shop (Explain): E-commerce, product catalog, or retail showcase (Crisp airy backdrop, high-converting clear CTA)
+(If you require an alternative aesthetic, please specify: Cyberpunk, Minimalist, Brutalist, etc. - WCAG 2.1 AA contrast is strictly enforced across all styles)
 ```
 
-### A) Şahsi / Bireysel Site (Kişisel İmza & Fox / Tilki Teması)
-- **Kullanım Alanı:** Kişisel projeler, geliştirici portfolyoları, bloglar, botlar, özel geliştirici araçları veya yaratıcı vitrinler.
-- **Karakter:** Çevik, keskin, yüksek kontrastlı ve modern.
-- **Vurgu (Accent) Renkleri:** Tilki Turuncusu / Kehribar (`#EA580C`, `#D97706`, `#F97316`).
-- **Zemin & Yüzey:** Derin antrasit / kömür (`#09090B`, `#18181B`, `#27272A`) veya zarif kırık beyaz.
+### A) Personal / Individual Site (Signature Fox Aesthetic)
+- **Target Use:** Personal projects, engineering portfolios, developer blogs, bots, custom CLI tools, or creative showcases.
+- **Visual Character:** Agile, sharp, high-contrast, modern.
+- **Accent Tones:** Fox Orange / Amber (`#EA580C`, `#D97706`, `#F97316`).
+- **Surfaces & Canvas:** Deep anthracite / charcoal (`#09090B`, `#18181B`, `#27272A`) or crisp off-white.
 
-### B) Kurumsal Site (B2B / SaaS / Dashboard)
-- **Kullanım Alanı:** B2B web platformları, resmi kurumsal firma siteleri, SaaS ürünleri, veri yoğun yönetim panelleri ve finans.
-- **Karakter:** Güven veren, dengeli, göz yormayan, profesyonel.
-- **Zemin & Yüzey:** Slate veya Zinc gri tonları (`#0F172A`, `#1E293B`, `#F8FAFC`).
-- **Vurgu (Accent):** Kurumsal Çivit / Kraliyet Mavisi (`#4F46E5`, `#2563EB`) veya Zümrüt Yeşili (`#10B981`).
+### B) Corporate Site (B2B / SaaS / Administrative Dashboard)
+- **Target Use:** B2B web applications, official corporate websites, SaaS products, data-dense dashboards, and fintech.
+- **Visual Character:** Trustworthy, balanced, ergonomic, professional.
+- **Surfaces & Canvas:** Slate or Zinc neutrals (`#0F172A`, `#1E293B`, `#F8FAFC`).
+- **Accent Tones:** Corporate Indigo / Royal Blue (`#4F46E5`, `#2563EB`) or Emerald Green (`#10B981`).
 
-### C) Ticaret / Mağaza vs. (E-Ticaret / Ürün Kataloğu / Perakende)
-- **Kullanım Alanı:** Satış odaklı siteler, e-ticaret mağazaları, ürün katalogları, dijital pazar yerleri veya perakende vitrinleri.
-- **Karakter:** Ferah, dikkat dağıtmayan, dönüşüm ve ürün görselleri odaklı.
-- **Zemin & Yüzey:** Ferah, aydınlık tonlar (`#FFFFFF`, `#FAFAFA`, `#F4F4F5`), Stone ve Warm Gray nötr geçişler.
-- **Aksiyon (CTA):** Ürünü öne çıkaran, dikkat dağıtmayan tek bir net satın alma/aksiyon rengi.
+### C) Commerce / Storefront (E-Commerce / Product Catalog / Retail)
+- **Target Use:** Sales-driven sites, e-commerce stores, product catalogs, digital marketplaces, or retail showcases.
+- **Visual Character:** Crisp, uncluttered, conversion-oriented, spotlighting product imagery.
+- **Surfaces & Canvas:** Bright, spacious neutrals (`#FFFFFF`, `#FAFAFA`, `#F4F4F5`), Stone and Warm Gray transitions.
+- **Action (CTA):** A singular, high-converting purchase action color with zero distracting visual noise.
 
-*(Kullanıcı açıkça Cyberpunk, Retro, Brutalist veya Neumorphic gibi alternatif bir estetik stil talep ettiğinde bu tercihe uyulur; ancak WCAG 2.1 AA 4.5:1 kontrast standardı asla çiğnenmez).*
-
----
-
-## 2. KESİN YASAKLAR (ANTI-AI AESTHETIC SHIELD)
-
-Aşağıdaki amatör ve yapay zeka klişesi stilleri **kullanıcı açıkça istemedikçe KULLANMA**:
-
-- ❌ **Jenerik AI Klişesi ve Rastgele Neon Yasağı:** Kullanıcı açıkça talep etmedikçe (oyun arayüzü, synthwave teması vb. bilinçli tercihler hariç), amatör rastgele mor-pembe-camgöbeği (`#ff00ff`, `#00ffff`) neon gradyanlar veya göz yoran parlamalar kullanma. Özel temalarda dahi metin kontrastı (WCAG AA 4.5:1) korunmalıdır.
-- ❌ **Çamur Gölge Yasağı:** Koyu, geniş, opasitesi yüksek siyah gölgeler (`box-shadow: 0 10px 30px rgba(0,0,0,0.8)`) kullanma. Gölgeler çok hafif, dağınık ve neredeyse belirsiz olmalıdır (`shadow-sm` veya `0 1px 2px rgba(0,0,0,0.05)`).
-- ❌ **Orantısız Köşe Yuvarlaklığı:** Her karta `border-radius: 30px` verme. Modern, keskin ve zarif köşeler kullan (`6px`, `8px` veya en fazla `12px` / `rounded-md`, `rounded-lg`).
-- ❌ **Renk Karmaşası Yasağı:** Ekranda 3'ten fazla bağımsız renk tonu kullanma. **60-30-10 Kuralına** sadık kal:
-  - `%60` Baskın zemin ve nötr yüzeyler
-  - `%30` İkincil yüzeyler, kartlar, kenarlıklar
-  - `%10` Vurgu (accent) ve tıklanabilir aksiyon rengi
+*(When users explicitly request alternative aesthetic movements such as Cyberpunk, Retro, Brutalist, or Neumorphic, adhere strictly to their preference while never compromising WCAG 2.1 AA 4.5:1 contrast standards).*
 
 ---
 
-## 3. MİMARİ VE YÜZEY STANDARTLARI (LINEAR & SHADCN SEVİYESİ)
+## 2. STRICT PROHIBITIONS (ANTI-AI AESTHETIC SHIELD)
 
-- **Zarif Kenarlıklar (Borders):** Kartları ve bölümleri ayırmak için kaba gölgeler yerine `1px solid` ince kenarlıklar kullan:
-  - *Dark Mode:* `rgba(255,255,255,0.08)` veya `border-zinc-800`
+The following amateur AI cliches are **STRICTLY PROHIBITED** unless explicitly requested by the user:
+
+- ❌ **Generic AI Cliches & Unprincipled Neon:** Unless explicitly requested (e.g. gaming consoles or synthwave themes), random purple-pink-cyan (`#ff00ff`, `#00ffff`) neon gradients and eye-straining glows are forbidden. Even in themed interfaces, text contrast (WCAG AA 4.5:1) remains mandatory.
+- ❌ **Muddy Drop Shadows:** Heavy, sprawling, high-opacity black drop shadows (`box-shadow: 0 10px 30px rgba(0,0,0,0.8)`) are banned. Shadows must remain crisp, subtle, and diffused (`shadow-sm` or `0 1px 2px rgba(0,0,0,0.05)`).
+- ❌ **Disproportionate Border Radii:** Avoid slapping `border-radius: 30px` across arbitrary cards. Use crisp, modern, refined corners (`6px`, `8px`, or at most `12px` / `rounded-md`, `rounded-lg`).
+- ❌ **Color Chaos:** Never exceed 3 distinct color roles on a single viewport. Strictly adhere to the **60-30-10 Rule**:
+  - `60%` Dominant background canvas and neutral surfaces
+  - `30%` Structural surfaces, cards, navbars, and borders
+  - `10%` Accent interactive color reserved strictly for primary CTAs
+
+---
+
+## 3. ARCHITECTURAL & SURFACE STANDARDS (LINEAR & SHADCN QUALITY)
+
+- **Subtle Borders:** Delineate cards and sections using `1px solid` hairline borders rather than heavy drop shadows:
+  - *Dark Mode:* `rgba(255,255,255,0.08)` or `border-zinc-800`
   - *Light Mode:* `border-zinc-200`
-- **Tipografi Hiyerarşisi:**
-  - Modern sans-serif fontlar kullan (Inter, Geist, Plus Jakarta Sans, JetBrains Mono).
-  - Başlıklarda harf aralığını hafifçe daralt (`tracking-tight` / `-0.02em`).
-  - Gövde metinlerinde gözü yormamak için saf siyah/saf beyaz yerine hafif kırık tonlar tercih et (`text-zinc-600` veya `text-zinc-400`).
-- **Whitespace Disiplini:** Elementleri birbirine yapıştırma. Tutarlı bir 4px / 8px grid sistemi (`gap-2`, `gap-4`, `p-6`, `my-8`) uygula. Ferah, nefes alan düzenler oluştur.
+- **Typography Hierarchy:**
+  - Modern sans-serif typefaces (Inter, Geist, Plus Jakarta Sans, JetBrains Mono).
+  - Apply subtle letter-spacing reduction on large headlines (`tracking-tight` / `-0.02em`).
+  - Use high-legibility muted off-blacks and off-whites for body text to reduce eye fatigue (`text-zinc-600` or `text-zinc-400`).
+- **Whitespace Discipline:** Never pack elements tightly. Enforce a consistent 4px / 8px spatial grid system (`gap-2`, `gap-4`, `p-6`, `my-8`) to maintain generous, breathing layouts.
 
 ---
 
-## 4. EKSİKSİZ UX VE DURUM YÖNETİMİ (STATE COMPLETENESS)
+## 4. STATE COMPLETENESS IN UX
 
-Veri listelenen veya form içeren her arayüzde şu 4 durumu **istisnasız** tasarla:
-1. **Normal Veri Görünümü (Data State):** Bilgilerin düzenli listelendiği hal.
-2. **Yükleme Durumu (Loading / Skeleton):** Spinner yerine içeriğin yerleşimine uygun iskelet animasyonu (`animate-pulse`).
-3. **Boş Durum (Empty State):** Henüz veri yokken kullanıcıyı karşılayan şık ikon, başlık ve "Yeni Ekle" aksiyon butonu.
-4. **Hata Durumu (Error State):** Sunucu hatasında patlamak yerine kullanıcıya durumu zarifçe anlatan ve "Tekrar Dene" butonu sunan arayüz.
-
----
-
-## 5. ETKİLEŞİM, ERİŞİLEBİLİRLİK VE MOBİL UYUM
-
-- **Mikro Etkileşimler:** Tıklanabilir her elementin (buton, link, kart) zarif bir `hover`, `active` ve `focus-visible` hali olmalıdır (`transition-all duration-150 ease-in-out`).
-- **Yatay Taşma Yasağı:** Hiçbir ekranda istemsiz yatay kaydırma çubuğu (`horizontal scroll`) çıkamaz. Sabit piksel (`width: 1200px`) yerine `max-w-*` ve akıcı CSS Grid/Flexbox kullan.
-- **Dokunma Ergonomisi:** Mobilde tıklanabilir her alan en az 44x44px fiziksel dokunma alanına sahip olmalıdır.
-- **İkonografi:** Emoji yerine her zaman temiz vektörel SVG ikon setleri (Lucide, Heroicons, Phosphor) kullan ve ikon boyutlarını metinle oranla (`w-4 h-4` veya `w-5 h-5`).
-- **Kontrast:** Metin ve arka plan arasındaki renk kontrastının en az 4.5:1 olduğunu doğrula.
+Every data-displaying or form-bearing interface must account for all 4 states without exception:
+1. **Data State:** Clean, organized presentation of loaded records.
+2. **Loading State (Skeleton):** Layout-matching skeleton animations (`animate-pulse`) rather than generic spinners.
+3. **Empty State:** High-craft illustration/icon, clear explanation, and primary "Create New" action button when zero records exist.
+4. **Error State:** Resilient UI providing actionable error explanations and a "Retry" button rather than silent crashes.
 
 ---
 
-## 6. UI/UX DOĞRULAMA VE QA KONTROL LİSTESİ
+## 5. ERGONOMICS, ACCESSIBILITY & RESPONSIVENESS
 
-- [ ] Seçilen tema için kullanıcı onayı alındı mı veya onaylı palete uyuldu mu?
-- [ ] Neon gradyanlar, abartılı parlamalar ve çamur gölgeler engellendi mi?
-- [ ] 60-30-10 renk dengesi korundu mu?
-- [ ] Loading, Empty ve Error durumları eksiksiz sağlandı mı?
-- [ ] Mobil ekranda yatay taşma (horizontal overflow) sıfırlandı mı?
-- [ ] Tıklanabilir öğelerde `focus-visible` ve `hover` geçişleri var mı?
+- **Micro-Interactions:** Every interactive element (buttons, links, cards) must define refined `hover`, `active`, and `focus-visible` states (`transition-all duration-150 ease-in-out`).
+- **Zero Horizontal Overflow:** Accidental horizontal scrollbars are strictly forbidden. Use `max-w-*` constraints and fluid CSS Grid/Flexbox layouts instead of rigid pixel widths (`width: 1200px`).
+- **Touch Ergonomics:** Ensure all mobile touch targets satisfy minimum 44x44px physical interaction zones.
+- **Iconography:** Use consistent, scalable vector SVG icon sets (Lucide, Heroicons, Phosphor) sized proportionally to adjacent typography (`w-4 h-4` or `w-5 h-5`).
+- **Contrast Ratios:** Verify >= 4.5:1 contrast between all text and background surfaces.
+
+---
+
+## 6. UI/UX VERIFICATION & QA CHECKLIST
+
+- [ ] Was the theme confirmed or aligned with approved palette standards?
+- [ ] Were garish neon gradients and muddy drop shadows eliminated?
+- [ ] Was the 60-30-10 color balance maintained?
+- [ ] Were Data, Loading, Empty, and Error states fully implemented?
+- [ ] Was horizontal overflow completely eliminated across mobile viewports?
+- [ ] Do all interactive elements have visible `focus-visible` and `hover` states?

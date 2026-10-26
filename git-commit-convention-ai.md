@@ -1,54 +1,55 @@
 # GIT COMMIT & BRANCH CONVENTION (git-commit-convention-ai.md)
 
-> **Rol Tanımı:** Kıdemli Sürüm Kontrol ve Kaynak Yönetimi Uzmanı  
-> **Temel Amaç:** Tutarlı, okunabilir ve otomatik changelog üretimine uygun commit mesajları ile temiz dal yönetimi sağlamak.  
-> **Standart Uyumu:** RulesAI.md Destekli Çekirdek Git Standardı
+> **File Location:** `git-commit-convention-ai.md`  
+> **Role Definition:** Staff Version Control & Release Engineering Architect  
+> **Core Mission:** Enforce consistent, machine-readable, changelog-ready commit messages and disciplined branching workflows.  
+> **Standard Compliance:** RulesAI.md Constitutional Git Standard
 
 ---
 
-## 1. COMMIT MESAJ FORMATI (CONVENTIONAL COMMITS)
+## 1. COMMIT MESSAGE SCHEMA (CONVENTIONAL COMMITS)
 
-Her commit mesajı aşağıdaki formata **kesinlikle** uymalıdır:
+Every commit message MUST adhere strictly to the following structure:
 
 ```text
-<tip>(<kapsam>): <kısa açıklama>
+<type>(<scope>): <short summary>
 
-[isteğe bağlı gövde]
+[optional body]
 
-[isteğe bağlı alt bilgi]
+[optional footer]
 ```
 
-### Commit Tipleri (Type)
+### Commit Types
 
-| Tip | Kullanım Alanı | Örnek |
+| Type | Use Case | Canonical Example |
 | :--- | :--- | :--- |
-| `feat` | Yeni özellik | `feat(auth): add JWT refresh token rotation` |
-| `fix` | Hata düzeltme | `fix(catalog): correct price rounding for decimals` |
-| `refactor` | Davranış değiştirmeyen kod düzenleme | `refactor(api): extract validation to middleware` |
-| `style` | Kod formatlama, whitespace (davranış değişikliği yok) | `style(components): fix indentation and trailing commas` |
-| `docs` | Dokümantasyon değişikliği | `docs(readme): update installation instructions` |
-| `test` | Test ekleme veya düzeltme | `test(cart): add edge case for zero quantity` |
-| `chore` | Build, CI, bağımlılık, config değişikliği | `chore(deps): upgrade prisma to v6.2` |
-| `perf` | Performans iyileştirmesi | `perf(query): add index on orders.created_at` |
-| `ci` | CI/CD pipeline değişikliği | `ci(github): add playwright e2e to workflow` |
-| `revert` | Önceki commit'i geri alma | `revert: feat(auth): add social login` |
+| `feat` | New end-user or API capability | `feat(auth): add JWT refresh token rotation` |
+| `fix` | Bug or defect resolution | `fix(catalog): correct price rounding for decimals` |
+| `refactor` | Code restructuring with zero behavior change | `refactor(api): extract validation to middleware` |
+| `style` | Formatting, whitespace, semicolon fixes (no runtime change) | `style(components): fix indentation and trailing commas` |
+| `docs` | Documentation and Markdown updates | `docs(readme): update installation instructions` |
+| `test` | Adding or refactoring automated tests | `test(cart): add edge case for zero quantity` |
+| `chore` | Build tooling, dependencies, config updates | `chore(deps): upgrade prisma to v6.2` |
+| `perf` | Measurable performance optimization | `perf(query): add index on orders.created_at` |
+| `ci` | CI/CD pipeline and workflow updates | `ci(github): add playwright e2e to workflow` |
+| `revert` | Reverting a prior commit | `revert: feat(auth): add social login` |
 
-### Kapsam (Scope) Kuralları
-- Kapsam, değişikliğin etkilediği modülü veya alanı belirtir: `auth`, `catalog`, `ui`, `api`, `db`, `config`
-- Tüm projeyi etkileyen değişikliklerde kapsam atlanabilir: `chore: update eslint config`
-- Kapsam her zaman **küçük harfle**, tire kullanılmadan yazılır.
+### Scope Directives
+- Identifies the localized component or module: `auth`, `catalog`, `ui`, `api`, `db`, `config`.
+- May be omitted for whole-repo alterations: `chore: update eslint config`.
+- Lowercase only, without hyphenation or spaces.
 
-### Kısa Açıklama Kuralları
-- Küçük harfle başlar, nokta ile bitmez.
-- Emir kipi (imperative) kullanılır: `add`, `fix`, `remove`, `update` (~~added~~, ~~fixed~~, ~~removed~~ değil).
-- Maksimum **72 karakter**.
-- Dil: **İngilizce**.
+### Short Summary Directives
+- Starts with a lowercase letter; ends without a period.
+- Uses imperative present tense: `add`, `fix`, `remove`, `update` (never ~~added~~, ~~fixed~~, ~~updating~~).
+- Maximum **72 characters**.
+- Language: **English**.
 
 ---
 
-## 2. BREAKING CHANGE BİLDİRİMİ
+## 2. BREAKING CHANGE NOTIFICATIONS
 
-API sözleşmesini, veritabanı şemasını veya kullanıcı arayüzünü kıran değişikliklerde:
+For changes modifying API contracts, database schemas, or breaking user interfaces:
 
 ```text
 feat(api)!: change authentication from session to JWT
@@ -57,63 +58,63 @@ BREAKING CHANGE: All API endpoints now require Bearer token
 in Authorization header. Session-based auth is removed.
 ```
 
-- `!` işareti tip ve kapsam arasına eklenir.
-- `BREAKING CHANGE:` alt bilgisi ile detaylı açıklama verilir.
+- Append `!` between type and scope.
+- Include a detailed `BREAKING CHANGE:` footer explaining the migration requirement.
 
 ---
 
-## 3. DAL (BRANCH) ADLANDIRMA STANDARDI
+## 3. BRANCH NAMING STANDARDS
 
 ```text
-<tip>/<kısa-açıklama>
+<type>/<short-description>
 ```
 
-| Dal Tipi | Format | Örnek |
+| Branch Archetype | Format | Canonical Example |
 | :--- | :--- | :--- |
-| Yeni özellik | `feature/<açıklama>` | `feature/user-dashboard` |
-| Hata düzeltme | `fix/<açıklama>` | `fix/cart-total-calculation` |
-| Acil düzeltme | `hotfix/<açıklama>` | `hotfix/payment-timeout` |
-| Bakım/Config | `chore/<açıklama>` | `chore/upgrade-node-22` |
-| Deneysel | `experiment/<açıklama>` | `experiment/new-cache-strategy` |
+| New Feature | `feature/<description>` | `feature/user-dashboard` |
+| Bug Fix | `fix/<description>` | `fix/cart-total-calculation` |
+| Hotfix | `hotfix/<description>` | `hotfix/payment-timeout` |
+| Tooling / Chore | `chore/<description>` | `chore/upgrade-node-22` |
+| Experimental | `experiment/<description>` | `experiment/new-cache-strategy` |
 
-### Dal Kuralları
-- Dal adları küçük harf, tire (`-`) ile ayrılır.
-- Ana dallar: `main` (production), `develop` (geliştirme).
-- Feature dalları `develop`'dan ayrılır, `develop`'a merge edilir.
-- Hotfix dalları `main`'den ayrılır, hem `main` hem `develop`'a merge edilir.
+### Branch Management Rules
+- Lowercase alphanumeric characters, hyphen-separated (`-`).
+- Primary branches: `main` (production), `develop` (staging).
+- Feature branches branch from and merge into `develop`.
+- Hotfix branches branch from `main` and merge into both `main` and `develop`.
 
 ---
 
-## 4. ATOMİK COMMIT PRENSİBİ
+## 4. ATOMIC COMMIT PRINCIPLES
 
-- **Tek Commit = Tek Mantıksal Değişiklik:** Bir commit'te hem yeni özellik hem bug fix hem refactor **yapılamaz**.
-- **Her commit kendi başına build alabilir:** Kırık (broken) commit yasaktır.
-- **WIP commit yasağı:** `WIP: çalışıyor`, `temp commit`, `asdfg` gibi mesajlar **yasaktır**.
+- **Single Commit = Single Logical Delta:** Never bundle a new feature, bug fix, and refactoring within a single commit.
+- **Build Integrity:** Every commit in the history must compile and pass tests independently. Broken intermediate commits are forbidden.
+- **Prohibition of Work-In-Progress Commits:** Messages like `WIP`, `temp commit`, or `saving progress` are strictly prohibited.
 
-### Commit Boyutu Rehberi
+### Commit Sizing Guidelines
 ```text
-İDEAL   : 1-5 dosya, tek bir değişiklik teması
-KABUL   : 5-10 dosya, birbiriyle doğrudan ilişkili
-BÖLÜNME : 10+ dosya → Birden fazla mantıksal commit'e ayır
+IDEAL    : 1–5 files, unified thematic delta
+ACCEPTABLE: 5–10 files, tightly coupled changes
+DECOUPLE : 10+ files → Split into multiple logical, atomic commits
 ```
 
 ---
 
-## 5. COMMIT YASAKLARI
+## 5. STRICT GIT PROHIBITIONS
 
-- ❌ Commit mesajına dosya listesi yazma (diff zaten gösterir).
-- ❌ `git add .` ile kontrol edilmeden tüm değişiklikleri ekleme.
-- ❌ `.env`, secret dosyaları, `node_modules`, `dist/`, `.next/` commit'e dahil etme.
-- ❌ `force push` (kullanıcı açıkça istemediği sürece).
-- ❌ Aynı dosyanın farklı mantıksal değişikliklerini tek commit'e sıkıştırma.
+- ❌ Never list modified files in the commit message (the git diff already conveys this).
+- ❌ Never run uninspected `git add .` indiscriminately.
+- ❌ Never commit `.env`, secret credentials, `node_modules`, `dist/`, or `.next/`.
+- ❌ Never force-push (`git push -f`) unless explicitly requested by the user.
+- ❌ Never combine unrelated multi-module edits into a single commit.
 
 ---
 
-## 6. DOĞRULAMA VE QA KONTROL LİSTESİ
+## 6. VERIFICATION & QA CHECKLIST
 
-- [ ] Commit mesajı Conventional Commits formatında mı?
-- [ ] Kısa açıklama 72 karakteri aşmıyor mu?
-- [ ] Breaking change varsa `!` ve `BREAKING CHANGE:` footer'ı eklendi mi?
-- [ ] Commit atomik mi? (Tek mantıksal değişiklik)
-- [ ] Secret veya build artifact dahil edilmedi mi?
-- [ ] Dal adı standarda uygun mu?
+- [ ] Does the commit message strictly follow Conventional Commits?
+- [ ] Is the short summary 72 characters or less?
+- [ ] Are breaking changes signaled with `!` and a `BREAKING CHANGE:` footer?
+- [ ] Is the commit atomic and self-contained?
+- [ ] Are secrets, environment files, and build artifacts excluded?
+- [ ] Does the branch name adhere to standard archetypes?
