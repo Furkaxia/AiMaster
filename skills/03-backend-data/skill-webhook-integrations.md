@@ -16,8 +16,10 @@
 
 ---
 
-### 2. ASYNCHRONOUS INGESTION
-- Acknowledge incoming webhooks immediately (`200 OK`) after signature verification; push payloads to a background queue for asynchronous processing.
+### 2. DURABLE ASYNCHRONOUS INGESTION
+- Verify signature, then execute durable handoff to persistent queue or write-ahead log.
+- Return `200/202 Accepted` ONLY after durable enqueue succeeds.
+- If the background queue or broker is temporarily unavailable, return `503 Service Unavailable` (or `500`) to trigger the webhook provider's retry backoff. Never acknowledge an unpersisted event.
 
 ---
 

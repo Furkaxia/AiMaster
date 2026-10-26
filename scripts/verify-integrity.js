@@ -2,12 +2,18 @@
 
 /**
  * ==============================================================================
- * AIMASTER INTEGRITY & HEALTH CHECK SCRIPT
+ * AIMASTER INTEGRITY & HEALTH CHECK SCRIPT (v2.0)
  * ==============================================================================
- * Bu script, repo genelindeki dosya bütünlüğünü, RulesAI.md içindeki skill
- * referanslarını, markdown link çözümlenebilirliğini, gizlilik sızıntılarını ve
- * çekirdek standartların diskteki varlığını doğrular.
- * Sıfır harici bağımlılık (Pure Node.js) ile çalışır.
+ * Comprehensive bidirectional integrity validator:
+ * 1. Core standards existence (including ai-log-ai.md, package.json).
+ * 2. Bidirectional skill catalog parity (Disk <-> RulesAI.md <-> skills/README.md).
+ * 3. Exact skill & category count assertions (80 skills, 7 categories).
+ * 4. Shared footer compliance across all 80 skills.
+ * 5. Deep markdown link parser: verifies that every relative link resolves on disk.
+ * 6. Integration presets verification (all 6 AI IDE presets).
+ * 7. Privacy & path leak protection (no file:/// or local C:\Users\ paths).
+ * 8. Git security hygiene (.gitignore must include .env, .handoff/, ai-log.local.md).
+ * Zero external dependencies (Pure Node.js).
  */
 
 const fs = require('fs');
@@ -27,10 +33,30 @@ function logFail(msg) {
 }
 
 console.log('\n🔍 ======================================================');
-console.log('   AIMASTER REPOSITORY INTEGRITY & HEALTH CHECK');
+console.log('   AIMASTER ENTERPRISE INTEGRITY & HEALTH CHECK (v2.0)');
 console.log('======================================================\n');
 
-// 1. Çekirdek Standart Dosyalarını Kontrol Et
+// Helper to recursively collect markdown files
+function getAllMarkdownFiles(dir) {
+  let results = [];
+  if (!fs.existsSync(dir)) return results;
+  const list = fs.readdirSync(dir);
+  list.forEach(file => {
+    if (file === 'node_modules' || file === '.git' || file === '.handoff' || file === 'test md' || file === 'temp') return;
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
+    if (stat && stat.isDirectory()) {
+      results = results.concat(getAllMarkdownFiles(filePath));
+    } else if (file.endsWith('.md')) {
+      results.push(filePath);
+    }
+  });
+  return results;
+}
+
+// -----------------------------------------------------------------------------
+// 1. Core Standards Verification
+// -----------------------------------------------------------------------------
 console.log('📌 1. Çekirdek Standart Dosyaları Doğrulanıyor...');
 const CORE_STANDARDS = [
   'RulesAI.md',
@@ -44,6 +70,7 @@ const CORE_STANDARDS = [
   'ai-communication-protocol-ai.md',
   'performance-budget-ai.md',
   'session-handoff-protocol-ai.md',
+  'ai-log-ai.md',
   'README.md',
   'README.tr.md',
   'LICENSE',
@@ -63,68 +90,161 @@ CORE_STANDARDS.forEach(file => {
   }
 });
 
-// 2. RulesAI.md İçindeki Skill Tablosunu Ayrıştır ve Doğrula
-console.log('\n📌 2. RulesAI.md Skill Kataloğu Doğrulanıyor...');
-const rulesAiPath = path.join(ROOT_DIR, 'RulesAI.md');
-if (fs.existsSync(rulesAiPath)) {
-  const content = fs.readFileSync(rulesAiPath, 'utf8');
-  const skillMatches = content.match(/skills\/[a-zA-Z0-9_-]+\/skill-[a-zA-Z0-9_-]+\.md/g) || [];
-  const uniqueSkills = Array.from(new Set(skillMatches));
+// -----------------------------------------------------------------------------
+// 2. Skill Catalog & Directory Assertions (Disk <-> Catalogs)
+// -----------------------------------------------------------------------------
+console.log('\n📌 2. 80 Skill, 7 Kategori ve Katalog Çift Yönlü Bütünlüğü...');
 
-  console.log(`   RulesAI.md içinde ${uniqueSkills.length} benzersiz skill yolu tespit edildi.`);
+const EXPECTED_CATEGORIES = {
+  '01-architecture-planning': 9,
+  '02-frontend-ui': 10,
+  '03-backend-data': 19,
+  '04-security-audit': 9,
+  '05-testing-quality': 10,
+  '06-devops-tooling': 11,
+  '07-code-craft': 12
+};
 
-  uniqueSkills.forEach(relPath => {
-    checksCount++;
-    const fullPath = path.join(ROOT_DIR, relPath);
-    if (fs.existsSync(fullPath)) {
-      logPass(`Skill mevcut: ${relPath}`);
-    } else {
-      logFail(`RulesAI.md içinde tanımlı ama diskte YOK: ${relPath}`);
-    }
-  });
-} else {
-  logFail('RulesAI.md ana dosyası bulunamadı!');
-}
-
-// 3. skills/ Dizinindeki Tüm Dosyaları Tara
-console.log('\n📌 3. skills/ Klasör Bütünlüğü ve Shared Footer Kontrolü...');
 const skillsDir = path.join(ROOT_DIR, 'skills');
-let allMarkdownFiles = [];
+let diskSkills = [];
 
-function getAllMarkdownFiles(dir) {
-  let results = [];
-  const list = fs.readdirSync(dir);
-  list.forEach(file => {
-    if (file === 'node_modules' || file === '.git') return;
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
-    if (stat && stat.isDirectory()) {
-      results = results.concat(getAllMarkdownFiles(filePath));
-    } else if (file.endsWith('.md')) {
-      results.push(filePath);
-    }
-  });
-  return results;
-}
-
-if (fs.existsSync(skillsDir)) {
-  const footerPath = path.join(skillsDir, '_shared-skill-footer.md');
+Object.keys(EXPECTED_CATEGORIES).forEach(category => {
   checksCount++;
-  if (fs.existsSync(footerPath)) {
-    logPass('Paylaşılan footer mevcut: skills/_shared-skill-footer.md');
-  } else {
-    logFail('skills/_shared-skill-footer.md EKSİK!');
+  const catDir = path.join(skillsDir, category);
+  if (!fs.existsSync(catDir)) {
+    logFail(`Kategori dizini eksik: skills/${category}`);
+    return;
   }
+  const files = fs.readdirSync(catDir).filter(f => f.startsWith('skill-') && f.endsWith('.md'));
+  const expectedCount = EXPECTED_CATEGORIES[category];
+  if (files.length === expectedCount) {
+    logPass(`Kategori [${category}]: ${files.length}/${expectedCount} skill mevcut`);
+  } else {
+    logFail(`Kategori [${category}] sayısı tutarsız! Beklenen: ${expectedCount}, Mevcut: ${files.length}`);
+  }
+  files.forEach(f => {
+    diskSkills.push(`skills/${category}/${f}`);
+  });
+});
 
-  const allSkillFiles = getAllMarkdownFiles(skillsDir);
-  console.log(`   skills/ altında toplam ${allSkillFiles.length} markdown dosyası tespit edildi.`);
-  logPass(`Tüm skill dosyaları taranabilir durumda (${allSkillFiles.length} dosya)`);
+checksCount++;
+if (diskSkills.length === 80) {
+  logPass(`Tam olarak 80 skill disk üzerinde doğrulandı (${diskSkills.length}/80)`);
 } else {
-  logFail('skills/ ana dizini bulunamadı!');
+  logFail(`Toplam skill sayısı 80 olmalıdır! Diskteki sayı: ${diskSkills.length}`);
 }
 
-// 4. Entegrasyon Preset Dosyalarını Kontrol Et
-console.log('\n📌 4. integrations/ Şablonları Doğrulanıyor...');
+// RulesAI.md catalog check
+const rulesAiPath = path.join(ROOT_DIR, 'RulesAI.md');
+const rulesAiContent = fs.readFileSync(rulesAiPath, 'utf8');
+const rulesMatches = rulesAiContent.match(/skills\/[a-zA-Z0-9_-]+\/skill-[a-zA-Z0-9_-]+\.md/g) || [];
+const uniqueRulesSkills = Array.from(new Set(rulesMatches));
+
+checksCount++;
+if (uniqueRulesSkills.length === 80) {
+  logPass(`RulesAI.md içinde 80/80 skill kataloglanmış durumda`);
+} else {
+  logFail(`RulesAI.md içinde 80 skill olmalı! Bulunan: ${uniqueRulesSkills.length}`);
+}
+
+// Check every disk skill is cataloged in RulesAI.md and skills/README.md
+const skillsReadmePath = path.join(skillsDir, 'README.md');
+const skillsReadmeContent = fs.readFileSync(skillsReadmePath, 'utf8');
+
+let orphanSkillsCount = 0;
+diskSkills.forEach(skillRelPath => {
+  if (!rulesAiContent.includes(skillRelPath)) {
+    logFail(`Kayıtsız/Orphan Skill bulundu (RulesAI.md'de yok): ${skillRelPath}`);
+    orphanSkillsCount++;
+  }
+  const filename = path.basename(skillRelPath);
+  if (!skillsReadmeContent.includes(filename)) {
+    logFail(`Kayıtsız/Orphan Skill bulundu (skills/README.md'de yok): ${skillRelPath}`);
+    orphanSkillsCount++;
+  }
+});
+
+checksCount++;
+if (orphanSkillsCount === 0) {
+  logPass('Hiçbir kayıtsız/sahipsiz (orphan) skill bulunmuyor; katalog %100 senkronize');
+}
+
+// -----------------------------------------------------------------------------
+// 3. Shared Footer Compliance across all 80 skills
+// -----------------------------------------------------------------------------
+console.log('\n📌 3. Ortak Footer (_shared-skill-footer.md) Standart Uyumu...');
+const footerPath = path.join(skillsDir, '_shared-skill-footer.md');
+checksCount++;
+if (fs.existsSync(footerPath)) {
+  logPass('Paylaşılan footer mevcut: skills/_shared-skill-footer.md');
+} else {
+  logFail('skills/_shared-skill-footer.md EKSİK!');
+}
+
+let footerMissingCount = 0;
+diskSkills.forEach(skillRelPath => {
+  const fullPath = path.join(ROOT_DIR, skillRelPath);
+  const content = fs.readFileSync(fullPath, 'utf8');
+  if (!content.includes('_shared-skill-footer.md')) {
+    logFail(`Footer referansı eksik: ${skillRelPath}`);
+    footerMissingCount++;
+  }
+});
+
+checksCount++;
+if (footerMissingCount === 0) {
+  logPass(`80 skill dosyasının tamamı _shared-skill-footer.md standardına bağlı`);
+}
+
+// -----------------------------------------------------------------------------
+// 4. Deep Markdown Relative Link Resolution
+// -----------------------------------------------------------------------------
+console.log('\n📌 4. Derin Markdown Link Çözümleme ve Kırık Link Taraması...');
+const allMarkdownFiles = getAllMarkdownFiles(ROOT_DIR);
+let brokenLinksCount = 0;
+let totalCheckedLinks = 0;
+
+allMarkdownFiles.forEach(mdFile => {
+  const content = fs.readFileSync(mdFile, 'utf8');
+  const dir = path.dirname(mdFile);
+  const relFile = path.relative(ROOT_DIR, mdFile);
+
+  // Strip fenced code blocks and inline code spans to avoid testing example code
+  const cleanContent = content
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`\n]+`/g, '');
+
+  // Match [text](target)
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let match;
+  while ((match = linkRegex.exec(cleanContent)) !== null) {
+    const rawTarget = match[2].trim();
+    // Ignore external URLs, anchors, mailto, etc.
+    if (rawTarget.startsWith('http://') || rawTarget.startsWith('https://') || rawTarget.startsWith('mailto:') || rawTarget.startsWith('#')) {
+      continue;
+    }
+    // Remove query params and hash fragments
+    const cleanTarget = rawTarget.split('?')[0].split('#')[0];
+    if (!cleanTarget) continue;
+
+    totalCheckedLinks++;
+    const resolvedPath = path.resolve(dir, cleanTarget);
+    if (!fs.existsSync(resolvedPath)) {
+      logFail(`Kırık bağıl link bulundu: [${relFile}] -> "${rawTarget}"`);
+      brokenLinksCount++;
+    }
+  }
+});
+
+checksCount++;
+if (brokenLinksCount === 0) {
+  logPass(`Tüm bağıl markdown linkleri (${totalCheckedLinks} link, ${allMarkdownFiles.length} dosya) başarıyla çözümlendi`);
+}
+
+// -----------------------------------------------------------------------------
+// 5. Integration Presets
+// -----------------------------------------------------------------------------
+console.log('\n📌 5. integrations/ IDE Preset Şablonları...');
 const PRESET_FILES = [
   'integrations/cursor/.cursorrules',
   'integrations/claude/claude-project-prompt.md',
@@ -144,9 +264,10 @@ PRESET_FILES.forEach(preset => {
   }
 });
 
-// 5. Gizlilik ve Mutlak Yol Güvenliği (No Absolute Paths / file:/// / Private paths)
-console.log('\n📌 5. Mutlak Yol ve Gizlilik Sızıntısı Taraması...');
-allMarkdownFiles = getAllMarkdownFiles(ROOT_DIR);
+// -----------------------------------------------------------------------------
+// 6. Absolute Path Leak & Privacy Inspection
+// -----------------------------------------------------------------------------
+console.log('\n📌 6. Gizlilik ve Mutlak Yol Sızıntısı Taraması...');
 let absolutePathLeaks = 0;
 
 allMarkdownFiles.forEach(mdFile => {
@@ -164,30 +285,34 @@ if (absolutePathLeaks === 0) {
   logPass(`Tüm markdown dosyaları taşınabilir ve temiz (${allMarkdownFiles.length} dosya)`);
 }
 
-// 6. Git Hijyeni ve .gitignore Güvenlik Kontrolü
-console.log('\n📌 6. Git Güvenliği ve .gitignore Doğrulanıyor...');
+// -----------------------------------------------------------------------------
+// 7. Git & Security Hygiene (.gitignore)
+// -----------------------------------------------------------------------------
+console.log('\n📌 7. Git Hijyeni ve .gitignore Güvenlik Doğrulaması...');
 const gitignorePath = path.join(ROOT_DIR, '.gitignore');
 if (fs.existsSync(gitignorePath)) {
   const gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
-  const requiredIgnores = ['.env', '.handoff/'];
+  const requiredIgnores = ['.env', '.handoff/', 'ai-log.local.md'];
 
   requiredIgnores.forEach(item => {
     checksCount++;
     if (gitignoreContent.includes(item)) {
       logPass(`.gitignore içinde tanımlı: ${item}`);
     } else {
-      logFail(`.gitignore içinde EKSİK (Güvenlik riski): ${item}`);
+      logFail(`.gitignore içinde EKSİK: ${item}`);
     }
   });
 } else {
   logFail('.gitignore dosyası bulunamadı!');
 }
 
-// 7. Özet ve Sonuç
+// -----------------------------------------------------------------------------
+// Summary
+// -----------------------------------------------------------------------------
 console.log('\n======================================================');
-console.log(`📊 DENETİM SONUCU: ${checksCount} Kontrol Gerçekleştirildi.`);
+console.log(`📊 DENETİM SONUCU: ${checksCount} Bütünlük Kontrolü Tamamlandı.`);
 if (errorsCount === 0) {
-  console.log(`\x1b[32m🎉 BAŞARILI: Hiçbir kırık link veya eksik dosya bulunamadı! (0 Hata)\x1b[0m\n`);
+  console.log(`\x1b[32m🎉 BAŞARILI: Sistemde 0 hata, 0 kırık link, 0 katalog uyuşmazlığı tespit edildi!\x1b[0m\n`);
   process.exit(0);
 } else {
   console.error(`\x1b[31m❌ BAŞARISIZ: Toplam ${errorsCount} hata tespit edildi!\x1b[0m\n`);

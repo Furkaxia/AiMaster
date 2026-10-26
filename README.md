@@ -60,9 +60,9 @@ AIMASTER solves this with two foundational pillars:
                                                     (One-Shot Flawless Code)
 ```
 
-1. **On-Demand Surgical Skills:** All 80 skills are isolated. Only the single relevant skill is loaded into memory on demand.
-2. **Agentic Boardroom (Micro-Agent Council):** Before touching code, 3 micro-personas (UX Architect, UI Systems, Red-Team Critic) debate a 30-line Micro-Spec. Bad design decisions are killed before wasting code tokens.
-3. **One-Shot Synthesis:** Once consensus is signed, code is generated in a single, flawless, hallucination-free pass.
+1. **On-Demand Minimal Skill Sets:** All 80 skills are modularized. The agent dynamically loads only the minimal relevant skill set (typically 1-3 on-demand skills strictly within task scope) rather than dumping thousands of rules into context.
+2. **Agentic Boardroom (Micro-Agent Council):** Before touching code, 3 micro-personas (UX Architect, UI Systems, Red-Team Critic) debate a 30-line Micro-Spec. Bad design decisions and material vulnerabilities are eliminated before burning code tokens.
+3. **One-Shot Synthesis:** Once consensus is signed, code is generated in a single pass with verified requirements and surgical micro-diffs.
 4. **English-Pivot Cross-Lingual Reasoning:** No matter what language the user speaks in (e.g., Turkish), the model deconstructs the request into rigorous technical English internally, enforces strict engineering standards, preserves local domain entities (e.g., VKN, TCKN, Iyzico), and delivers back in the user's native tongue.
 
 ---
@@ -71,10 +71,12 @@ AIMASTER solves this with two foundational pillars:
 
 | Metric | Monolithic Prompts | AIMASTER Boardroom | Advantage |
 | :--- | :--- | :--- | :--- |
-| **Context Pollution** | 1000s of rules loaded upfront (~40K tokens) | 1 core rule + 1 on-demand skill (~3K tokens) | **92% Lighter** |
-| **Pre-Flight Cost** | Blindly writing 2500 lines of code (~15K tokens) | 30-line Micro-Spec debate (~1.5K tokens) | **90% Cheaper** |
-| **Debugging Cycles** | 4 - 8 rounds of regenerating files (~80K+ tokens) | 0 - 1 rounds of surgical micro-diffs (~5K tokens) | **94% Faster** |
-| **Total Task Cost** | **~120,000 - 180,000 Tokens** | **~18,000 - 25,000 Tokens** | **🔥 85% NET SAVINGS** |
+| **Context Pollution** | 1000s of rules loaded upfront (~40K tokens) | 1 core rule + minimal skills (~3K tokens) | **~90% Lighter** |
+| **Pre-Flight Cost** | Blindly writing 2500 lines of code (~15K tokens) | 30-line Micro-Spec debate (~1.5K tokens) | **~90% Cheaper** |
+| **Debugging Cycles** | 4 - 8 rounds of regenerating files (~80K+ tokens) | 0 - 1 rounds of surgical micro-diffs (~5K tokens) | **Drastically Reduced** |
+| **Total Task Cost** | **~120,000 - 180,000 Tokens** | **~18,000 - 25,000 Tokens** | **🔥 Up to 85% Net Savings** |
+
+> *Note:* Figures reflect comparative token consumption observed during complex multi-file engineering tasks in internal AI IDE evaluation benchmarks (Cursor, Windsurf, Claude Projects). Actual efficiency gains vary depending on model context caching and repository complexity. AIMASTER operates as a prompt-level constitutional instruction framework.
 
 ---
 

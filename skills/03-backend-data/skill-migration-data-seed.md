@@ -19,7 +19,7 @@
 ---
 
 ### 2. REVERSIBLE MIGRATIONS & SEED FIXTURES
-- Ensure every migration includes a functional, tested rollback (`down`) script.
+- Ensure every schema migration defines a verified recovery path: either a tested reversible rollback (`down`) script or an explicit forward-fix strategy for irreversible operations (e.g. data truncations, table drops).
 - Seed data scripts must be idempotent (`ON CONFLICT DO NOTHING` / upserts).
 
 ---

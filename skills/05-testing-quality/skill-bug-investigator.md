@@ -11,7 +11,7 @@
 ## 1. CORE PRINCIPLES & DOMAIN STANDARDS
 
 ### 1. REPRODUCE BEFORE REMEDIATION
-- Never write fix code without first reproducing the defect via an isolated, failing automated test case.
+- For all behavioral defects, runtime crashes, and logic regressions, never write fix code without first reproducing the defect via an isolated, failing test case (trivial typos and obvious single-line syntax fixes under 5 lines are exempt under RulesAI Fast-Track).
 - Apply the **5 Whys Methodology** to uncover the systemic cause rather than treating superficial symptoms.
 
 ---

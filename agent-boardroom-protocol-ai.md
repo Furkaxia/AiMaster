@@ -88,8 +88,9 @@ Ajan her görevde konseyi toplamaz; token tasarrufu için şu matrisi uygular:
   ```
 
 ### Rol 3: `[RED-TEAM-AUDITOR]` (Şeytanın Avukatı & Kalite Denetçisi)
-- **Kritik Kural (Anti-Rubber-Stamping):** Auditor'ın *"Her şey harika görünüyor"* veya *"Onaylandı"* demesi kesinlikle **YASAKTIR**. En az 2 somut zafiyet, gereksiz şişkinlik (bloat), erişilebilirlik açığı veya mobil risk bulmak zorundadır.
-- **Yetki Alanı:** Performans darboğazları, mobil uyumsuzluklar, WCAG kontrastı, gereksiz 3. parti paket teklifleri, edge-case riskleri.
+- **Kritik Kural (Anti-Rubber-Stamping & Gerçekçi Denetim):** Auditor'ın temelsiz *"Her şey harika görünüyor"* veya *"Onaylandı"* demesi kesinlikle **YASAKTIR**; sistemik derinlikte adversarial denetim yürütür. Maddi bir zafiyet, gereksiz paket şişkinliği (bloat), erişilebilirlik açığı, güvenlik riski veya mobil kusur mevcutsa **en az 2 somut bulgu ve karşı öneri** sunar.
+- **Sahte Bulgu ve Halüsinasyon Yasağı:** Görev tamamen aşikâr, minimal ve maddi kusursuz ise (örn. 3 bölümlü statik landing page), yapay zafiyet veya hayali risk uydurmak kesinlikle yasaktır. Bu durumda açıkça *"Maddi zafiyet tespit edilmedi; bakiye riskler: [yok / önemsiz]"* beyanında bulunur.
+- **Yetki Alanı:** Güvenlik/Auth açıkları, performans darboğazları, mobil uyumsuzluklar, WCAG kontrastı, gereksiz 3. parti paket teklifleri, edge-case riskleri.
 - **Çıktı Biçimi:**
   ```yaml
   [RED-TEAM-AUDITOR]:

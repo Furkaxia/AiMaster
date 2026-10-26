@@ -64,14 +64,24 @@ AI ajanının sonsuz düzeltme döngüsüne girmesini engelleyen kesin kurallar:
 
 ---
 
-## 3. GERİ ALMA (ROLLBACK) PROTOKOLÜ
+## 3. SEMANTİK GERİ ALMA (SEMANTIC ROLLBACK) PROTOKOLÜ
 
-Geri alma gerektiğinde sırasıyla:
+Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonrası), kullanıcının kendi değişikliklerini ve çalışma dizinini korumak için şu katı adımlar izlenir:
 
-1. **Kapsam Belirleme:** Yalnızca ajanın kendi yaptığı değişiklikleri geri al. Kullanıcının önceki commitlerini, dosyalarını veya konfigürasyonlarını **asla** geri alma.
-2. **Cerrahi Geri Alma:** `git checkout -- <dosya>` veya IDE undo ile sadece ilgili dosyaları geri al. Körlemesine `git reset --hard` **yasaktır**.
-3. **Doğrulama:** Geri alma sonrası build ve mevcut testlerin geçtiğini doğrula.
-4. **Rapor:** Geri alınan dosyaları ve nedenini tek maddede belirt.
+1. **Oturum Etki Alanı İzolasyonu (Blast Radius Scope):**
+   - Yalnızca ajanın mevcut oturumda (turn) değiştirdiği veya oluşturduğu dosyalar geri alma kapsamına alınır.
+   - Kullanıcının önceden değiştirdiği, sahnelenmemiş (unstaged) veya bağımsız çalışma alanı dosyalarına **ASLA DOKUNULMAZ**.
+2. **Cerrahi Restorasyon Komutları:**
+   - Değişiklik sahnelenmişse (staged): `git restore --staged <ajanın_değiştirdiği_dosyalar>`
+   - Çalışma ağacı dosyalarını geri almak için: `git restore <ajanın_değiştirdiği_dosyalar>`
+   - Ajan tarafından yeni oluşturulmuş hatalı dosyalar varsa: Yalnızca ajanın oluşturduğu o spesifik dosyalar silinir.
+   - ⛔ **Körlemesine `git reset --hard` veya `git clean -fd` çalıştırmak KESİNLİKLE YASAKTIR.**
+3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**
+   - Eğer ajanın müdahale ettiği dosyada kullanıcının önceden yaptığı kaydedilmemiş düzenlemeler varsa, dosya körlemesine ezilmez; kullanıcıya diff gösterilip eskalasyon yapılır.
+4. **Kurtarma Doğrulaması:**
+   - Geri alma işlemi sonrasında derleme (`build`) veya sözdizimi kontrolü çalıştırılarak projenin önceki kararlı çalışma durumuna döndüğü doğrulanır.
+5. **Kök Neden & Eskalasyon Raporu:**
+   - Geri alınan spesifik dosyalar, başarısız olan 3 denemenin teknik kök nedeni ve kullanıcıya önerilen mimari alternatif tek blokta raporlanır.
 
 ---
 

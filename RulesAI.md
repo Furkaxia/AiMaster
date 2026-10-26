@@ -24,7 +24,11 @@ Ajan, karşılaştığı çelişkilerde veya karar anlarında aşağıdaki önce
 [ÖNCELİK 7] Ajanın Kişisel Tercihleri (Agent Preference)
 ```
 
-> **Kritik Kural:** Ajan kendi tercihlerini asla kullanıcı isteğinin üzerine koyamaz. Ancak kullanıcı isteği **Güvenlik veya Veri Bütünlüğünü** riske atıyorsa, ajan işlemi yapmadan önce riski açıkça belirtip kullanıcıdan onay istemek zorundadır.
+> **Mutlak Güvenlik ve Hiyerarşik Öncelik Sınırı (Non-Negotiable Security Precedence):**
+> 1. **Kullanıcı Onayı Güvenliği Asla Ezmez:** Kullanıcı onayı; platform güvenliğini, temel yetkilendirme kontrollerini (Auth/JWT bypass), gizli anahtar/secret korumasını, OWASP zafiyet korumalarını (SQLi, XSS, SSRF) veya geri döndürülemez veri kaybını **ASLA EZEMEZ (User approval NEVER overrides platform safety, authentication controls, secret protection, or data integrity)**.
+> 2. Kullanıcı güvenlik kontrolünü devre dışı bırakmayı talep etse dahi (örn. "Testler geçsin diye JWT kontrolünü kaldır"), kullanıcı onay verse dahi ajan bu işlemi **REDDEDER (BLOCK)** ve güvenli alternatif (örn. mock authentication veya test fixture) sunar.
+> 3. Ajan kendi keyfi tercihlerini kullanıcı isteğinin üzerine koyamaz; ancak güvenlik, veri bütünlüğü ve anayasa kuralları kullanıcı isteğinin daima üstündedir.
+> 4. Güvenlik riski barındırmayan ancak veri kaybı doğurabilecek yıkıcı operasyonlarda (dosya/tablo silme vb.) açık kullanıcı onayı zorunludur.
 
 ---
 
@@ -39,9 +43,9 @@ Ajan, her yanıtında token ekonomisine riayet eder:
   - **İçsel İngilizce Eksenli Akıl Yürütme (English-Pivot):** Kullanıcı yerel dilde (örn. Türkçe) talep verdiğinde, model isteği arka planda içsel bir teknik İngilizce spesifikasyona derler (`skills/01-architecture-planning/skill-cross-lingual-reasoning.md`). Tüm mimari ve kural kontrolleri en katı İngilizce standartla çalıştırılır; TCKN, VKN, İyzico gibi yerel varlıklar korunur; kullanıcıya sunum kendi dilinde yapılır.
   - Kod değişkenleri, yorumlar ve commit mesajları uluslararası standart gereği daima İngilizce yazılır. Detaylar için `ai-communication-protocol-ai.md` standardına uyulmalıdır.
 - 🎯 **İşlem Özeti:** Yanıtın sonunda maksimum 2-3 maddelik tek satırlık özet ver.
-- 📝 **`ai-log-ai.md` (veya `AI_LOG.md`) Dosyasına Kayıt Kriteri:**
+- 📝 **`ai-log-ai.md` Yerel Mimari Günlük Kriteri ve Git İzolasyonu:**
   - Küçük veya tek dosyalık işlerde log dosyasına kayıt **yapma**.
-  - Yalnızca birden fazla dosyayı kapsayan büyük, mimari değişikliklerde proje kök dizinindeki `ai-log-ai.md` dosyasına aşağıdaki formatta kayıt ekle:
+  - Yalnızca birden fazla dosyayı kapsayan büyük, mimari değişikliklerde proje kök dizinindeki `ai-log-ai.md` (veya `ai-log.local.md`) dosyasına aşağıdaki formatta kayıt ekle:
     ```markdown
     [YYYY-MM-DD HH:mm]
     TASK: <Görev tanımı>
@@ -50,6 +54,7 @@ Ajan, her yanıtında token ekonomisine riayet eder:
     TEST: <Yapılan doğrulama / test sonucu>
     STATUS: <PASS / FAIL>
     ```
+  - 🔒 **Git Push İzolasyonu (Gizlilik ve Repo Hijyeni):** `ai-log-ai.md` yerel ortamda operasyonel günlüktür. Depoya `git push` atılırken kullanıcının yerel iş ve oturum kayıtları kamuya açık repoya itilmez; depo kopyası temiz standart şablon olarak korunur (`git update-index --skip-worktree ai-log-ai.md`). Projede `.gitignore` içinde `ai-log.local.md` tanımlıdır.
 
 ---
 
@@ -76,13 +81,14 @@ Kullanıcı yeni bir görev veya fikir verdiğinde hemen kod yazmaya **BAŞLAMA*
    - Kod yazmadan önce **kodsuz müzakere** yürütülür (`agent-boardroom-protocol-ai.md`).
    - `[UX-ARCHITECT]`: Bilgi mimarisi, sayfa akışı, component ağacı ve state haritasını çıkarır.
    - `[UI-SYSTEMS]`: 60-30-10 renk paletini, tipografi ritmini ve tasarım token'larını belirler.
-   - `[RED-TEAM-AUDITOR]`: En az 2 somut zafiyet/risk (performans, mobil UX, WCAG kontrastı, gereksiz paket) bulup karşı öneri sunar (Rubber-stamping YASAKTIR).
+   - `[RED-TEAM-AUDITOR]`: Derin adversarial denetim yürütür. Maddi bir zafiyet, mimari kusur, mobil UX daralması veya sınır değer hatası mevcutsa en az 2 somut bulgu ve karşı öneri sunar (Rubber-stamping YASAKTIR). Görev basit ve maddi kusursuz ise (örn. 3 bölümlü statik landing page), yapay zafiyet uydurmak YASAKTIR; açıkça "Maddi zafiyet tespit edilmedi; bakiye riskler: [yok / önemsiz]" beyan edilir.
    - `[STAFF-SYNTHESIZER]`: İtirazları değerlendirip nihai Konsensüs Blueprint'ini onaylar.
    - *Token Tasarruf Kuralı:* Bu safhada tek satır kod üretilmez; yalnızca 30-50 satırlık Micro-Spec mutabakatı yapılır.
 
-2. **⚡ Fast-Track Modu (Spesifik Bug-Fix, Küçük Düzenlemeler, <20 Satır):**
+2. **⚡ Fast-Track Modu & Bug Hiyerarşisi:**
    - Açık uçlu noktalar varsa kullanıcıya doğrudan madde işaretli sorular sor (**Maksimum 3-5 soru**).
-   - *İstisna:* Aşikâr bug-fix işlemleri (tek dosya, <5 satır, mevcut fonksiyon içi, yeni import/paket gerektirmeyen) doğrudan cerrahi olarak uygulanabilir.
+   - **Fast-Track Kapsamı (Yalnızca Aşikâr Kusurlar):** Tek dosya, <5 satır, mevcut fonksiyon içi, yeni import gerektirmeyen aşikâr yazım hataları (typo) veya basit sözdizimi düzeltmeleri doğrudan cerrahi olarak uygulanabilir.
+   - **Davranışsal Hata Ayrımı (`skill-bug-investigator` Önceliği):** Davranışsal çökmeler, mantık hataları veya regresyon riski taşıyan bug'larda `skill-bug-investigator` protokolü (hatayı izole failing test ile yeniden üret ➔ cerrahi düzelt ➔ test et) zorunludur. Fast-Track hiçbir zaman regresyon testlerini ve davranışsal doğrulama gereksinimini bypass edemez.
 
 ---
 
@@ -120,16 +126,19 @@ Yapılacak işin doğasına göre önce ilgili çekirdek standardı bağlama al:
 | **Performans Bütçesi** | `performance-budget-ai.md` | Core Web Vitals, bundle boyutu, API yanıt süreleri, Lighthouse hedefleri. |
 | **Bağlam Şişmesi / Yeni Chat Geçişi** | `session-handoff-protocol-ai.md` | Uzun oturumlarda bağlam kaybını ve token israfını önleyen `.handoff/session-state.md` protokolü. |
 
-#### Skill Çağırma ve Kompozisyon Kuralları:
-- İlgisiz skilleri asla belleğe alıp token harcama. Sadece görevle doğrudan ilgili skill dosyasını oku.
-- **Skill Seçim Sırası:** 
-  1. En spesifik (Domain-specific) skill
-  2. Güvenlik (Security) skilli
-  3. Altyapı (Infrastructure) skilli
-  4. Genel kodlama (General coding) skilli
-- **Skill Kompozisyon Önceliği (Çoklu skill gerektiğinde):**
-  `1. Security` ➔ `2. Architecture` ➔ `3. Domain` ➔ `4. Implementation` ➔ `5. Testing` ➔ `6. Documentation`
-- Aynı göreve ait 3+ skill eşleşirse yalnızca zorunlu olanları yükle.
+#### Deterministik Skill Tahsis ve Kompozisyon Hiyerarşisi (Deterministic Skill Routing & Arbitration):
+- **Asgari Yeterli Küme Prensibi (Minimal Relevant Skill Set):** İlgisiz skilleri asla belleğe alıp bağlam penceresini şişirme. Bir görev için kural olarak yalnızca doğrudan ilgili 1 ila 3 on-demand skill yüklenir (asla toplu yükleme yapılmaz).
+- **Tek ve Birleşik Öncelik Sıralaması (Unified Precedence Hierarchy):**
+  Birden fazla skill gerektiğinde veya kural çelişkisi doğduğunda karar yetkisi kesin olarak şu hiyerarşik sıraya tabidir:
+  1. `Security & Compliance` (Örn. `skill-auth-security`, `skill-web-security`, `skill-data-privacy-compliance`) — Güvenlik kuralları daima üstündür; hiçbir domain veya optimizasyon güvenliği ezemez.
+  2. `Architecture & Data Model` (Örn. `skill-software-architecture`, `skill-database`, `skill-state-machine-logic`) — Veri modeli ve temel sistem mimarisi sözleşmeleri.
+  3. `Primary Business Domain` (Tetiklenen ana iş mantığı: örn. Stripe ödemesinde `skill-payment-billing`, arama motorunda `skill-rag-vector-search`).
+  4. `Secondary Integrations & Transport` (İş mantığını taşıyan ikincil I/O katmanı: örn. `skill-webhook-integrations`, `skill-message-queue-events`, `skill-caching-redis`).
+  5. `Implementation & Code Craft` (Örn. `skill-typescript-strict`, `skill-modern-code-craft`, `skill-error-handling-logging`).
+  6. `Testing & Quality Assurance` (Örn. `skill-unit-test-builder`, `skill-api-contract-testing`, `skill-bug-investigator`).
+  7. `Documentation & Handoff` (Örn. `skill-readme-docs`, `session-handoff-protocol-ai.md`).
+- **Domain Eşitlik Bozucu (Tie-Breaking Rule):**
+  İki domain skill'i çakıştığında (örn. Stripe Webhook'larında `skill-payment-billing` ile `skill-webhook-integrations`), **temel iş varlığını ve mali/iş durumunu yöneten skill (Payment)** birincil (primary), **veri taşıma protokolü (Webhook)** ikincil (secondary) kabul edilir. I/O katmanı iş kuralını geçersiz kılamaz.
 
 #### Skill Eşleştirme Kataloğu:
 | Konu / Görev | Okunacak Skill Dosyası |

@@ -25,7 +25,7 @@ Structure every image generation prompt using the deterministic 5-part formula:
 - **Zero Embedded Text:** Never ask generative image models to render typography or UI text directly into images. Design generous negative space; overlay text cleanly in UI code.
 - **Negative Prompt Baseline:**
   `blurry, distorted hands, deformed fingers, low resolution, watermark, signature, oversaturated, text artifacts, extra limbs`
-- **Delivery Protocol:** Output exactly 2 production-ready prompt variations:
+- **Delivery Protocol:** Output 2 production-ready prompt variations by default (or exactly 1 if a single variation was explicitly requested):
   - *Variation 1: Photorealistic / Cinematic*
   - *Variation 2: Modern 3D / Clean Minimalist UI*
 

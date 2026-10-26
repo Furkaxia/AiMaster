@@ -24,9 +24,12 @@ Yeni bir ihtiyaç karşılanacaksa şu öncelik sırasına uy:
 
 ---
 
-## 2. GÜVENLİ LİSTE (ONAYSIZ EKLENEBİLİR PAKETLER)
+## 2. ÖNCEDEN ONAYLI TEMEL PAKETLER (PRE-APPROVED WHITELIST)
 
-Aşağıdaki paketler projede zaten onaylanmış kabul edilir ve kullanıcı onayı **gerekmez**:
+Aşağıdaki paketler modern web ve backend mimarilerinde endüstri standardı olarak önceden değerlendirilmiştir; ancak bu liste **körlemesine güven veya CVE muafiyeti anlamına gelmez**.
+- 🔒 **Sürüm Sabitleme Şartı:** Tüm paketler katı sürüm (`"1.2.3"`, asla `^` veya `*` değil) ile lockfile'a kaydedilmelidir.
+- 🛡️ **Sıfır CVE Şartı:** Kurulum öncesi ve sonrasında paketlerin bilinen bir güvenlik zafiyeti (CVE) barındırmadığı doğrulanmalıdır (`npm audit`).
+- ⚙️ **Konfigürasyon Disiplini:** Paketin listede olması güvenli yapılandırıldığı anlamına gelmez (Örn. `jsonwebtoken` için katı algoritma whitelist (`RS256` / `HS256` high-entropy) zorunludur; şifreleme için `bcrypt` en az 12 round veya `argon2` tercih edilmelidir).
 
 ### Frontend Güvenli Liste
 | Paket | Kullanım Alanı |

@@ -43,3 +43,8 @@ temp/
 # Session handoff & context checkpoints
 .handoff/
 
+# Local execution logs & reviewer scratchpad
+ai-log.local.md
+*.local.log
+test md/
+

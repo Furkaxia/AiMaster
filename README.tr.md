@@ -60,9 +60,9 @@ AIMASTER bu problemi iki köklü devrimle çözer:
                                                    (Tek Seferde Hatasız Kod)
 ```
 
-1. **On-Demand Cerrahi Yükleme:** 80 skill hafızaya aynı anda yığılmaz. Sadece o anda yapılan işe özel tek bir skill cerrahi olarak çağrılır.
-2. **Agentic Boardroom (Mikro-Ajan Konseyi):** Kod yazılmadan önce 3 mikro-rol (UX Architect, UI Systems, Red-Team Auditor) 30 satırlık bir Micro-Spec üzerinde uzlaşır. Kötü kararlar kod yazılmadan elenir.
-3. **One-Shot Synthesis:** Uzlaşı sağlandıktan sonra kod tek hamlede, sıfır deneme-yanılmayla hatasız üretilir.
+1. **On-Demand Asgari Skill Kümesi:** 80 skill hafızaya aynı anda yığılmaz. Sadece o anda yapılan işin kapsamına giren asgari yeterli küme (genellikle 1 ila 3 on-demand skill) cerrahi olarak çağrılır.
+2. **Agentic Boardroom (Mikro-Ajan Konseyi):** Kod yazılmadan önce 3 mikro-rol (UX Architect, UI Systems, Red-Team Auditor) 30 satırlık bir Micro-Spec üzerinde uzlaşır. Kötü tasarım kararları ve maddi zafiyetler kod yazılmadan elenir.
+3. **One-Shot Synthesis:** Uzlaşı sağlandıktan sonra kod tek hamlede, cerrahi mikro-diff disipliniyle doğrulanmış olarak üretilir.
 4. **English-Pivot Cross-Lingual Akıl Yürütme:** Kullanıcı Türkçe talep verse dahi, model arka planda talebi endüstri standardı teknik İngilizce spesifikasyona derler; kuralları en katı şekilde işletir, yerel varlıkları (VKN, TCKN, İyzico) korur ve kullanıcıya doğrudan Türkçe yanıt verir.
 5. **Context Window Checkpoint & Handoff:** Uzun süren oturumlarda bağlam şiştiğinde sistem `.handoff/session-state.md` üreterek yeni sohbete sıfır token israfı ve tam hafızayla geçiş sağlar.
 
@@ -72,10 +72,12 @@ AIMASTER bu problemi iki köklü devrimle çözer:
 
 | Metrik | Geleneksel Monolitik Model | AIMASTER Boardroom Modeli | Avantaj |
 | :--- | :--- | :--- | :--- |
-| **Bağlam Kirliliği** | 1000'lerce kural baştan yüklenir (~40K token) | Sadece 1 ana kural + 1 on-demand skill (~3K token) | **%92 Daha Hafif** |
-| **Ön Hazırlık Maliyeti** | Körlemesine 2500 satır kod yazımı (~15K token) | 30 satırlık Micro-Spec müzakeresi (~1.5K token) | **%90 Tasarruf** |
-| **Hata Düzeltme Turları** | 4 - 8 tur tekrar tekrar kod üretimi (~80K+ token) | 0 - 1 tur cerrahi rötuş (~5K token) | **%94 Daha Hızlı** |
-| **Toplam Görev Maliyeti** | **~120.000 - 180.000 Token** | **~18,000 - 25,000 Token** | **🔥 %85 NET TASARRUF** |
+| **Bağlam Kirliliği** | 1000'lerce kural baştan yüklenir (~40K token) | 1 ana kural + asgari skill (~3K token) | **~%90 Daha Hafif** |
+| **Ön Hazırlık Maliyeti** | Körlemesine 2500 satır kod yazımı (~15K token) | 30 satırlık Micro-Spec müzakeresi (~1.5K token) | **~%90 Tasarruf** |
+| **Hata Düzeltme Turları** | 4 - 8 tur tekrar tekrar kod üretimi (~80K+ token) | 0 - 1 tur cerrahi rötuş (~5K token) | **Ciddi Azalma** |
+| **Toplam Görev Maliyeti** | **~120.000 - 180.000 Token** | **~18,000 - 25,000 Token** | **🔥 %85'e Varan Net Tasarruf** |
+
+> *Not:* Veriler, AI IDE ortamlarında (Cursor, Windsurf, Claude Projects) yürütülen çok dosyalı karmaşık mühendislik kıyaslama senaryolarındaki gözlemleri yansıtır. Gerçek verimlilik kazanımları modelin bağlam önbelleklemesine (prompt caching) ve depo karmaşıklığına bağlıdır. AIMASTER, IDE istemcileri için anayasal bir prompt/talimat çerçevesidir.
 
 ---
 

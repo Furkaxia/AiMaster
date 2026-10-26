@@ -1,8 +1,7 @@
 {
   "name": "aimaster",
   "version": "1.0.0",
-  "description": "The Constitutional Agentic Operating System & Boardroom Framework for AI IDEs",
-  "main": "scripts/verify-integrity.js",
+  "description": "The Constitutional Agentic Instruction Framework & Boardroom Architecture for AI IDEs",
   "scripts": {
     "test": "node scripts/verify-integrity.js",
     "verify": "node scripts/verify-integrity.js"
@@ -26,7 +25,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Furkaxia/aimaster.git"
+    "url": "https://github.com/Furkaxia/AiMaster.git"
   },
   "bugs": {
     "url": "https://github.com/Furkaxia/aimaster/issues"

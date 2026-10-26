@@ -26,7 +26,7 @@
 ---
 
 ### 2. IDEMPOTENCY & NETWORK RESILIENCE
-- Require an `Idempotency-Key` header on all mutating financial or transactional POST endpoints.
+- Enforce an Idempotency contract (Key, caller scope, request payload fingerprint, and cached response with TTL) on all mutating financial, transactional, or state-changing operations (`POST`, `PUT`, `PATCH`, `DELETE`).
 - Apply request timeouts on every outbound HTTP call: default **5s connect / 15s read**.
 
 ---
