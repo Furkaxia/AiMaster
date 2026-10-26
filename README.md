@@ -2,14 +2,15 @@
 
 <div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/M[![Skills Count](https://img.shields.io/badge/Skills-80%20Specialized%20Skills-emerald.svg?style=for-the-badge)](skills/README.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Skills Count](https://img.shields.io/badge/Skills-80%20Specialized%20Skills-emerald.svg?style=for-the-badge)](skills/README.md)
 [![Core Standards](https://img.shields.io/badge/Core%20Standards-10%20Bulletproof%20Rules-indigo.svg?style=for-the-badge)](RulesAI.md)
-[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#-estimated-token-economics--efficiency)
+[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#estimated-token-economics-efficiency)
 [![Multi-Agent](https://img.shields.io/badge/Architecture-Agentic%20Boardroom-purple.svg?style=for-the-badge)](agent-boardroom-protocol-ai.md)
 
 **An enterprise AI Agent operating system that transforms AI coding models (Claude, Cursor, Gemini, Windsurf, ChatGPT) from hallucinating spaghetti-code generators into an autonomous, Staff-Engineer-level engineering council.**
 
-[🇹🇷 Türkçe Dokümantasyon](README.tr.md) • [Quickstart Options](#-quickstart--deployment-options) • [How Boardroom Works](#-how-the-agentic-boardroom-works) • [Skills Directory (80 Skills)](skills/README.md)
+[🇹🇷 Türkçe Dokümantasyon](README.tr.md) • [Quickstart Options](#quickstart-deployment-options) • [How Boardroom Works](#how-the-agentic-boardroom-works) • [Skills Directory (80 Skills)](skills/README.md)
 
 </div>
 

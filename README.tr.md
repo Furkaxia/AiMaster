@@ -2,14 +2,15 @@
 
 <div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/M[![Skills Count](https://img.shields.io/badge/Skills-80%20Uzman%20Yetkinlik-emerald.svg?style=for-the-badge)](skills/README.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Skills Count](https://img.shields.io/badge/Skills-80%20Uzman%20Yetkinlik-emerald.svg?style=for-the-badge)](skills/README.md)
 [![Core Standards](https://img.shields.io/badge/Core%20Standards-10%20Temel%20Kural-indigo.svg?style=for-the-badge)](RulesAI.md)
-[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#-tahmini-token-ekonomisi-ve-verimlilik)
+[![Token Efficiency](https://img.shields.io/badge/Token%20Savings-Up%20to%2085%25-orange.svg?style=for-the-badge)](#tahmini-token-ekonomisi-ve-verimlilik)
 [![Multi-Agent](https://img.shields.io/badge/Architecture-Agentic%20Boardroom-purple.svg?style=for-the-badge)](agent-boardroom-protocol-ai.md)
 
 **Yapay zeka ajanlarını (Claude, Cursor, Gemini, Windsurf, ChatGPT) kontrolsüz halüsinasyon gören spagetti kod üreticileri olmaktan çıkarıp, Staff Engineer disiplininde çalışan otonom bir mühendislik konseyine dönüştüren kurumsal işletim sistemi.**
 
-[🌍 English Documentation](README.md) • [Kurulum Seçenekleri](#-hizli-baslangic-ve-kurulum-secenekleri) • [Boardroom Protokolü](#-agentic-boardroom-nasil-calisir) • [Yetenek Kataloğu (80 Skill)](skills/README.md)
+[🌍 English Documentation](README.md) • [Kurulum Seçenekleri](#hizli-baslangic-ve-kurulum-secenekleri) • [Boardroom Protokolü](#agentic-boardroom-nasil-calisir) • [Yetenek Kataloğu (80 Skill)](skills/README.md)
 
 </div>
 

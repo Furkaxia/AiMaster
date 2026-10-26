@@ -68,9 +68,13 @@ AI ajanının sonsuz düzeltme döngüsüne girmesini engelleyen kesin kurallar:
 
 Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonrası), kullanıcının kendi değişikliklerini ve çalışma dizinini korumak için şu katı adımlar izlenir:
 
-1. **Oturum Öncesi Durum Tespiti (Pre-Flight Baseline):**
-   - Ajan herhangi bir dosyayı değiştirmeden önce çalışma dizininin ve Git index'inin anlık durumunu tespit eder (`git status --porcelain`, `git diff --staged`).
-   - Kullanıcının önceden sahnelediği (`staged`) veya çalışma dizininde bıraktığı değişiklikler "kullanıcı alanı" olarak işaretlenir ve dokunulmaz kabul edilir.
+1. **Oturum Öncesi Durum Tespiti ve İçerik Snapshot'ı (Pre-Flight Baseline Snapshot):**
+   - Ajan herhangi bir dosyayı değiştirmeden önce çalışma dizininin ve Git index'inin durumunu tam olarak arşivler:
+     - `git status --porcelain` ile genel durum listesi,
+     - `git diff --staged` çıktısı ile kullanıcının önceden stage ettiği içerik snapshot'ı,
+     - `git diff` çıktısı ile kullanıcının unstaged çalışma dizini snapshot'ı,
+     - `git ls-files --others --exclude-standard` ile kullanıcının untracked dosyalar envanteri.
+   - Bu içerikler referans snapshot olarak saklanır; kullanıcının önceki tüm değişiklikleri dokunulmaz kabul edilir.
 2. **Cerrahi Restorasyon & Hunk Bazlı Geri Alma (Hunk-Level Reversion):**
    - ⛔ **Karışık dosyalarda `git restore --staged <dosya>` çalıştırmak KESİNLİKLE YASAKTIR.** Çünkü `git restore --staged`, dosyanın tüm index içeriğini doğrudan `HEAD` üzerinden sıfırlayarak kullanıcının önceden stage ettiği değişiklikleri yok eder.
    - **Yalnızca Ajanın Değiştirdiği Temiz Dosyalar:** Dosyada kullanıcının hiçbir önceki değişikliği yoksa, dosya `git restore <dosya>` (ve henüz stage edilmemişse) ile güvenle geri alınabilir.
@@ -79,8 +83,9 @@ Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonra
    - ⛔ **Körlemesine `git reset --hard` veya `git clean -fd` çalıştırmak KESİNLİKLE YASAKTIR.**
 3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**
    - Eğer ajanın dokunmak istediği kod bloğunda kullanıcının kaydedilmemiş bir değişikliği ile çakışma varsa, dosya ezilmez; durulur ve kullanıcıya diff gösterilerek onay istenir.
-4. **Kurtarma ve Kullanıcı Durumu Doğrulaması:**
-   - Geri alma sonrasında `git status --porcelain`, `git diff` ve `git diff --cached` kontrolleri çalıştırılarak kullanıcının oturum öncesi staged ve unstaged durumunun %100 korunduğu doğrulanır.
+4. **Kurtarma ve Kullanıcı Durumu Eşitlik Doğrulaması (State Equivalence Verification):**
+   - Geri alma sonrasında alınan güncel `git status --porcelain`, `git diff` ve `git diff --cached` çıktıları, oturum başında kaydedilen baseline snapshot içerikleriyle birebir karşılaştırılır.
+   - Başlangıç durumu ile geri alma sonrası durumun tam eşitliği kanıtlanmadan "kullanıcı durumu korundu" onayı verilemez.
    - Derleme (`build`) veya sözdizimi doğrulaması çalıştırılarak sistemin önceki kararlı baseline durumuna döndüğü teyit edilir.
 5. **Kök Neden & Eskalasyon Raporu:**
    - Geri alınan değişiklikler, başarısız denemelerin kök nedeni ve kullanıcıya sunulan alternatif çözümler açıkça raporlanır.

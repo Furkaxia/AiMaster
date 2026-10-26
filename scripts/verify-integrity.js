@@ -42,7 +42,8 @@ console.log('\n🔍 ======================================================');
 console.log('   AIMASTER ENTERPRISE HEALTH & SEMANTIC LINTER (v2.1)');
 console.log('======================================================\n');
 
-// Helper to recursively collect markdown files safely
+// Helper to recursively collect markdown files with explicit error reporting
+let scanErrorsCount = 0;
 function getAllMarkdownFiles(dir) {
   let results = [];
   if (!fs.existsSync(dir)) return results;
@@ -59,11 +60,13 @@ function getAllMarkdownFiles(dir) {
           results.push(filePath);
         }
       } catch (e) {
-        // Skip unreadable files safely
+        logFail(`Dosya okunamadı/taranamadı: ${filePath} (${e.message})`);
+        scanErrorsCount++;
       }
     });
   } catch (err) {
-    // Gracefully handle directory read error
+    logFail(`Dizin içeriği okunamadı: ${dir} (${err.message})`);
+    scanErrorsCount++;
   }
   return results;
 }
@@ -323,71 +326,202 @@ if (semanticViolations === 0) {
 }
 
 // -----------------------------------------------------------------------------
-// 4. Cross-Language Documentation Synchronization
+// 4. Cross-Language Documentation Synchronization & Section Parity
 // -----------------------------------------------------------------------------
-console.log('\n📌 4. Diller Arası Dokümantasyon Senkronizasyonu (README.md <-> README.tr.md)...');
+console.log('\n📌 4. Diller Arası Dokümantasyon Senkronizasyonu ve Bölüm Bütünlüğü (README.md <-> README.tr.md)...');
 const readmeEnPath = path.join(ROOT_DIR, 'README.md');
 const readmeTrPath = path.join(ROOT_DIR, 'README.tr.md');
 if (fs.existsSync(readmeEnPath) && fs.existsSync(readmeTrPath)) {
   const enContent = fs.readFileSync(readmeEnPath, 'utf8');
   const trContent = fs.readFileSync(readmeTrPath, 'utf8');
 
+  // Check 1: Skill and rule metrics
   checksCount++;
-  const enSkillsMatch = enContent.includes('80 On-Demand Specialized Skills') || enContent.includes('80 On-Demand Minimal');
-  const trSkillsMatch = trContent.includes('80 Adet On-Demand') || trContent.includes('80 skill');
+  const enSkillsMatch = enContent.includes('80 Specialized Skills') || enContent.includes('80 On-Demand');
+  const trSkillsMatch = trContent.includes('80 Uzman Yetkinlik') || trContent.includes('80 Adet On-Demand') || trContent.includes('80 skill');
   if (enSkillsMatch && trSkillsMatch) {
     logPass('README.md ve README.tr.md skill sayıları (80 skill) senkronize');
   } else {
     logFail('README.md ile README.tr.md arasında skill sayısı uyumsuzluğu!');
   }
+
+  // Check 2: Core structural section parity
+  const structuralSections = [
+    { name: 'Architecture / OS Title', en: 'AIMASTER — AGENTIC OPERATING SYSTEM', tr: 'AIMASTER — AGENTIC OPERATING SYSTEM' },
+    { name: 'Problem Definition', en: 'THE PROBLEM', tr: 'PROBLEM' },
+    { name: 'Solution Architecture', en: 'THE SOLUTION', tr: 'ÇÖZÜM' },
+    { name: 'Token Economics', en: 'ESTIMATED TOKEN ECONOMICS', tr: 'TAHMİNİ TOKEN EKONOMİSİ' },
+    { name: 'Boardroom Protocol', en: 'HOW THE AGENTIC BOARDROOM WORKS', tr: 'AGENTIC BOARDROOM NASIL ÇALIŞIR' },
+    { name: 'Quickstart', en: 'QUICKSTART', tr: 'HIZLI BAŞLANGIÇ' },
+    { name: 'Skills Directory', en: 'SKILLS DIRECTORY', tr: 'YETENEK KATALOĞU' },
+    { name: 'Repository Architecture', en: 'REPOSITORY ARCHITECTURE', tr: 'SİSTEM MİMARİSİ VE DOSYA YAPISI' }
+  ];
+
+  structuralSections.forEach(sec => {
+    checksCount++;
+    const hasEn = enContent.toUpperCase().includes(sec.en);
+    const hasTr = trContent.toUpperCase().includes(sec.tr);
+    if (hasEn && hasTr) {
+      logPass(`Çift dilli bölüm yapısı senkronize: [${sec.name}]`);
+    } else {
+      logFail(`Çift dilli bölüm eksik veya senkronize değil: [${sec.name}] (EN: ${hasEn}, TR: ${hasTr})`);
+    }
+  });
 } else {
   checksCount++;
   logFail('README.md veya README.tr.md dosyalarından biri eksik!');
 }
 
 // -----------------------------------------------------------------------------
-// 5. Deep Markdown Relative Link Resolution
+// 5. Deep Markdown Relative Link Resolution & Anchor Heading Verification
 // -----------------------------------------------------------------------------
-console.log('\n📌 5. Derin Markdown Link Çözümleme ve Kırık Link Taraması...');
+console.log('\n📌 5. Derin Markdown Link Çözümleme ve Başlık Anchor Doğrulaması...');
 const allMarkdownFiles = getAllMarkdownFiles(ROOT_DIR);
 let brokenLinksCount = 0;
 let totalCheckedLinks = 0;
 
+// Helper to extract anchors from markdown headings
+const headingAnchorsCache = new Map();
+function getHeadingAnchors(filePath) {
+  if (headingAnchorsCache.has(filePath)) return headingAnchorsCache.get(filePath);
+  const anchors = new Set();
+  if (fs.existsSync(filePath)) {
+    const content = fs.readFileSync(filePath, 'utf8').replace(/```[\s\S]*?```/g, '');
+    content.split('\n').forEach(line => {
+      const match = line.match(/^#{1,6}\s+(.+)$/);
+      if (match) {
+        let title = match[1].trim();
+        // Remove markdown links [text](...) -> text
+        title = title.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+        // Remove formatting
+        title = title.replace(/[*_`]/g, '');
+        // GitHub slugify: remove punctuation and emojis
+        const slug = title
+          .toLowerCase()
+          .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+          .replace(/[^\w\s\u00C0-\u024F\u1EA0-\u1EFF-]/gu, '')
+          .trim()
+          .replace(/\s+/g, '-');
+        if (slug) {
+          anchors.add(slug);
+          anchors.add(`-${slug}`);
+          // ASCII normalized variant
+          const asciiSlug = slug
+            .replace(/ı/g, 'i')
+            .replace(/ş/g, 's')
+            .replace(/ğ/g, 'g')
+            .replace(/ç/g, 'c')
+            .replace(/ü/g, 'u')
+            .replace(/ö/g, 'o')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+          anchors.add(asciiSlug);
+          anchors.add(`-${asciiSlug}`);
+        }
+      }
+    });
+  }
+  headingAnchorsCache.set(filePath, anchors);
+  return anchors;
+}
+
+// Tokenizer to extract all markdown links handling nested brackets and badges
+function extractAllMarkdownLinks(content) {
+  const links = [];
+  const clean = content
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`\n]*`/g, '');
+
+  let i = 0;
+  while (i < clean.length) {
+    if (clean[i] === '[') {
+      let depth = 1;
+      let j = i + 1;
+      while (j < clean.length && depth > 0) {
+        if (clean[j] === '[') depth++;
+        else if (clean[j] === ']') depth--;
+        j++;
+      }
+      if (depth === 0 && j < clean.length && clean[j] === '(') {
+        let parenDepth = 1;
+        let k = j + 1;
+        while (k < clean.length && parenDepth > 0) {
+          if (clean[k] === '(') parenDepth++;
+          else if (clean[k] === ')') parenDepth--;
+          k++;
+        }
+        if (parenDepth === 0) {
+          const rawTarget = clean.slice(j + 1, k - 1).trim();
+          if (rawTarget) links.push(rawTarget);
+          i = k;
+          continue;
+        }
+      }
+    }
+    i++;
+  }
+
+  // Reference definitions: [ref]: target
+  const refRegex = /^[ \t]*\[([^\]]+)\]:[ \t]+(\S+)/gm;
+  let refMatch;
+  while ((refMatch = refRegex.exec(clean)) !== null) {
+    links.push(refMatch[2].trim());
+  }
+
+  return links;
+}
+
 allMarkdownFiles.forEach(mdFile => {
   const content = fs.readFileSync(mdFile, 'utf8');
   const dir = path.dirname(mdFile);
-  const relFile = path.relative(ROOT_DIR, mdFile);
+  const relFile = path.relative(ROOT_DIR, mdFile).replace(/\\/g, '/');
+  const links = extractAllMarkdownLinks(content);
 
-  // Strip fenced code blocks and inline code spans to avoid testing example code
-  const cleanContent = content
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`\n]+`/g, '');
-
-  // Match [text](target)
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  let match;
-  while ((match = linkRegex.exec(cleanContent)) !== null) {
-    const rawTarget = match[2].trim();
-    // Ignore external URLs, anchors, mailto, etc.
-    if (rawTarget.startsWith('http://') || rawTarget.startsWith('https://') || rawTarget.startsWith('mailto:') || rawTarget.startsWith('#')) {
-      continue;
+  links.forEach(rawTarget => {
+    // Ignore external URLs, mailto, ftp, etc.
+    if (rawTarget.startsWith('http://') || rawTarget.startsWith('https://') || rawTarget.startsWith('mailto:') || rawTarget.startsWith('ftp:')) {
+      return;
     }
-    // Remove query params and hash fragments
-    const cleanTarget = rawTarget.split('?')[0].split('#')[0];
-    if (!cleanTarget) continue;
 
     totalCheckedLinks++;
-    const resolvedPath = path.resolve(dir, cleanTarget);
+
+    // Same-file anchor link: #some-anchor
+    if (rawTarget.startsWith('#')) {
+      const anchor = rawTarget.slice(1);
+      const fileAnchors = getHeadingAnchors(mdFile);
+      if (!fileAnchors.has(anchor)) {
+        logFail(`Kırık dosya-içi anchor linki: [${relFile}] -> "${rawTarget}" (Hedef başlık bulunamadı)`);
+        brokenLinksCount++;
+      }
+      return;
+    }
+
+    // Relative file link with optional #anchor: path/to/file.md#some-anchor
+    const [pathPart, anchorPart] = rawTarget.split('#');
+    const cleanPath = pathPart.split('?')[0].trim();
+    if (!cleanPath) return;
+
+    const resolvedPath = path.resolve(dir, cleanPath);
     if (!fs.existsSync(resolvedPath)) {
       logFail(`Kırık bağıl link bulundu: [${relFile}] -> "${rawTarget}"`);
       brokenLinksCount++;
+      return;
     }
-  }
+
+    // If an anchor was specified on another markdown file, verify heading exists in target
+    if (anchorPart && cleanPath.endsWith('.md')) {
+      const targetAnchors = getHeadingAnchors(resolvedPath);
+      if (!targetAnchors.has(anchorPart)) {
+        logFail(`Kırık başlık anchor linki: [${relFile}] -> "${rawTarget}" (Hedef dosyada #${anchorPart} başlığı yok)`);
+        brokenLinksCount++;
+      }
+    }
+  });
 });
 
 checksCount++;
 if (brokenLinksCount === 0) {
-  logPass(`Tüm bağıl markdown linkleri (${totalCheckedLinks} link, ${allMarkdownFiles.length} dosya) başarıyla çözümlendi`);
+  logPass(`Tüm bağıl markdown linkleri ve başlık anchor'ları (${totalCheckedLinks} link, ${allMarkdownFiles.length} dosya) başarıyla doğrulandı`);
 }
 
 // -----------------------------------------------------------------------------
