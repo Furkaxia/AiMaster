@@ -75,7 +75,7 @@ AIMASTER solves this with two foundational pillars:
 | **Rework & Bug Debugging** | 4–8 cycles of regenerating entire files (~80K+ tokens) | Surgical diffs with verification gates (~5K tokens) | **Drastically Reduced** |
 | **Total Task Footprint** | **~135,000 – 165,000 Tokens** | **~15,000 – 20,000 Tokens** | **🔥 Up to 85% Net Savings** |
 
-> *Note:* Figures represent estimated comparative token consumption for typical multi-file features based on byte-to-token ratios. AIMASTER operates as a prompt-level constitutional instruction framework. Actual consumption varies based on codebase scale, file count, and model context caching.
+> *Methodology Note:* Figures reflect modeled comparative token projections based on standard byte-to-token ratios between monolithic prompt dumps and dynamic on-demand skill loading. AIMASTER operates as a prompt-level constitutional instruction framework. Actual savings vary depending on codebase scale, file count, task complexity, and whether the underlying LLM provider leverages prompt caching. These are internal architectural estimates rather than an externally audited empirical benchmark dataset.
 
 ---
 

@@ -26,9 +26,9 @@ Ajan, karşılaştığı her hatayı aşağıdaki 5 seviyeden birine sınıfland
 │ DUR+SOR   │ sistemi çatışması, çoklu dosya   │ nedenini ve 2-3 çözüm           │
 │           │ etkisi, API sözleşme değişikliği │ alternatifini sun, onay al.      │
 ├───────────┼──────────────────────────────────┼──────────────────────────────────┤
-│ SEVİYE 4  │ Test suite tamamen kırıldı,      │ 🔙 TÜM değişiklikleri GERİ AL,   │
-│ GERİ AL   │ build alınamıyor, 3+ dosyada    │ önceki çalışan duruma dön,       │
-│           │ kaskat arıza                     │ kök neden analizi sun.           │
+│ SEVİYE 4  │ Test suite tamamen kırıldı,      │ 🔙 Yalnızca AJANIN değişiklik-   │
+│ GERİ AL   │ build alınamıyor, 3+ dosyada     │ lerini GERİ AL, kullanıcının     │
+│           │ kaskat arıza                     │ kodunu koru, kök nedeni sun.     │
 ├───────────┼──────────────────────────────────┼──────────────────────────────────┤
 │ SEVİYE 5  │ Production DB, canlı API, gerçek │ ⛔ KESİNLİKLE DOKUNMA.           │
 │ DOKUNMA   │ kullanıcı verisi, ödeme sistemi  │ Sadece plan ve script hazırla,   │
@@ -79,8 +79,9 @@ Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonra
    - ⛔ **Körlemesine `git reset --hard` veya `git clean -fd` çalıştırmak KESİNLİKLE YASAKTIR.**
 3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**
    - Eğer ajanın dokunmak istediği kod bloğunda kullanıcının kaydedilmemiş bir değişikliği ile çakışma varsa, dosya ezilmez; durulur ve kullanıcıya diff gösterilerek onay istenir.
-4. **Kurtarma Doğrulaması:**
-   - Geri alma sonrasında derleme (`build`) veya sözdizimi doğrulaması çalıştırılarak sistemin önceki kararlı baseline durumuna döndüğü doğrulanır.
+4. **Kurtarma ve Kullanıcı Durumu Doğrulaması:**
+   - Geri alma sonrasında `git status --porcelain`, `git diff` ve `git diff --cached` kontrolleri çalıştırılarak kullanıcının oturum öncesi staged ve unstaged durumunun %100 korunduğu doğrulanır.
+   - Derleme (`build`) veya sözdizimi doğrulaması çalıştırılarak sistemin önceki kararlı baseline durumuna döndüğü teyit edilir.
 5. **Kök Neden & Eskalasyon Raporu:**
    - Geri alınan değişiklikler, başarısız denemelerin kök nedeni ve kullanıcıya sunulan alternatif çözümler açıkça raporlanır.
 

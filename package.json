@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "The Constitutional Agentic Instruction Framework & Boardroom Architecture for AI IDEs",
   "scripts": {
-    "test": "node scripts/verify-integrity.js",
-    "verify": "node scripts/verify-integrity.js"
+    "test": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js",
+    "verify": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js",
+    "test:fixtures": "node scripts/test-integrity-fixtures.js"
   },
   "keywords": [
     "ai",

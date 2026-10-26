@@ -25,7 +25,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT_DIR = path.resolve(__dirname, '..');
+const ROOT_DIR = process.env.AIMASTER_TEST_ROOT ? path.resolve(process.env.AIMASTER_TEST_ROOT) : path.resolve(__dirname, '..');
 let errorsCount = 0;
 let checksCount = 0;
 
@@ -120,8 +120,49 @@ const EXPECTED_CATEGORIES = {
 };
 
 const skillsDir = path.join(ROOT_DIR, 'skills');
-let diskSkills = [];
 
+// 1. Recursive discovery of ALL skill-*.md files across the entire skills/ tree
+function getSkillsOnDisk(dir) {
+  let results = [];
+  if (!fs.existsSync(dir)) return results;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results = results.concat(getSkillsOnDisk(fullPath));
+    } else if (entry.isFile() && entry.name.startsWith('skill-') && entry.name.endsWith('.md')) {
+      const rel = path.relative(ROOT_DIR, fullPath).replace(/\\/g, '/');
+      results.push(rel);
+    }
+  }
+  return results;
+}
+
+const allSkillsOnDisk = getSkillsOnDisk(skillsDir);
+
+// 2. Verify immediate subdirectories under skills/ — no unexpected categories allowed
+const actualCategories = fs.existsSync(skillsDir)
+  ? fs.readdirSync(skillsDir).filter(f => {
+      const full = path.join(skillsDir, f);
+      return fs.statSync(full).isDirectory();
+    })
+  : [];
+
+let alienCategoriesCount = 0;
+actualCategories.forEach(cat => {
+  checksCount++;
+  if (!EXPECTED_CATEGORIES[cat]) {
+    logFail(`Beklenmeyen / Yabancı kategori dizini tespit edildi: skills/${cat}`);
+    alienCategoriesCount++;
+  }
+});
+if (alienCategoriesCount === 0) {
+  checksCount++;
+  logPass(`Tüm kategori dizinleri (${actualCategories.length}/7) anayasal şemayla tam eşleşiyor`);
+}
+
+// 3. Category count verification
+let diskSkills = [];
 Object.keys(EXPECTED_CATEGORIES).forEach(category => {
   checksCount++;
   const catDir = path.join(skillsDir, category);
@@ -141,11 +182,12 @@ Object.keys(EXPECTED_CATEGORIES).forEach(category => {
   });
 });
 
+// 4. Assert total recursive count matches exact diskSkills
 checksCount++;
-if (diskSkills.length === 80) {
-  logPass(`Tam olarak 80 skill disk üzerinde doğrulandı (${diskSkills.length}/80)`);
+if (allSkillsOnDisk.length === 80 && diskSkills.length === 80) {
+  logPass(`Tam olarak 80 skill disk üzerinde recursive olarak doğrulandı (${allSkillsOnDisk.length}/80)`);
 } else {
-  logFail(`Toplam skill sayısı 80 olmalıdır! Diskteki sayı: ${diskSkills.length}`);
+  logFail(`Toplam skill sayısı 80 olmalıdır! Recursive bulunan: ${allSkillsOnDisk.length}, Kategorize: ${diskSkills.length}`);
 }
 
 const CATEGORY_NAMES = {
@@ -223,32 +265,32 @@ diskSkills.forEach(skillRelPath => {
   const category = skillRelPath.split('/')[1];
 
   // 1. File Location assertion (exact relative path)
-  const locMatch = content.match(/> \*\*File Location:\*\*\s*`([^`]+)`/);
+  const locMatch = content.match(/> \*\*File Location:\*\*[ \t]*`([^`]+)`/);
   if (!locMatch || locMatch[1].trim() !== skillRelPath) {
     logFail(`Geçersiz File Location başlığı: ${skillRelPath} (Bulunan: ${locMatch ? locMatch[1] : 'Yok'})`);
     semanticViolations++;
   }
   // 2. Role Definition assertion
-  const roleMatch = content.match(/> \*\*Role Definition:\*\*\s*(.+)/);
+  const roleMatch = content.match(/> \*\*Role Definition:\*\*[ \t]*(.+)/);
   if (!roleMatch || roleMatch[1].trim().length < 5) {
     logFail(`Eksik veya geçersiz Role Definition metadata: ${skillRelPath}`);
     semanticViolations++;
   }
   // 3. Core Mission assertion
-  const missionMatch = content.match(/> \*\*Core Mission:\*\*\s*(.+)/);
+  const missionMatch = content.match(/> \*\*Core Mission:\*\*[ \t]*(.+)/);
   if (!missionMatch || missionMatch[1].trim().length < 10) {
     logFail(`Eksik veya geçersiz Core Mission metadata: ${skillRelPath}`);
     semanticViolations++;
   }
   // 4. Category assertion (must match category folder mapping)
-  const catMatch = content.match(/> \*\*Category:\*\*\s*(.+)/);
+  const catMatch = content.match(/> \*\*Category:\*\*[ \t]*(.+)/);
   const expectedCatName = CATEGORY_NAMES[category];
   if (!catMatch || !catMatch[1].trim().includes(expectedCatName)) {
     logFail(`Geçersiz Category metadata: ${skillRelPath} (Beklenen: "${expectedCatName}", Bulunan: "${catMatch ? catMatch[1].trim() : 'Yok'}")`);
     semanticViolations++;
   }
   // 5. Standard Compliance assertion
-  const compMatch = content.match(/> \*\*Standard Compliance:\*\*\s*(.+)/);
+  const compMatch = content.match(/> \*\*Standard Compliance:\*\*[ \t]*(.+)/);
   if (!compMatch || !compMatch[1].trim().includes('AIMASTER Architectural OS Model')) {
     logFail(`Eksik veya geçersiz Standard Compliance metadata: ${skillRelPath}`);
     semanticViolations++;
@@ -423,8 +465,13 @@ allMarkdownFiles.forEach(mdFile => {
   const content = fs.readFileSync(mdFile, 'utf8');
   const relName = path.relative(ROOT_DIR, mdFile);
 
-  if (content.includes('file:///') || content.match(/[a-zA-Z]:[\\/][Uu]sers/)) {
-    logFail(`Mutlak yol sızıntısı bulundu (${relName}): file:/// veya C:\\Users referansı içeriyor`);
+  if (
+    content.includes('file:///') ||
+    content.match(/[a-zA-Z]:[\\/][Uu]sers/) ||
+    content.match(/(?:^|[\s"'`])\/home\/[a-zA-Z0-9_-]+/m) ||
+    content.match(/(?:^|[\s"'`])\/Users\/[a-zA-Z0-9_-]+/m)
+  ) {
+    logFail(`Mutlak yol sızıntısı bulundu (${relName}): file:///, C:\\Users, /home/* veya /Users/* referansı içeriyor`);
     absolutePathLeaks++;
   }
 });
@@ -441,6 +488,12 @@ console.log('\n📌 8. Git Hijyeni ve .gitignore Güvenlik Doğrulaması...');
 const gitignorePath = path.join(ROOT_DIR, '.gitignore');
 if (fs.existsSync(gitignorePath)) {
   const gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
+  // Parse active non-comment lines
+  const activeIgnoreLines = gitignoreContent
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l && !l.startsWith('#'));
+
   const requiredIgnores = [
     '.env',
     '.env.*',
@@ -456,10 +509,10 @@ if (fs.existsSync(gitignorePath)) {
 
   requiredIgnores.forEach(item => {
     checksCount++;
-    if (gitignoreContent.includes(item)) {
-      logPass(`.gitignore içinde tanımlı: ${item}`);
+    if (activeIgnoreLines.includes(item)) {
+      logPass(`.gitignore içinde aktif kural tanımlı: ${item}`);
     } else {
-      logFail(`.gitignore içinde EKSİK: ${item}`);
+      logFail(`.gitignore içinde aktif kural EKSİK (veya yorum satırında): ${item}`);
     }
   });
 } else {
