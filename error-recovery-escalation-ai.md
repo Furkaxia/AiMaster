@@ -68,12 +68,12 @@ AI ajanının sonsuz düzeltme döngüsüne girmesini engelleyen kesin kurallar:
 
 Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonrası), kullanıcının kendi değişikliklerini ve çalışma dizinini korumak için şu katı adımlar izlenir:
 
-1. **Oturum Etki Alanı İzolasyonu (Blast Radius Scope):**
-   - Yalnızca ajanın mevcut oturumda (turn) değiştirdiği veya oluşturduğu dosyalar geri alma kapsamına alınır.
-   - Kullanıcının önceden değiştirdiği, sahnelenmemiş (unstaged) veya bağımsız çalışma alanı dosyalarına **ASLA DOKUNULMAZ**.
-2. **Cerrahi Restorasyon Komutları:**
-   - Değişiklik sahnelenmişse (staged): `git restore --staged <ajanın_değiştirdiği_dosyalar>`
-   - Çalışma ağacı dosyalarını geri almak için: `git restore <ajanın_değiştirdiği_dosyalar>`
+1. **Oturum Öncesi Durum Tespiti (Pre-Flight Snapshot):**
+   - Ajan bir dosyaya dokunmadan önce o dosyanın mevcut Git index (`staged`) ve çalışma ağacı (`unstaged`) durumunu inceler.
+   - Dosyada kullanıcının önceden sahnelediği (staged) değişiklikler varsa, ajan kendi müdahalesini dosya bazında değil, **hunk / patch bazında izole eder**.
+2. **Cerrahi Restorasyon & Patch Geri Alma (Hunk-Level Reversion):**
+   - Dosyada sadece ajanın değişiklikleri varsa: `git restore <dosya>` (ve gerekirse `git restore --staged <dosya>`).
+   - Dosyada kullanıcının önceden sahnelediği kodlar mevcutsa: `git restore --staged` dosya bazında çalıştırılarak kullanıcının stage durumu bozulmaz; ajanın ürettiği diff ters patch (`reverse patch`) veya in-memory diff geri alma ile cerrahi olarak çıkarılır.
    - Ajan tarafından yeni oluşturulmuş hatalı dosyalar varsa: Yalnızca ajanın oluşturduğu o spesifik dosyalar silinir.
    - ⛔ **Körlemesine `git reset --hard` veya `git clean -fd` çalıştırmak KESİNLİKLE YASAKTIR.**
 3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**

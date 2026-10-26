@@ -8,9 +8,9 @@
 
 ---
 
-## 1. CORE ARCHITECTURE: ENGLISH-PIVOT MODEL
+## 1. CORE PRINCIPLES & DOMAIN STANDARDS: ENGLISH-PIVOT MODEL
 
-Frontier LLMs exhibit 15-25% higher reasoning rigor and 35-40% lower token overhead when operating within an English conceptual graph.
+Frontier LLMs demonstrate heightened reasoning rigor and significantly reduced subword tokenization fragmentation when operating within an English technical conceptual graph.
 
 ```text
 [USER PROMPT (e.g. Turkish / German / Spanish)]

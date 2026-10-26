@@ -49,7 +49,7 @@ AIMASTER bu problemi iki köklü devrimle çözer:
                                         ┌─────────────────────────┼─────────────────────────┐
                                         ▼                         ▼                         ▼
                                  [UX ARCHITECT]            [UI SYSTEMS]           [RED-TEAM AUDITOR]
-                                 (Bilgi Mimarisi)          (Tasarım/Token)        (Zorunlu 2 Kusur Bulur)
+                                 (Bilgi Mimarisi)          (Tasarım/Token)        (Adversarial Denetim: Maddi Risk Varsa >=2)
                                         │                         │                         │
                                         └─────────────────────────┼─────────────────────────┘
                                                                   ▼
@@ -57,7 +57,7 @@ AIMASTER bu problemi iki köklü devrimle çözer:
                                                                   │
                                                                   ▼
                                                       [STAFF SYNTHESIZER]
-                                                   (Tek Seferde Hatasız Kod)
+                                                 (Konsensüs Spec & Cerrahi Diff)
 ```
 
 1. **On-Demand Asgari Skill Kümesi:** 80 skill hafızaya aynı anda yığılmaz. Sadece o anda yapılan işin kapsamına giren asgari yeterli küme (genellikle 1 ila 3 on-demand skill) cerrahi olarak çağrılır.
@@ -84,6 +84,8 @@ AIMASTER bu problemi iki köklü devrimle çözer:
 ## 🏛️ AGENTIC BOARDROOM NASIL ÇALIŞIR?
 
 Karmaşık bir istek geldiğinde sistem tek bir çıktı bloğunda 4 rolü konuşturur:
+
+> 💡 **Örnek Müzakere:** Aşağıdaki diyalog, interaktif bir SaaS açılış sayfası senaryosu için temsili bir örnek gösterir. Rol bulguları her zaman gerçek kod tabanına dinamik olarak uygulanmalı, asla örnek şablon kopyalanmamalıdır.
 
 ```markdown
 ### 🏛️ [AIMASTER BOARDROOM MÜZAKERESİ]

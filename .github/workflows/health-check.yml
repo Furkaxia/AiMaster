@@ -20,4 +20,4 @@ jobs:
           node-version: '20'
 
       - name: Run Integrity & Broken Link Verification
-        run: node scripts/verify-integrity.js
+        run: npm test

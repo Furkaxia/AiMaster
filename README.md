@@ -49,7 +49,7 @@ AIMASTER solves this with two foundational pillars:
                                         ┌─────────────────────────┼─────────────────────────┐
                                         ▼                         ▼                         ▼
                                  [UX ARCHITECT]            [UI SYSTEMS]           [RED-TEAM AUDITOR]
-                                 (Information Tree)        (Tokens/Palette)       (MUST find >=2 Flaws)
+                                 (Information Tree)        (Tokens/Palette)       (Adversarial Audit: >=2 Flaws IF Material)
                                         │                         │                         │
                                         └─────────────────────────┼─────────────────────────┘
                                                                   ▼
@@ -57,7 +57,7 @@ AIMASTER solves this with two foundational pillars:
                                                                   │
                                                                   ▼
                                                        [STAFF SYNTHESIZER]
-                                                    (One-Shot Flawless Code)
+                                                  (Consensus Spec & Surgical Diff)
 ```
 
 1. **On-Demand Minimal Skill Sets:** All 80 skills are modularized. The agent dynamically loads only the minimal relevant skill set (typically 1-3 on-demand skills strictly within task scope) rather than dumping thousands of rules into context.
@@ -83,6 +83,8 @@ AIMASTER solves this with two foundational pillars:
 ## 🏛️ HOW THE AGENTIC BOARDROOM WORKS
 
 When receiving a complex instruction, the system convenes the 4 specialized roles before producing a single line of code:
+
+> 💡 **Illustrative Example:** The debate below shows a sample deliberation for an interactive SaaS landing page. Personas must always dynamically derive findings from actual codebase inspection — never copy example findings verbatim.
 
 ```markdown
 ### 🏛️ [AIMASTER BOARDROOM DEBATE]
