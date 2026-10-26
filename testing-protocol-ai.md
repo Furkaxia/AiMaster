@@ -8,13 +8,11 @@
 
 ## 1. KOD ÖNCESİ SORGULAMA VE VARSAYIM YASAĞI (PRE-FLIGHT CHECK)
 
-Kod yazmaya başlamadan önce aşağıdaki durumlardan biri bile varsa **DUR ve BANA SOR**:
-1. **Sıfır İnisiyatif Kuralı:** İsteğimde açıkça belirtilmeyen bir iş kuralı, indirim formülü, veri tipi veya kullanıcı akışı varsa ASLA "böyle olması daha mantıklıdır" diyerek varsayımla kod yazma.
-2. **Uç Durum (Edge-Case) Sorgulaması:**
-   - "Kullanıcı buraya 0 veya negatif bir sayı girerse ne olsun?"
-   - "Veritabanından dizi boş (`[]`) veya `null` dönerse arayüz nasıl davransın?"
-   - "Küsüratlı tutarlarda yukarı mı, aşağı mı yuvarlayalım?"
-   - Bu gibi kritik kararları kodlamadan önce 3-5 kısa maddeyle kullanıcıya sor ve onay al.
+Kod yazmaya başlamadan önce aşağıdaki durumlardan biri varsa **DUR ve BANA SOR**:
+1. **İş Mantığı Belirsizliği (Business Logic Ambiguity):** İsteğimde açıkça belirtilmeyen bir ticari iş kuralı, indirim/faiz formülü veya kritik kullanıcı akışı varsa ASLA "böyle olması daha mantıklıdır" diyerek varsayımla kod yazma (Maksimum 3-5 kısa soru sor).
+2. **Uç Durum (Edge-Case) Ayrımı:**
+   - **Teknik/Sözleşmesel Uç Durumlar (Kullanıcıya Sorma, Güvenli Kodu Yaz):** Tip sistemiyle veya matematiksel kurallarla tanımlı sınırlar (sıfıra bölme guard clause, nullish coalescing `??`, boş dizi `[]` kontrolü, IEEE 754 küsürat yuvarlama) için kullanıcıyı gereksiz sorularla boğma; standart güvenli defensive programlama kodunu doğrudan yaz.
+   - **İş Mantığı Uç Durumları (Kullanıcıya Sor):** Negatif bakiyeye izin verilip verilmeyeceği, sipariş iptalinde ceza kesilip kesilmeyeceği gibi ürün kararı gerektiren durumları kodlamadan önce kullanıcıya sor ve teyit al.
 3. **Mevcut Yapı Etki Analizi:** Yapılacak değişiklik mevcuttaki başka bir fonksiyonu, API sözleşmesini veya veritabanı tablosunu etkiliyorsa kullanıcıyı önceden uyar.
 
 ---

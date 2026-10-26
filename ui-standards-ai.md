@@ -8,9 +8,9 @@
 
 ## 1. TEMA SEÇİMİ VE SORGULAMA PROTOKOLÜ (ÖNCE ONAY AL)
 
-Projeye yeni bir arayüz, sayfa veya bileşen eklemeden önce belirlenmiş bir tasarım sistemi yoksa **DUR ve BANA SOR:**
+Projeye yeni bir arayüz, sayfa veya bileşen eklemeden önce belirlenmiş bir tasarım sistemi yoksa ve **kullanıcı özel bir tema belirtmemişse** DUR ve BANA SOR:
 1. **Proje Türü:** Kişisel/Özel Araç mı, E-Ticaret/Katalog mu, B2B SaaS/Dashboard mu?
-2. **Tema Paleti Önerisi:** Proje türüne uygun aşağıdaki 3 paletten birini öner ve kullanıcı onayı almadan kodlama yapma:
+2. **Tema Paleti Önerisi:** Proje türüne uygun aşağıdaki 3 paletten birini öner ve kullanıcı onayı almadan kodlama yapma (Kullanıcı açıkça Cyberpunk, Retro, Brutalist veya Neumorphic gibi özel bir tema istediyse, kullanıcının açık tasarım tercihi uygulanır; ancak WCAG AA 4.5:1 kontrast standardı asla çiğnenmez):
 
 ### A) Kişisel İmza (Fox / Tilki Teması)
 - **Kullanım Alanı:** Kişisel projeler, geliştirici araçları, botlar, özel portfolyolar veya markalı ürünler.
@@ -32,9 +32,9 @@ Projeye yeni bir arayüz, sayfa veya bileşen eklemeden önce belirlenmiş bir t
 
 ## 2. KESİN YASAKLAR (ANTI-AI AESTHETIC SHIELD)
 
-Aşağıdaki amatör ve yapay zeka klişesi stilleri **KESİNLİKLE KULLANMA**:
+Aşağıdaki amatör ve yapay zeka klişesi stilleri **kullanıcı açıkça istemedikçe KULLANMA**:
 
-- ❌ **Neon ve Cyberpunk Yasağı:** Parlak mor-pembe-camgöbeği (`#ff00ff`, `#00ffff`) neon gradyanlar, floresan ışıltılı (glowing) butonlar veya gökkuşağı geçişleri YASAKTIR.
+- ❌ **Jenerik AI Klişesi ve Rastgele Neon Yasağı:** Kullanıcı açıkça talep etmedikçe (oyun arayüzü, synthwave teması vb. bilinçli tercihler hariç), amatör rastgele mor-pembe-camgöbeği (`#ff00ff`, `#00ffff`) neon gradyanlar veya göz yoran parlamalar kullanma. Özel temalarda dahi metin kontrastı (WCAG AA 4.5:1) korunmalıdır.
 - ❌ **Çamur Gölge Yasağı:** Koyu, geniş, opasitesi yüksek siyah gölgeler (`box-shadow: 0 10px 30px rgba(0,0,0,0.8)`) kullanma. Gölgeler çok hafif, dağınık ve neredeyse belirsiz olmalıdır (`shadow-sm` veya `0 1px 2px rgba(0,0,0,0.05)`).
 - ❌ **Orantısız Köşe Yuvarlaklığı:** Her karta `border-radius: 30px` verme. Modern, keskin ve zarif köşeler kullan (`6px`, `8px` veya en fazla `12px` / `rounded-md`, `rounded-lg`).
 - ❌ **Renk Karmaşası Yasağı:** Ekranda 3'ten fazla bağımsız renk tonu kullanma. **60-30-10 Kuralına** sadık kal:

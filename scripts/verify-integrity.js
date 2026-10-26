@@ -42,21 +42,29 @@ console.log('\n🔍 ======================================================');
 console.log('   AIMASTER ENTERPRISE HEALTH & SEMANTIC LINTER (v2.1)');
 console.log('======================================================\n');
 
-// Helper to recursively collect markdown files
+// Helper to recursively collect markdown files safely
 function getAllMarkdownFiles(dir) {
   let results = [];
   if (!fs.existsSync(dir)) return results;
-  const list = fs.readdirSync(dir);
-  list.forEach(file => {
-    if (file === 'node_modules' || file === '.git' || file === '.handoff' || file === 'test md' || file === 'temp') return;
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
-    if (stat && stat.isDirectory()) {
-      results = results.concat(getAllMarkdownFiles(filePath));
-    } else if (file.endsWith('.md')) {
-      results.push(filePath);
-    }
-  });
+  try {
+    const list = fs.readdirSync(dir);
+    list.forEach(file => {
+      if (file === 'node_modules' || file === '.git' || file === '.handoff' || file === 'test md' || file === 'temp') return;
+      const filePath = path.join(dir, file);
+      try {
+        const stat = fs.statSync(filePath);
+        if (stat && stat.isDirectory()) {
+          results = results.concat(getAllMarkdownFiles(filePath));
+        } else if (file.endsWith('.md')) {
+          results.push(filePath);
+        }
+      } catch (e) {
+        // Skip unreadable files safely
+      }
+    });
+  } catch (err) {
+    // Gracefully handle directory read error
+  }
   return results;
 }
 
@@ -297,9 +305,9 @@ if (brokenLinksCount === 0) {
 }
 
 // -----------------------------------------------------------------------------
-// 6. Integration Presets
+// 6. Integration Presets & Semantic Parity Verification
 // -----------------------------------------------------------------------------
-console.log('\n📌 6. integrations/ IDE Preset Şablonları...');
+console.log('\n📌 6. integrations/ IDE Preset Şablonları & Anayasal Parite Taraması...');
 const PRESET_FILES = [
   'integrations/cursor/.cursorrules',
   'integrations/claude/claude-project-prompt.md',
@@ -312,10 +320,60 @@ const PRESET_FILES = [
 PRESET_FILES.forEach(preset => {
   checksCount++;
   const fullPath = path.join(ROOT_DIR, preset);
-  if (fs.existsSync(fullPath)) {
-    logPass(`Preset mevcut: ${preset}`);
-  } else {
+  if (!fs.existsSync(fullPath)) {
     logFail(`Preset EKSİK: ${preset}`);
+    return;
+  }
+  logPass(`Preset dosyası mevcut: ${preset}`);
+
+  const content = fs.readFileSync(fullPath, 'utf8');
+
+  // 1. Minimal 1-3 skills directive
+  checksCount++;
+  if (content.includes('1–3') || content.includes('1-3')) {
+    logPass(`[${preset}] -> Minimal 1-3 skill yükleme kuralı mevcut`);
+  } else {
+    logFail(`[${preset}] -> Minimal 1-3 skill kuralı EKSİK veya eski tekil skill kuralı taşıyor!`);
+  }
+
+  // 2. Auditor anti-hallucination / conditional flaw rule
+  checksCount++;
+  if (
+    content.includes('IF material') ||
+    content.includes('maddi risk varsa') ||
+    content.includes('no material vulnerabilities identified') ||
+    content.includes('maddi risk tespit edilmedi')
+  ) {
+    logPass(`[${preset}] -> Auditor anti-hallucination / koşullu bulgu kuralı mevcut`);
+  } else {
+    logFail(`[${preset}] -> Auditor kuralı koşulsuz kusur uydurma riski taşıyor!`);
+  }
+
+  // 3. Fast-Track vs Bug-Investigator distinction
+  checksCount++;
+  if (
+    (content.includes('<5') || content.includes('<5 satır')) &&
+    (content.includes('skill-bug-investigator') || content.includes('failing test'))
+  ) {
+    logPass(`[${preset}] -> Fast-Track (<5 satır) ve Bug-Investigator ayrımı mevcut`);
+  } else {
+    logFail(`[${preset}] -> Fast-Track / Bug-Investigator ayrımı EKSİK!`);
+  }
+
+  // 4. Non-negotiable security precedence clause
+  checksCount++;
+  if (content.includes('NEVER overrides') || content.includes('ASLA geçersiz kılamaz')) {
+    logPass(`[${preset}] -> Tavizsiz güvenlik üstünlüğü (Security Precedence) mevcut`);
+  } else {
+    logFail(`[${preset}] -> Güvenlik üstünlüğü kuralı EKSİK!`);
+  }
+
+  // 5. Canonical QA test summary block
+  checksCount++;
+  if (content.includes('🧪 [QA TEST ÖZETİ]')) {
+    logPass(`[${preset}] -> Kanonik QA test özeti şablonu mevcut`);
+  } else {
+    logFail(`[${preset}] -> Kanonik QA test özeti şablonu EKSİK!`);
   }
 });
 

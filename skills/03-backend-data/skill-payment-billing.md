@@ -16,9 +16,10 @@
 
 ---
 
-### 2. WEBHOOK SIGNATURE VERIFICATION & IDEMPOTENCY
-- Verify webhook cryptographic HMAC signatures using raw request bodies and constant-time equality (`crypto.timingSafeEqual`).
-- Store processed payment webhook event IDs in an idempotency table to prevent duplicate billing upon retry deliveries.
+### 2. WEBHOOK SIGNATURE, DURABLE INGESTION & IDEMPOTENCY LOCKS
+- Verify webhook cryptographic HMAC signatures against raw request bodies using `crypto.timingSafeEqual`.
+- **Durable Persistence Before ACK:** Write event to transactional inbox/queue before returning `200 OK`. If storage commit fails, return `500/503` to trigger payment gateway retry.
+- **Atomic Idempotency:** Enforce a strict `UNIQUE` database constraint on `event_id` and utilize atomic database transactions (or distributed locks) to prevent race conditions when concurrent workers process identical payment webhooks. Never bill or refund twice.
 
 ---
 

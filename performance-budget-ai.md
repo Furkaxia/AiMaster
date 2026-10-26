@@ -4,6 +4,15 @@
 > **Temel Amaç:** Projelerde ölçülebilir performans hedefleri tanımlayarak subjektif "hızlı/yavaş" değerlendirmelerini somut eşik değerlerine dönüştürmek.  
 > **Standart Uyumu:** RulesAI.md Destekli Çekirdek Performans Standardı
 
+## 0. EŞİK VE BÜTÇE POLİTİKASI (HIERARCHY OF THRESHOLDS)
+
+Performans bütçeleri kör bir geçiş/kalış engeli değil, mühendislik kalitesini koruyan hedef kılavuzlarıdır. Sistemde eşikler 4 katmanda ele alınır:
+
+1. **Katı Zorunluluklar (Hard Requirements):** Güvenlik sınırları, veri bütünlüğü, auth kontrolleri, secret koruması ve açıkça belirtilmiş ürün sözleşmeleri. Bu maddeler asla esnetilemez.
+2. **Varsayılan Mühendislik Hedefleri (Default Targets):** Standart web ve mobil uygulamalar için geçerli endüstri standardı referanslar (örn. Core Web Vitals, API p95 süreleri, 200KB bundle). Ajan varsayılan olarak bu değerleri hedefler.
+3. **Projeye Özel SLO'lar (Project-Specific SLO):** Projenin doğasına (örn. ML/AI dashboard, veri yoğun analiz, 3D/Canvas oyun, Chromium gömülü Electron) göre tanımlanmış özel servis seviyesi hedefleri.
+4. **Belgelenmiş İstisna Protokolü (Documented Exceptions):** Bir bileşen (örn. Monaco Editor, PDF renderer, TensorFlow.js) varsayılan bütçeyi aşmak zorundaysa, ajan bunu körlemesine reddetmez veya mimariyi bozmaz; teknik gerekçeyi ve etkiyi `🧪 [QA TEST ÖZETİ]` içinde açıkça belgeler.
+
 ---
 
 ## 1. WEB PERFORMANS BÜTÇESİ (CORE WEB VITALS)

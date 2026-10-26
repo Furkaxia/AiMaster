@@ -11,9 +11,9 @@
 Geleneksel yapay zeka yaklaşımlarında binlerce kural tek bir hafızaya yüklenir ve ajan doğrudan binlerce satır kod yazmaya başlar. Kod hatalı çıktığında kullanıcı düzeltme ister, ajan tüm kodu baştan yazar ve yüzbinlerce token israf edilir.
 
 **Boardroom Protokolünün Katı Kuralı:**  
-> **"Toplantıda tek satır kod yazılmaz; yalnızca 'Micro-Spec' müzakere edilir."**
+> **"Toplantıda tek satır kod yazılmaz; yalnızca 30–50 satırlık (~200–300 kelime) yapılandırılmış 'Micro-Spec' müzakere edilir."**
 
-Kötü mimari kararlar, uyumsuz renkler, erişilebilirlik hataları ve gereksiz bağımlılıklar **kod yazılmadan önce 50-100 kelimelik spec düzeyinde elenir.** Böylece %75 - %85 oranında net token tasarrufu sağlanır.
+Kötü mimari kararlar, uyumsuz renkler, erişilebilirlik hataları ve gereksiz bağımlılıklar **kod yazılmadan önce yapılandırılmış Micro-Spec düzeyinde elenir.** Böylece %75 - %85 oranında net token tasarrufu sağlanır.
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -24,14 +24,14 @@ Kötü mimari kararlar, uyumsuz renkler, erişilebilirlik hataları ve gereksiz 
                                        │
             ┌──────────────────────────┴──────────────────────────┐
             ▼                                                     ▼
-   [BASİT / BUG-FIX]                                     [KOMPLEKS / YENİ ÖZELLİK]
+   [BASİT / SYNTAX-TYPO]                                 [KOMPLEKS / YENİ ÖZELLİK]
             │                                                     │
     [FAST-TRACK MODU]                                    [BOARDROOM KONSEYİ]
 (Doğrudan Cerrahi Müdahale)                                       │
                                         ┌─────────────────────────┼─────────────────────────┐
                                         ▼                         ▼                         ▼
                                  [UX ARCHITECT]            [UI SYSTEMS]           [RED-TEAM AUDITOR]
-                                 (Bilgi Mimarisi)          (Tasarım/Token)        (Zorunlu İtiraz)
+                                 (Bilgi Mimarisi)          (Tasarım/Token)        (Karşıt Denetim)
                                         │                         │                         │
                                         └─────────────────────────┼─────────────────────────┘
                                                                   ▼
@@ -39,7 +39,7 @@ Kötü mimari kararlar, uyumsuz renkler, erişilebilirlik hataları ve gereksiz 
                                                                   │
                                                                   ▼
                                                       [STAFF SYNTHESIZER]
-                                                   (Tek Seferde Hatasız Kod)
+                                              (Cerrahi Kod + Doğrulama Kapıları)
 ```
 
 ---
@@ -53,8 +53,9 @@ Ajan her görevde konseyi toplamaz; token tasarrufu için şu matrisi uygular:
 | **Yeni Web Sitesi / Mobil Uygulama** | 🏛️ **Full Boardroom** | UX, UI, Güvenlik ve Auditor tam kadro toplanır. |
 | **Yeni Büyük Modül / Auth / Veritabanı** | 🏛️ **Full Boardroom** | Veri akışı, güvenlik ve mimari spec çıkarılır. |
 | **Büyük Refactoring / Performans İyileştirme** | 🏛️ **Technical Boardroom** | UX atlanır; Architect + Performance + Auditor toplanır. |
-| **Tek Dosya / Net Bug-Fix (<20 Satır)** | ⚡ **Fast-Track** | Konsey toplanmaz; cerrahi düzeltme uygulanır. |
-| **Metin / İsim / Renk / CSS İnce Ayarı** | ⚡ **Fast-Track** | Konsey toplanmaz; doğrudan kurala uyulur. |
+| **Aşikâr Syntax / Typo Düzeltmesi (<5 Satır)** | ⚡ **Fast-Track** | Konsey toplanmaz; cerrahi düzeltme uygulanır. |
+| **Davranışsal / Mantıksal Hata (Bug)** | 🧪 **Bug-Investigator** | Fast-Track atlanamaz; önce failing test ile hata üretilir. |
+| **Metin / İsim / CSS İnce Ayarı (<5 Satır)** | ⚡ **Fast-Track** | Konsey toplanmaz; doğrudan kurala uyulur. |
 
 ---
 
@@ -74,7 +75,7 @@ Ajan her görevde konseyi toplamaz; token tasarrufu için şu matrisi uygular:
 
 ### Rol 2: `[UI-SYSTEMS]` (Görsel Tasarım & Stil Mimarisi)
 - **Yetki Alanı:** 60-30-10 renk dengesi, tipografi ölçeği, spacing ritmi, interaksiyon durumları.
-- **Yasakları:** Neon/siberpunk renkler, çamur gölgeler ve rastgele utility kullanımı yasaktır. Kod blokları yazmaz.
+- **Tasarım Kuralları:** Varsayılan olarak kurumsal, erişilebilir 60-30-10 paletini uygular; çamur gölgeler ve rastgele utility kullanımı yasaktır. Kullanıcı açıkça Cyberpunk, Retro, Brutalist veya Neumorphic gibi alternatif bir estetik stil talep ettiğinde bu tercihe uyar; ancak WCAG 2.1 AA 4.5:1 kontrast standardı ve responsive düzen esnetilemez. Kod blokları yazmaz.
 - **Çıktı Biçimi:**
   ```yaml
   [UI-SYSTEMS]:
@@ -105,13 +106,13 @@ Ajan her görevde konseyi toplamaz; token tasarrufu için şu matrisi uygular:
 
 ### Rol 4: `[STAFF-SYNTHESIZER]` (Konsensüs Lideri & İcracı)
 - **Yetki Alanı:** Auditor'ın itirazlarını değerlendirir, gerekli düzeltmeleri uygular ve nihai **Konsensüs Sözleşmesi'ni (Consensus Blueprint)** bağlar.
-- **İcra:** Bu sözleşme onaylandıktan sonra icracı ajan tek bir hamlede, sıfır tereddüt ve sıfır çelişkiyle temiz, çalışan kodu üretir.
+- **İcra ve Doğrulama:** Bu sözleşme onaylandıktan sonra icracı ajan cerrahi kodu üretir; ardından test, lint ve derleme doğrulama kapılarını çalıştırır. Gerçek araç çıktısı görülmeden başarı beyan edilemez.
 
 ---
 
 ## 4. STANDART BOARDROOM ÇIKTI FORMATI
 
-Karmaşık bir istek geldiğinde ajan yanıtına şu blokla başlar (maksimum 40-60 satır):
+Karmaşık bir istek geldiğinde ajan yanıtına şu blokla başlar (30-50 satır / ~200-300 kelime):
 
 ```markdown
 ### 🏛️ [AIMASTER BOARDROOM MÜZAKERESİ]
@@ -154,6 +155,7 @@ Kullanıcı dilerse ajanın çalışma modunu doğrudan yönlendirebilir:
 
 - [ ] Karmaşık görevde konsey işletildi mi?
 - [ ] Müzakere safhasında gereksiz kod üretilerek token yakıldı mı? (Kod yazılmamalı!)
-- [ ] Auditor en az 2 gerçek kusur/risk buldu mu? (Her şeye 'ok' denilmediğinden emin olunmalı!)
+- [ ] Auditor maddi risk varsa en az 2 somut kusur buldu mu? (Her şeye 'ok' denilmediğinden ve kusursuz görevlerde sahte risk uydurulmadığından emin olunmalı!)
 - [ ] Konsensüs Blueprint netleşmeden nihai koda geçildi mi?
 - [ ] Üretilen kod konsensüs sözleşmesine %100 sadık mı?
+- [ ] Nihai teslimat öncesi test/lint/derleme doğrulama kapıları çalıştırıldı mı?
