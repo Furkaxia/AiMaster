@@ -68,24 +68,25 @@ AI ajanının sonsuz düzeltme döngüsüne girmesini engelleyen kesin kurallar:
 
 Geri alma gerektiğinde (Seviye 4 kaskat arıza veya 3 başarısız deneme sonrası), kullanıcının kendi değişikliklerini ve çalışma dizinini korumak için şu katı adımlar izlenir:
 
-1. **Oturum Öncesi Durum Tespiti ve İçerik Snapshot'ı (Pre-Flight Baseline Snapshot):**
-   - Ajan herhangi bir dosyayı değiştirmeden önce çalışma dizininin ve Git index'inin durumunu tam olarak arşivler:
+1. **Oturum / Görev Başlangıç Kilidi (Pre-Execution Cryptographic Baseline Snapshot):**
+   - Ajan herhangi bir dosyaya yazmadan önce çalışma dizininin ve Git index'inin durumunu kriptografik ve atomik olarak arşivler:
+     - `PRE_INDEX_HASH=$(git write-tree)` ile Git index'inin (staged dosyalar) kriptografik ağaç özeti,
+     - `PRE_WORKTREE_PATCH=$(git diff | sha256sum)` (ve `git diff` ham çıktısı) ile unstaged çalışma dizini farkının kriptografik özeti,
      - `git status --porcelain` ile genel durum listesi,
-     - `git diff --staged` çıktısı ile kullanıcının önceden stage ettiği içerik snapshot'ı,
-     - `git diff` çıktısı ile kullanıcının unstaged çalışma dizini snapshot'ı,
      - `git ls-files --others --exclude-standard` ile kullanıcının untracked dosyalar envanteri.
-   - Bu içerikler referans snapshot olarak saklanır; kullanıcının önceki tüm değişiklikleri dokunulmaz kabul edilir.
+   - **Önceden Var Olan Untracked Dosyaların Korunması (Strict Rule):** `git ls-files --others` yalnızca dosya adlarını listeler, dosya içeriklerini kaydetmez. Önceden var olan untracked dosyaların içeriklerini snapshot almadan değiştirmek veya silmek KESİNLİKLE YASAKTIR. Bu dosyaların değiştirilmesi gerekiyorsa başlangıç içeriği salt hash ile değil (hash tek başına geri yükleme yapamaz), gerçek dosya içeriği kopyasıyla (raw content backup) referans snapshot olarak saklanır; kullanıcının önceki tüm değişiklikleri dokunulmaz kabul edilir.
 2. **Cerrahi Restorasyon & Hunk Bazlı Geri Alma (Hunk-Level Reversion):**
-   - ⛔ **Karışık dosyalarda `git restore --staged <dosya>` çalıştırmak KESİNLİKLE YASAKTIR.** Çünkü `git restore --staged`, dosyanın tüm index içeriğini doğrudan `HEAD` üzerinden sıfırlayarak kullanıcının önceden stage ettiği değişiklikleri yok eder.
-   - **Yalnızca Ajanın Değiştirdiği Temiz Dosyalar:** Dosyada kullanıcının hiçbir önceki değişikliği yoksa, dosya `git restore <dosya>` (ve henüz stage edilmemişse) ile güvenle geri alınabilir.
-   - **Kullanıcı ile Ajanın Karışık Olduğu Dosyalar:** Geri alma işlemi asla dosya seviyesinde yapılmaz; yalnızca ajanın eklediği spesifik diff blokları ters patch (`git apply -R` veya satır bazlı geri alma) ile cerrahi olarak geri çekilir. Kullanıcının index (`staged`) ve working-tree durumu el değmeden korunur.
-   - **Ajanın Yeni Oluşturduğu Dosyalar:** Yalnızca ajanın oturumda oluşturduğu spesifik dosyalar silinir; kullanıcının mevcut dosyalarına dokunulmaz.
+   - ⛔ **Ajan tarafından değiştirilen dosya görev öncesinde zaten `dirty` (staged veya modified) ise `git restore <file>`, `git restore --staged <file>` veya `git checkout <file>` çalıştırmak KESİNLİKLE YASAKTIR.** Çünkü bu komutlar dosyanın index ve worktree içeriğini `HEAD` üzerinden sıfırlayarak kullanıcının önceden yaptığı değişiklikleri yok eder.
+   - **Kullanıcı ile Ajanın Karışık Olduğu Dosyalar:** Geri alma işlemi asla dosya seviyesinde yapılamaz; yalnızca ajanın ürettiği diff blokları ters patch (`git apply --reverse <agent_patch>` veya cerrahi hunk geri alma) ile geri çekilir. Kullanıcının index (`staged`) ve working-tree durumu el değmeden korunur.
+   - **Yalnızca Ajanın Değiştirdiği Temiz Dosyalar:** Görev öncesinde dosyada kullanıcının hiçbir değişikliği yoksa, dosya `git restore <dosya>` (ve henüz stage edilmemişse) ile güvenle geri alınabilir.
+   - **Ajanın Yeni Oluşturduğu Dosyalar vs. Önceden Var Olan Untracked Dosyalar:** Yalnızca ajanın oturumda kendisinin sıfırdan oluşturduğu spesifik dosyalar silinebilir. Oturum öncesinde var olan untracked dosyalara dokunulmaz; eğer oturumda değiştirilmişlerse gerçek içerik yedeğinden başlangıç durumuna restore edilir, asla körlemesine silinmez veya ezilmez.
    - ⛔ **Körlemesine `git reset --hard` veya `git clean -fd` çalıştırmak KESİNLİKLE YASAKTIR.**
 3. **Kullanıcı Değişikliği Çakışma Güvenliği (User Conflict Safety):**
    - Eğer ajanın dokunmak istediği kod bloğunda kullanıcının kaydedilmemiş bir değişikliği ile çakışma varsa, dosya ezilmez; durulur ve kullanıcıya diff gösterilerek onay istenir.
-4. **Kurtarma ve Kullanıcı Durumu Eşitlik Doğrulaması (State Equivalence Verification):**
-   - Geri alma sonrasında alınan güncel `git status --porcelain`, `git diff`, `git diff --cached` ve `git ls-files --others --exclude-standard` çıktıları, oturum başında kaydedilen 4 parçalı baseline snapshot içerikleriyle birebir (hash/diff bazında) karşılaştırılır.
-   - Başlangıç durumu ile geri alma sonrası durumun tam eşitliği kanıtlanmadan "kullanıcı durumu korundu" onayı verilemez; en ufak bir fark dahi kullanıcıya açıkça raporlanır.
+4. **Matematiksel Doğrulama Kapısı (Post-Rollback State Equivalence Verification):**
+   - Geri alma sonrasında alınan güncel `git write-tree` çıktısı oturum başındaki `PRE_INDEX_HASH` ile, `git diff | sha256sum` çıktısı ise `PRE_WORKTREE_PATCH` ile birebir (kriptografik eşitlik düzeyinde) karşılaştırılır.
+   - Ayrıca `git ls-files --others --exclude-standard` çıktısı ve değiştirilen untracked dosya içerikleri gerçek içerik yedekleriyle doğrulanır.
+   - Eğer `git write-tree` veya diff hash çıktıları başlangıç snapshot'ı ile uyuşmuyorsa rollback **başarısız** sayılır; ajan derhal çalışmayı durdurur, durumu gizlemez ve kullanıcıya tam eskalasyon raporu sunar.
    - Derleme (`build`) veya sözdizimi doğrulaması çalıştırılarak sistemin önceki kararlı baseline durumuna döndüğü teyit edilir.
 5. **Kök Neden & Eskalasyon Raporu:**
    - Geri alınan değişiklikler, başarısız denemelerin kök nedeni ve kullanıcıya sunulan alternatif çözümler açıkça raporlanır.

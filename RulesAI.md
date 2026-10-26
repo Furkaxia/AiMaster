@@ -36,12 +36,20 @@ Ajan, karşılaştığı çelişkilerde veya karar anlarında aşağıdaki önce
 
 Ajan, her yanıtında token ekonomisine riayet eder:
 
-- ❌ **Giriş ve Çıkış Dolgusu Yasaktır:** "Tabii ki!", "Harika bir proje", "Hemen ilgileniyorum", "Umarım yardımcı olmuştur", "Başka bir sorunuz var mı?" gibi sohbet cümleleri kurma. Doğrudan sonuca odaklan.
+- ❌ **Giriş ve Çıkış Dolgusu Yasaktır (Brevity Scope):** "Tabii ki!", "Harika bir proje", "Hemen ilgileniyorum", "Umarım yardımcı olmuştur", "Başka bir sorunuz var mı?" gibi sohbet selamlamaları ve meta-dolgu metinleri üretme. Doğrudan sonuca odaklan.
+  - *İstisna:* Bu kısıtlama mimari karar kayıtları (ADR), güvenlik denetim raporları, trade-off analizleri ve kök neden açıklamalarını kapsamaz; teknik gerekçelendirme asla budanamaz.
 - ❌ **Satır Satır Kod Açıklaması Yasaktır:** Değiştirilen kodları kullanıcı diff ekranında görmektedir. Kod bloklarının altına gereksiz açıklamalar yazıp token yakma.
-- 🌐 **Dinamik Dil Aynalama & English-Pivot Protokolü:** 
+- 🌐 **Dinamik Dil Aynalama & English-Pivot Protokolü (String Language Matrix):** 
   - **Aynalama:** Kullanıcı hangi dilde yazarsa (Türkçe, İngilizce, Almanca vb.) doğrudan o dille yanıt verilir.
   - **İçsel İngilizce Eksenli Akıl Yürütme (English-Pivot):** Kullanıcı yerel dilde (örn. Türkçe) talep verdiğinde, model isteği arka planda içsel bir teknik İngilizce spesifikasyona derler (`skills/01-architecture-planning/skill-cross-lingual-reasoning.md`). Tüm mimari ve kural kontrolleri en katı İngilizce standartla çalıştırılır; TCKN, VKN, İyzico gibi yerel varlıklar korunur; kullanıcıya sunum kendi dilinde yapılır.
-  - Kod değişkenleri, yorumlar ve commit mesajları uluslararası standart gereği daima İngilizce yazılır. Detaylar için `ai-communication-protocol-ai.md` standardına uyulmalıdır.
+  - **Çoklu Katman Dil Ayrım Tablosu:**
+    | Katman | Dil Standardı | Gerekçe / Kural |
+    | :--- | :--- | :--- |
+    | **Kod, Yorumlar, Commit, Exception & Loglar** | **İngilizce** | `throw new Error(...)`, `logger.error(...)`, AST ve commit mesajları global CI/CD ve statik analiz için İngilizce yazılır. |
+    | **Son Kullanıcı UI & Validasyon Mesajları** | **i18n Key / Ürün Dili** | Zod/şema hata mesajları ve ekran metinleri hedef kitleye veya i18n anahtarına (`t('errors.invalid_email')`) göre belirlenir. |
+    | **Ajan Sohbet Yanıtı & Eskalasyon** | **Kullanıcı Dili (Türkçe)** | Kullanıcıyla iletişim kurulan dil aynalanır; teknik terimler parantez içinde korunur. |
+- ⚓ **Periyodik Kısıtlama Kilidi (Periodic Invariant Anchor):** Uzun oturumlarda (her 10 turda bir) veya her Seviye 2+ hata sonrasında model, attention drift ve kuralları unutma (Lost-in-the-Middle) riskine karşı şu 5 çekirdek kısıtlamayı içsel olarak teyit eder:
+  `1. Anti-Any/Double-Cast 2. No-Security-Bypass 3. Surgical Hunk Diff 4. Cryptographic User-State Preserved 5. Pre-Filter Isolation`
 - 🎯 **İşlem Özeti:** Yanıtın sonunda maksimum 2-3 maddelik tek satırlık özet ver.
 - 📝 **`ai-log-ai.md` Yerel Mimari Günlük Kriteri ve Git İzolasyonu:**
   - Küçük veya tek dosyalık işlerde log dosyasına kayıt **yapma**.
@@ -116,7 +124,7 @@ Yapılacak işin doğasına göre önce ilgili çekirdek standardı bağlama al:
 | İşin Doğası | Zorunlu Standart Dosyası | Temel İlkeler |
 | :--- | :--- | :--- |
 | **Ajan Müzakeresi / Çoklu Rol / Konsey** | `agent-boardroom-protocol-ai.md` | Karmaşık görevlerde UX, UI, Auditor ve Synthesizer ile kodsuz Micro-Spec müzakeresi. |
-| **UI / Stil / Tasarım** | `ui-standards-ai.md` | Neon/cyberpunk ve çamur gölge yasak. 60-30-10 renk kuralı. Fox (Tilki), E-Ticaret veya Kurumsal palet onayı al. |
+| **UI / Stil / Tasarım** | `ui-standards-ai.md` | Neon/Cyberpunk varsayılan olarak kullanılmaz; kullanıcı açıkça isterse erişilebilirlik ve kontrast şartları korunarak uygulanır. Çamur gölge yasak. 60-30-10 renk kuralı. Soru formatı: Şahsi Site (Açıklayın) / Kurumsal Site (Açıklayın) / Ticaret vs. (Açıklayın) seçenekleriyle onay al. |
 | **Mantık / Matematik / Test** | `testing-protocol-ai.md` | Normal, sıfır, negatif ve küsürat senaryoları simülasyonu. Sıfıra bölme ve null güvenliği. |
 | **Yeni Dosya / Klasörleme** | `project-architecture-ai.md` | Kök dizine dosya saçma yasağı. Katı `src/` klasörleme hiyerarşisi (`components`, `services`, `types` vb.). |
 | **Hata Kurtarma / Döngü Kırıcı** | `error-recovery-escalation-ai.md` | 5 seviyeli hata tırmanma matrisi. 3 deneme kuralı. Kaskat arıza geri alma. |
@@ -128,6 +136,10 @@ Yapılacak işin doğasına göre önce ilgili çekirdek standardı bağlama al:
 
 #### Deterministik Skill Tahsis ve Kompozisyon Hiyerarşisi (Deterministic Skill Routing & Arbitration):
 - **Asgari Yeterli Küme Prensibi (Minimal Relevant Skill Set):** İlgisiz skilleri asla belleğe alıp bağlam penceresini şişirme. Bir görev için kural olarak yalnızca doğrudan ilgili 1 ila 3 on-demand skill yüklenir (asla toplu yükleme yapılmaz).
+- **Deterministik Slot Tahsis ve Kategori Sınırı (3-Slot Allocation Rule):**
+  1. Aynı kategori (`01`..`07`) içerisinden aynı anda **en fazla 2 skill** yüklenebilir.
+  2. Bir görev hem fonksiyonel (örn. `03-backend-data`) hem de güvenlik (`04-security-audit`) alanına dokunuyorsa; 1. slot doğrudan fonksiyonel skill'e, 2. slot **ZORUNLU** olarak ilgili güvenlik skill'ine ayrılır.
+  3. 3. slot, daima görevi denetleyen çapraz doğrulama odağına (Cross-Cutting Concern: Security, Testing veya Architecture) rezerve edilir.
 - **Tek ve Birleşik Öncelik Sıralaması (Unified Precedence Hierarchy):**
   Birden fazla skill gerektiğinde veya kural çelişkisi doğduğunda karar yetkisi kesin olarak şu hiyerarşik sıraya tabidir:
   1. `Security & Compliance` (Örn. `skill-auth-security`, `skill-web-security`, `skill-data-privacy-compliance`) — Güvenlik kuralları daima üstündür; hiçbir domain veya optimizasyon güvenliği ezemez.
@@ -137,8 +149,12 @@ Yapılacak işin doğasına göre önce ilgili çekirdek standardı bağlama al:
   5. `Implementation & Code Craft` (Örn. `skill-typescript-strict`, `skill-modern-code-craft`, `skill-error-handling-logging`).
   6. `Testing & Quality Assurance` (Örn. `skill-unit-test-builder`, `skill-api-contract-testing`, `skill-bug-investigator`).
   7. `Documentation & Handoff` (Örn. `skill-readme-docs`, `session-handoff-protocol-ai.md`).
-- **Domain Eşitlik Bozucu (Tie-Breaking Rule):**
-  İki domain skill'i çakıştığında (örn. Stripe Webhook'larında `skill-payment-billing` ile `skill-webhook-integrations`), **temel iş varlığını ve mali/iş durumunu yöneten skill (Payment)** birincil (primary), **veri taşıma protokolü (Webhook)** ikincil (secondary) kabul edilir. I/O katmanı iş kuralını geçersiz kılamaz.
+- **Sınırda Kalan Görevler Ayrıştırma Matrisi (Boundary Disambiguation Matrix):**
+  | Çakışan Konu | Birincil / Doğru Skill | İkincil / Destekçi Skill | Ayrım ve Dışlama Kuralı |
+  | :--- | :--- | :--- | :--- |
+  | **Auth / JWT / Session** | `skill-auth-security.md` | `skill-api.md` | Token doğrulama, RBAC, hash ve oturum güvenliği `04-security-audit` tarafından yönetilir; endpoint rotaları ikincildir. |
+  | **Refactor / Yeniden Yapılandırma** | `skill-software-architecture.md` (veya `skill-refactor-cleanup.md`) | `skill-typescript-strict.md` | Modül sınırları ve katman ayrımında `skill-software-architecture`; fonksiyon içi kod temizliği ve smell ayıklamada `skill-refactor-cleanup` seçilir. |
+  | **Veritabanı & Yavaş Sorgu** | `skill-database-performance.md` | `skill-database.md` | Şema değişikliği/DDL için `skill-database`; EXPLAIN ANALYZE, indeksleme ve sorgu optimizasyonunda `skill-database-performance` zorunludur. |
 
 #### Skill Eşleştirme Kataloğu:
 | Konu / Görev | Okunacak Skill Dosyası |
@@ -234,11 +250,11 @@ Yapılacak işin doğasına göre önce ilgili çekirdek standardı bağlama al:
 - **Tembellik Yasağı (No Placeholders):** Kod güncellerken `// ... mevcut kod buraya gelecek` gibi kesintiler yapma. Bloğu eksiksiz ve hatasız ver.
 - **Kapsam Takibi:** Her görevde `Modified`, `Created` ve `Deleted` dosyaları belirle. Beklenmeyen bir dosya düzenlenecekse önce nedenini belirtip onay al.
 
-#### 2. Geçici ve Hileli Çözüm Yasağı (No Band-Aid Fixes):
+#### 2. Geçici ve Hileli Çözüm Yasağı (No Band-Aid Fixes & Anti-Type-Casting):
 - Kök neden bilinmiyorsa semptomu gizleyen geçici çözümler (workarounds) uygulama.
 - `try/catch` blokları ile gerçek hataları yutma.
-- Tip hatalarını `any` ile susturma (`any` yalnızca zorunlu durumlarda ve gerekçelendirilerek kullanılabilir).
-- Linter veya derleyici hatalarını `@ts-ignore`, `@ts-nocheck`, `eslint-disable` ile kapatma.
+- **Tip Güvenliği ve Anti-Casting Yasağı:** Tip hatalarını `any` ile susturmak kesinlikle yasaktır. Benzer şekilde `any` kuralını aşmak için yapılan `as unknown as TargetType` (Double Assertion) hileleri de P1 seviyesinde kural ihlalidir. Dış sınır (I/O, Webhook, API) verilerinde `unknown` tipi kullanılmalı ve çalışma zamanı şema doğrulaması (Zod, Valibot veya TypeGuard) ile tipler daraltılmalıdır.
+- Linter veya derleyici hatalarını `@ts-ignore`, `@ts-nocheck`, `eslint-disable` ile kapatma (yalnızca kütüphane kaynaklı çözümsüz durumlarda ve gerekçeli bilet açıklamasıyla istisna olabilir).
 - Başarısız testleri silerek veya `.skip()` ekleyerek testi geçersiz kılma.
 - Konsol/log çıktılarını silerek problemleri görünmez kılma.
 - **Güvenlik Bypass Yasağı:** Auth/Yetki kontrollerini atlama, CORS'u `*` yapma, SSL/TLS ve sertifika doğrulamasını kapatma, girdi doğrulamalarını (validation) kaldırma.
@@ -354,11 +370,12 @@ Kod hazırlanabilir; ancak gerçek işlem kullanıcı açık onay vermeden **tet
 Bir değişiklik beklenmeyen bir hata üretirse veya sistemi bozarsa:
 1. **Kök Neden:** İlk adımda hatanın kök nedenini (root cause) izole et. Kök neden anlaşılmadan "düzeltme tamamlandı" deme.
 2. **Hileli Çözüm Yok:** Yeni hatayı örtbas etmek için ek workaround veya spagetti kod üretme.
-3. **Cerrahi Geri Alma (Rollback):**
-   - Yalnızca ajanın kendi yaptığı hatalı değişiklikleri geri al.
-   - Kullanıcının mevcut veya geçmiş değişikliklerine asla dokunma.
-   - Körlemesine `git reset --hard` çalıştırma.
-   - Geri alma işlemi sonrasında doğrulama testlerini tekrar çalıştır.
+3. **Cerrahi ve Kriptografik Geri Alma (Atomic Rollback):**
+   - Görev öncesinde `PRE_INDEX_HASH=$(git write-tree)` ve `PRE_WORKTREE_PATCH=$(git diff | sha256sum)` ile durum kilitlenir.
+   - Kullanıcının önceden stage ettiği veya değiştirdiği dosyalarda dosya bazlı `git restore <file>` veya `git checkout <file>` KESİNLİKLE YASAKTIR; yalnızca ajanın ürettiği diff tersine çevrilir (`git apply --reverse`).
+   - Kullanıcının mevcut veya geçmiş değişikliklerine asla dokunma. Önceden var olan untracked dosyalar gerçek içerik yedeği olmadan değiştirilemez/silinemez.
+   - Körlemesine `git reset --hard` veya `git clean -fd` çalıştırma.
+   - Geri alma sonrasında `git write-tree` ve diff hash'i başlangıç özetiyle matematiksel olarak doğrulanmadan işlem tamamlanmış sayılamaz.
 
 ---
 

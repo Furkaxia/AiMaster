@@ -8,25 +8,38 @@
 
 ## 1. TEMA SEÇİMİ VE SORGULAMA PROTOKOLÜ (ÖNCE ONAY AL)
 
-Projeye yeni bir arayüz, sayfa veya bileşen eklemeden önce belirlenmiş bir tasarım sistemi yoksa ve **kullanıcı özel bir tema belirtmemişse** DUR ve BANA SOR:
-1. **Proje Türü:** Kişisel/Özel Araç mı, E-Ticaret/Katalog mu, B2B SaaS/Dashboard mu?
-2. **Tema Paleti Önerisi:** Proje türüne uygun aşağıdaki 3 paletten birini öner ve kullanıcı onayı almadan kodlama yapma (Kullanıcı açıkça Cyberpunk, Retro, Brutalist veya Neumorphic gibi özel bir tema istediyse, kullanıcının açık tasarım tercihi uygulanır; ancak WCAG AA 4.5:1 kontrast standardı asla çiğnenmez):
+Projeye yeni bir arayüz, sayfa veya bileşen eklemeden önce belirlenmiş bir tasarım sistemi yoksa ve **kullanıcı özel bir tema belirtmemişse** DUR ve kullanıcıya aşağıdaki açıklayıcı soru formatıyla danış:
 
-### A) Kişisel İmza (Fox / Tilki Teması)
-- **Kullanım Alanı:** Kişisel projeler, geliştirici araçları, botlar, özel portfolyolar veya markalı ürünler.
-- **Vurgu (Accent) Renkleri:** Tilki Turuncusu / Kehribar (`#EA580C`, `#D97706`, `#F97316`).
-- **Zemin & Yüzey:** Derin antrasit / kömür (`#09090B`, `#18181B`, `#27272A`) veya kırık beyaz.
+> 💡 **Not:** Tilki (Fox) teması çerçevenin kurucusunun şahsi tasarım imzasıdır; ancak AIMASTER kurumsal, modüler ve globale açık bir arayüz mimarisine sahiptir. Bu doğrultuda kullanıcıya seçenekler her zaman proje bağlamını netleştirecek açıklamalarla sunulmalıdır:
+
+```text
+🎨 [AIMASTER UI TEMA VE MİMARİ TERCİHİ]
+Arayüz tasarımına başlamadan önce lütfen proje türünüzü ve tercih ettiğiniz paleti seçin:
+1. Şahsi Site (Açıklayın): Portfolyo, kişisel blog, bot veya geliştirici aracı (Kişisel imza: Tilki / Fox teması veya özel bireysel stil)
+2. Kurumsal Site (Açıklayın): B2B, SaaS platformu, yönetim paneli veya kurumsal firma sitesi (Slate/Mavi veya Zümrüt yeşili dengesi)
+3. Ticaret / Mağaza vs. (Açıklayın): E-ticaret, ürün kataloğu veya vitrin (Aydınlık ferah zemin, yüksek dönüşümlü net CTA)
+(Farklı bir estetik istiyorsanız lütfen belirtin: Cyberpunk, Minimalist, Brutalist vb. - WCAG 2.1 AA kontrastı daima korunur)
+```
+
+### A) Şahsi / Bireysel Site (Kişisel İmza & Fox / Tilki Teması)
+- **Kullanım Alanı:** Kişisel projeler, geliştirici portfolyoları, bloglar, botlar, özel geliştirici araçları veya yaratıcı vitrinler.
 - **Karakter:** Çevik, keskin, yüksek kontrastlı ve modern.
+- **Vurgu (Accent) Renkleri:** Tilki Turuncusu / Kehribar (`#EA580C`, `#D97706`, `#F97316`).
+- **Zemin & Yüzey:** Derin antrasit / kömür (`#09090B`, `#18181B`, `#27272A`) veya zarif kırık beyaz.
 
-### B) E-Ticaret / Mağaza / Ürün Kataloğu
-- **Kullanım Alanı:** Satış odaklı siteler, kataloglar, perakende veya vitrinler.
+### B) Kurumsal Site (B2B / SaaS / Dashboard)
+- **Kullanım Alanı:** B2B web platformları, resmi kurumsal firma siteleri, SaaS ürünleri, veri yoğun yönetim panelleri ve finans.
+- **Karakter:** Güven veren, dengeli, göz yormayan, profesyonel.
+- **Zemin & Yüzey:** Slate veya Zinc gri tonları (`#0F172A`, `#1E293B`, `#F8FAFC`).
+- **Vurgu (Accent):** Kurumsal Çivit / Kraliyet Mavisi (`#4F46E5`, `#2563EB`) veya Zümrüt Yeşili (`#10B981`).
+
+### C) Ticaret / Mağaza vs. (E-Ticaret / Ürün Kataloğu / Perakende)
+- **Kullanım Alanı:** Satış odaklı siteler, e-ticaret mağazaları, ürün katalogları, dijital pazar yerleri veya perakende vitrinleri.
+- **Karakter:** Ferah, dikkat dağıtmayan, dönüşüm ve ürün görselleri odaklı.
 - **Zemin & Yüzey:** Ferah, aydınlık tonlar (`#FFFFFF`, `#FAFAFA`, `#F4F4F5`), Stone ve Warm Gray nötr geçişler.
 - **Aksiyon (CTA):** Ürünü öne çıkaran, dikkat dağıtmayan tek bir net satın alma/aksiyon rengi.
 
-### C) Kurumsal / B2B / Dashboard / SaaS
-- **Kullanım Alanı:** Veri yoğun yönetim panelleri, finans ve kurumsal platformlar.
-- **Zemin & Yüzey:** Göz yormayan Slate veya Zinc gri tonları (`#0F172A`, `#1E293B`, `#F8FAFC`).
-- **Vurgu (Accent):** Kurumsal Çivit / Kraliyet Mavisi (`#4F46E5`, `#2563EB`) veya Zümrüt Yeşili (`#10B981`).
+*(Kullanıcı açıkça Cyberpunk, Retro, Brutalist veya Neumorphic gibi alternatif bir estetik stil talep ettiğinde bu tercihe uyulur; ancak WCAG 2.1 AA 4.5:1 kontrast standardı asla çiğnenmez).*
 
 ---
 

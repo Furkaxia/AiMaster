@@ -379,20 +379,151 @@ if (fs.existsSync(readmeEnPath) && fs.existsSync(readmeTrPath)) {
 }
 
 // -----------------------------------------------------------------------------
-// 5. Deep Markdown Relative Link Resolution & Anchor Heading Verification
+// 5. Deep CommonMark/GFM Markdown Relative Link & Anchor Heading Verification
 // -----------------------------------------------------------------------------
 console.log('\n📌 5. Derin Markdown Link Çözümleme ve Başlık Anchor Doğrulaması...');
+
+/**
+ * Supported CommonMark & GitHub Flavored Markdown (GFM) Syntax Subset:
+ * 1. Links & Images:
+ *    - Standard: [text](dest), ![alt](dest)
+ *    - Destination with optional title: [text](dest "title"), [text](dest 'title'), [text](dest (title))
+ *    - Angle bracket destinations: [text](<dest>), [text](<dest> "title")
+ *    - Reference links: [label]: dest, [label]: <dest> "title"
+ * 2. Code Fences:
+ *    - Backtick fences: 3 or more backticks (```, ````, etc.)
+ *    - Tilde fences: 3 or more tildes (~~~, ~~~~, etc.)
+ *    - Info string validation (backtick fences cannot contain backticks in info string)
+ *    - Matched closing fence rules (matching character, length >= opening length)
+ * 3. Headings & Anchors:
+ *    - ATX headings: # Heading
+ *    - GitHub slugification (emoji removal, punctuation stripping, case folding)
+ *    - ASCII normalization variants (Turkish characters: ı->i, ş->s, ğ->g, etc.)
+ *    - Sequential duplicate anchor modeling (e.g. #heading, #heading-1, #heading-2)
+ */
+
+// Helper to strip all fenced code blocks (``` and ~~~ of any length >=3) and inline code
+function stripCodeBlocks(content) {
+  const lines = content.split('\n');
+  const result = [];
+  let openFenceChar = null;
+  let openFenceLen = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const match = line.match(/^[ \t]{0,3}(`{3,}|~{3,})(.*)$/);
+    if (match) {
+      const fenceStr = match[1];
+      const char = fenceStr[0];
+      const len = fenceStr.length;
+      const rest = match[2].trim();
+
+      if (!openFenceChar) {
+        if (char === '`' && rest.includes('`')) {
+          result.push(line);
+          continue;
+        }
+        openFenceChar = char;
+        openFenceLen = len;
+        result.push('');
+        continue;
+      } else {
+        if (char === openFenceChar && len >= openFenceLen && rest === '') {
+          openFenceChar = null;
+          openFenceLen = 0;
+          result.push('');
+          continue;
+        }
+      }
+    }
+
+    if (openFenceChar) {
+      result.push('');
+    } else {
+      const strippedLine = line.replace(/(`+)(?:(?!\1)[\s\S])*?\1/g, '');
+      result.push(strippedLine);
+    }
+  }
+
+  return result.join('\n');
+}
+
+// Helper to verify balanced code fences for both backtick and tilde blocks
+function checkCodeFenceBalance(content) {
+  const lines = content.split('\n');
+  let openFenceChar = null;
+  let openFenceLen = 0;
+  let openLineNum = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const match = line.match(/^[ \t]{0,3}(`{3,}|~{3,})(.*)$/);
+    if (match) {
+      const fenceStr = match[1];
+      const char = fenceStr[0];
+      const len = fenceStr.length;
+      const rest = match[2].trim();
+
+      if (!openFenceChar) {
+        if (char === '`' && rest.includes('`')) {
+          continue;
+        }
+        openFenceChar = char;
+        openFenceLen = len;
+        openLineNum = i + 1;
+      } else {
+        if (char === openFenceChar && len >= openFenceLen && rest === '') {
+          openFenceChar = null;
+          openFenceLen = 0;
+          openLineNum = 0;
+        }
+      }
+    }
+  }
+
+  return {
+    isBalanced: openFenceChar === null,
+    openLineNum,
+    openFenceChar,
+    openFenceLen
+  };
+}
+
+// Helper to extract clean destination URL from markdown target (handling titles & angle brackets)
+function parseLinkDestination(rawTarget) {
+  let trimmed = rawTarget.trim();
+  if (!trimmed) return null;
+
+  // Case 1: Enclosed in angle brackets: <destination> [optional title]
+  if (trimmed.startsWith('<')) {
+    const closeAngle = trimmed.indexOf('>');
+    if (closeAngle !== -1) {
+      return trimmed.slice(1, closeAngle).trim();
+    }
+  }
+
+  // Case 2: Standard destination with optional title: destination "title" or 'title' or (title)
+  const titleMatch = trimmed.match(/^([^\s]+)(?:\s+(?:"[^"]*"|'[^']*'|\([^)]*\)))?$/);
+  if (titleMatch) {
+    return titleMatch[1].trim();
+  }
+
+  return trimmed.split(/\s+/)[0].trim();
+}
+
 const allMarkdownFiles = getAllMarkdownFiles(ROOT_DIR);
 let brokenLinksCount = 0;
 let totalCheckedLinks = 0;
 
-// Helper to extract anchors from markdown headings
+// Helper to extract anchors from markdown headings with GFM sequential duplicate numbering
 const headingAnchorsCache = new Map();
 function getHeadingAnchors(filePath) {
   if (headingAnchorsCache.has(filePath)) return headingAnchorsCache.get(filePath);
   const anchors = new Set();
   if (fs.existsSync(filePath)) {
-    const content = fs.readFileSync(filePath, 'utf8').replace(/```[\s\S]*?```/g, '');
+    const content = stripCodeBlocks(fs.readFileSync(filePath, 'utf8'));
+    const slugCounts = new Map();
+
     content.split('\n').forEach(line => {
       const match = line.match(/^#{1,6}\s+(.+)$/);
       if (match) {
@@ -402,17 +533,24 @@ function getHeadingAnchors(filePath) {
         // Remove formatting
         title = title.replace(/[*_`]/g, '');
         // GitHub slugify: remove punctuation and emojis
-        const slug = title
+        const baseSlug = title
           .toLowerCase()
           .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
           .replace(/[^\w\s\u00C0-\u024F\u1EA0-\u1EFF-]/gu, '')
           .trim()
           .replace(/\s+/g, '-');
-        if (slug) {
+
+        if (baseSlug) {
+          const count = slugCounts.get(baseSlug) || 0;
+          slugCounts.set(baseSlug, count + 1);
+
+          // GFM sequential numbering: 1st is baseSlug, 2nd is baseSlug-1, 3rd is baseSlug-2, etc.
+          const slug = count === 0 ? baseSlug : `${baseSlug}-${count}`;
           anchors.add(slug);
           anchors.add(`-${slug}`);
+
           // ASCII normalized variant
-          const asciiSlug = slug
+          const asciiBase = baseSlug
             .replace(/ı/g, 'i')
             .replace(/ş/g, 's')
             .replace(/ğ/g, 'g')
@@ -421,6 +559,8 @@ function getHeadingAnchors(filePath) {
             .replace(/ö/g, 'o')
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
+
+          const asciiSlug = count === 0 ? asciiBase : `${asciiBase}-${count}`;
           anchors.add(asciiSlug);
           anchors.add(`-${asciiSlug}`);
         }
@@ -431,12 +571,10 @@ function getHeadingAnchors(filePath) {
   return anchors;
 }
 
-// Tokenizer to extract all markdown links handling nested brackets and badges
+// Tokenizer to extract all markdown links handling nested brackets and titles
 function extractAllMarkdownLinks(content) {
   const links = [];
-  const clean = content
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`\n]*`/g, '');
+  const clean = stripCodeBlocks(content);
 
   let i = 0;
   while (i < clean.length) {
@@ -468,7 +606,7 @@ function extractAllMarkdownLinks(content) {
   }
 
   // Reference definitions: [ref]: target
-  const refRegex = /^[ \t]*\[([^\]]+)\]:[ \t]+(\S+)/gm;
+  const refRegex = /^[ \t]*\[([^\]]+)\]:[ \t]+(\S+(?:[ \t]+(?:"[^"]*"|'[^']*'|\([^)]*\)))?)/gm;
   let refMatch;
   while ((refMatch = refRegex.exec(clean)) !== null) {
     links.push(refMatch[2].trim());
@@ -482,42 +620,45 @@ allMarkdownFiles.forEach(mdFile => {
   const dir = path.dirname(mdFile);
   const relFile = path.relative(ROOT_DIR, mdFile).replace(/\\/g, '/');
 
-  // Assert balanced code fences (```)
-  const codeFenceMatches = content.match(/^[ \t]*```/gm) || [];
-  if (codeFenceMatches.length % 2 !== 0) {
-    logFail(`Dengesiz kod çiti (unbalanced code fence) tespit edildi: [${relFile}] (Çit sayısı tek: ${codeFenceMatches.length})`);
+  // Assert balanced code fences (``` and ~~~ with arbitrary lengths)
+  const fenceCheck = checkCodeFenceBalance(content);
+  if (!fenceCheck.isBalanced) {
+    logFail(`Dengesiz kod çiti (unbalanced code fence) tespit edildi: [${relFile}] (Satır ${fenceCheck.openLineNum} üzerinde açılan ${fenceCheck.openFenceLen} karakterli '${fenceCheck.openFenceChar}' çiti kapatılmamış)`);
     brokenLinksCount++;
   }
 
-  const links = extractAllMarkdownLinks(content);
+  const rawLinks = extractAllMarkdownLinks(content);
 
-  links.forEach(rawTarget => {
+  rawLinks.forEach(rawTarget => {
+    const dest = parseLinkDestination(rawTarget);
+    if (!dest) return;
+
     // Ignore external URLs, mailto, ftp, etc.
-    if (rawTarget.startsWith('http://') || rawTarget.startsWith('https://') || rawTarget.startsWith('mailto:') || rawTarget.startsWith('ftp:')) {
+    if (dest.startsWith('http://') || dest.startsWith('https://') || dest.startsWith('mailto:') || dest.startsWith('ftp:')) {
       return;
     }
 
     totalCheckedLinks++;
 
     // Same-file anchor link: #some-anchor
-    if (rawTarget.startsWith('#')) {
-      const anchor = rawTarget.slice(1);
+    if (dest.startsWith('#')) {
+      const anchor = dest.slice(1);
       const fileAnchors = getHeadingAnchors(mdFile);
       if (!fileAnchors.has(anchor)) {
-        logFail(`Kırık dosya-içi anchor linki: [${relFile}] -> "${rawTarget}" (Hedef başlık bulunamadı)`);
+        logFail(`Kırık dosya-içi anchor linki: [${relFile}] -> "${rawTarget}" (Hedef başlık bulunamadı: #${anchor})`);
         brokenLinksCount++;
       }
       return;
     }
 
     // Relative file link with optional #anchor: path/to/file.md#some-anchor
-    const [pathPart, anchorPart] = rawTarget.split('#');
+    const [pathPart, anchorPart] = dest.split('#');
     const cleanPath = pathPart.split('?')[0].trim();
     if (!cleanPath) return;
 
     const resolvedPath = path.resolve(dir, cleanPath);
     if (!fs.existsSync(resolvedPath)) {
-      logFail(`Kırık bağıl link bulundu: [${relFile}] -> "${rawTarget}"`);
+      logFail(`Kırık bağıl link bulundu: [${relFile}] -> "${rawTarget}" (Hedef dosya yok: ${cleanPath})`);
       brokenLinksCount++;
       return;
     }
@@ -608,6 +749,31 @@ PRESET_FILES.forEach(preset => {
     logPass(`[${preset}] -> Kanonik QA test özeti şablonu mevcut`);
   } else {
     logFail(`[${preset}] -> Kanonik QA test özeti şablonu EKSİK!`);
+  }
+
+  // 6. Semantic Contradiction & Security Bypass Assertion
+  // Ensures presets do not contain conflicting bypass instructions (e.g. "kullanıcı isterse güvenlik devre dışı", "disable security")
+  checksCount++;
+  const bypassPatterns = [
+    /kullanıcı isterse.*güvenlik.*(?:devre dışı|iptal|esnet|atla|yoksay)/i,
+    /user (?:can|may).*override.*security/i,
+    /disable (?:all )?security/i,
+    /bypass (?:all )?security/i,
+    /güvenlik kontrollerini devre dışı/i,
+    /güvenliği (?:devre dışı bırak|yoksay|atla)/i,
+    /skip (?:all )?security checks/i
+  ];
+
+  let hasContradiction = false;
+  for (const pattern of bypassPatterns) {
+    if (pattern.test(content)) {
+      logFail(`[${preset}] -> Semantik çelişki / Güvenlik bypass talimatı tespit edildi! Kural ihlali: "${content.match(pattern)[0]}"`);
+      hasContradiction = true;
+      break;
+    }
+  }
+  if (!hasContradiction) {
+    logPass(`[${preset}] -> Semantik çelişki / Güvenlik bypass taraması temiz`);
   }
 });
 

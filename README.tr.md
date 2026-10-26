@@ -77,7 +77,7 @@ AIMASTER bu problemi iki köklü devrimle çözer:
 | **Hata Düzeltme & Rework** | 4–8 tur tekrar tekrar dosya üretimi (~80K+ token) | Cerrahi mikro-diff ve doğrulama kapıları (~5K token) | **Ciddi Azalma** |
 | **Toplam Görev Ayak İzi** | **~135.000 – 165.000 Token** | **~15.000 – 20.000 Token** | **🔥 %85'e Varan Net Tasarruf** |
 
-> *Metodoloji Notu:* Tablodaki veriler, monolitik tüm kuralların baştan yüklendiği sistemler ile AIMASTER'ın dinamik asgari skill yükleme mimarisi arasındaki bayt-token oranlarına dayanan modelleme projeksiyonlarıdır. AIMASTER, istemciler için anayasal bir prompt/talimat çerçevesidir. Gerçek tasarruf oranları kod tabanı ölçeğine, dosya sayısına, görev karmaşıklığına ve kullanılan LLM sağlayıcısının prompt caching yeteneklerine göre değişiklik gösterir; bu veriler harici bağımsız bir ampirik benchmark değil, mimari modelleme tahminleridir.
+> *Metodoloji Notu:* Tablodaki veriler, monolitik tüm kuralların baştan yüklendiği sistemler ile AIMASTER'ın dinamik asgari skill yükleme mimarisi arasındaki bayt-token oranlarına dayanan modelleme projeksiyonlarıdır. AIMASTER, istemciler için anayasal bir prompt/talimat çerçevesidir. Gerçek tasarruf oranları kod tabanı ölçeğine, dosya sayısına, görev karmaşıklığına ve kullanılan LLM sağlayıcısının prompt caching yeteneklerine göre değişiklik gösterir; bu veriler harici bağımsız bir ampirik benchmark değil, mimari modelleme tahminleridir. Bağlam kaybını ve tekrar işleme maliyetini azaltmayı hedefler; gerçek tasarruf göreve ve modele bağlıdır, sıfır bilgi kaybı garantisi vermez.
 
 ---
 

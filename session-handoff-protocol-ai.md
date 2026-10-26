@@ -48,16 +48,23 @@ Handoff tetiklendiğinde ajan projenin kök dizininde `.handoff/session-state.md
 - `src/components/Header.tsx`: Responsive menü ve A11y eklendi.
 - `src/services/api.ts`: Idempotency header eklendi.
 
-## 3. AKTİF KARARLAR VE MİMARİ SÖZLEŞMELER
-- Renk Paleti: 60% #090A0F, 30% #151823, 10% #4F46E5.
-- State Yönetimi: Zustand store kuruldu, persist middleware bağlandı.
+## 3. AKTİF BAĞLAM, SKİLLER VE KRİPTOGRAFİK İZOLASYON
+- **Active Skills Loaded:** `[skills/03-backend-data/skill-api.md, skills/04-security-audit/skill-auth-security.md]`
+- **Git State Verification:** `git_head_sha: [commit_sha]`, `dirty_files_sha256: [hash_or_clean]`
+- **Verification Command:** `[npm test / npx vitest run]` (Yeni ajanın ilk adımda mevcut bütünlüğü teyit edeceği tek satırlık test komutu)
+- **Aktif Mimari Sözleşmeler:** 60-30-10 renk paleti (#090A0F / #151823 / #4F46E5), Zustand state persist.
 
-## 4. BİR SONRAKİ İLK ADIM (NEXT IMMEDIATE OBJECTIVE)
-- [ ] [Yeni chat başladığında tam olarak ilk yapılacak iş nedir?]
+## 4. ELENEN YAKLAŞIMLAR VE BAŞARISIZ YOLLAR (REJECTED APPROACHES)
+- ❌ **Denenen ve Reddedilen Yol 1:** [X yöntemi/algoritması denendi ancak Y yarış durumu (race condition) nedeniyle elendi]
+- ❌ **Denenen ve Reddedilen Yol 2:** [Z paketi bundle şişkinliği nedeniyle reddedildi]
+*(Yeni ajanın aynı başarısız çözümü tekrar denemesini kesin olarak önleyen hafıza kilidi)*
+
+## 5. BİR SONRAKİ İLK ADIM (NEXT IMMEDIATE OBJECTIVE)
+- [ ] [Yeni chat başladığında tam olarak ilk yapılacak cerrahi iş nedir?]
 
 ---
 
-## 5. 🚀 YENİ SOHBET MASTERPROMPTU (COPY & PASTE INTO NEW CHAT)
+## 6. 🚀 YENİ SOHBET MASTERPROMPTU (COPY & PASTE INTO NEW CHAT)
 [Aşağıdaki metni kopyalayıp yepyeni bir temiz sohbet penceresine yapıştırın:]
 
 ```text
@@ -66,9 +73,11 @@ Proje kök dizinindeki RulesAI.md ve .handoff/session-state.md dosyalarını oku
 
 ŞU ANKİ DURUMUMUZ:
 - Tamamlananlar: [Özet]
+- Doğrulama Komutu: [Verification Command]
+- Elenen Yaklaşımlar: [Rejected Approaches - Asla tekrar deneme]
 - Sırada Yapılacak İş: [Bir sonraki ilk adım]
 
-Hemen .handoff/session-state.md dosyasını incele, bağlamı doğrula ve doğrudan sıradaki adıma cerrahi olarak başla!
+Hemen .handoff/session-state.md dosyasını incele, doğrulama komutunu çalıştırarak mevcut durumu teyit et ve doğrudan sıradaki adıma başla!
 ```
 ```
 
@@ -80,8 +89,8 @@ Ajan handoff dosyasını yazdıktan sonra kullanıcıya yanıtının en altına 
 
 ```text
 ⚠️ [AIMASTER BAĞLAM UYARISI / CONTEXT CHECKPOINT]
-Bu oturumda bağlam derinliği optimum sınırı aştı. Bellek zindeliği ve %85 token tasarrufu için:
+Bu oturumda bağlam derinliği optimum sınırı aştı. Bağlam kaybını ve tekrar işleme maliyetini azaltmayı hedefler; gerçek tasarruf göreve ve modele bağlıdır, sıfır bilgi kaybı garantisi vermez:
 1. Projenizde `.handoff/session-state.md` oluşturuldu ve güncellendi.
 2. Yeni ve temiz bir sohbet penceresi açın.
-3. Dosyanın en altındaki Masterprompt'u yeni sohbete yapıştırarak sıfır kayıpla tam kaldığınız yerden devam edin!
+3. Dosyanın en altındaki Masterprompt'u yeni sohbete yapıştırarak kaldığınız yerden devam edin!
 ```

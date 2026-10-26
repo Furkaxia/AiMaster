@@ -13,7 +13,7 @@ Geleneksel yapay zeka yaklaşımlarında binlerce kural tek bir hafızaya yükle
 **Boardroom Protokolünün Katı Kuralı:**  
 > **"Toplantıda tek satır kod yazılmaz; yalnızca 30–50 satırlık (~200–300 kelime) yapılandırılmış 'Micro-Spec' müzakere edilir."**
 
-Kötü mimari kararlar, uyumsuz renkler, erişilebilirlik hataları ve gereksiz bağımlılıklar **kod yazılmadan önce yapılandırılmış Micro-Spec düzeyinde elenir.** Böylece %75 - %85 oranında net token tasarrufu sağlanır.
+Kötü mimari kararlar, uyumsuz renkler, erişilebilirlik hataları ve gereksiz bağımlılıklar **kod yazılmadan önce yapılandırılmış Micro-Spec düzeyinde elenir.** Bu yaklaşım; bağlam kaybını ve tekrar işleme maliyetini azaltmayı hedefler; gerçek tasarruf göreve ve modele bağlıdır, sıfır bilgi kaybı garantisi vermez.
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -75,7 +75,7 @@ Ajan her görevde konseyi toplamaz; token tasarrufu için şu matrisi uygular:
 
 ### Rol 2: `[UI-SYSTEMS]` (Görsel Tasarım & Stil Mimarisi)
 - **Yetki Alanı:** 60-30-10 renk dengesi, tipografi ölçeği, spacing ritmi, interaksiyon durumları.
-- **Tasarım Kuralları:** Varsayılan olarak kurumsal, erişilebilir 60-30-10 paletini uygular; çamur gölgeler ve rastgele utility kullanımı yasaktır. Kullanıcı açıkça Cyberpunk, Retro, Brutalist veya Neumorphic gibi alternatif bir estetik stil talep ettiğinde bu tercihe uyar; ancak WCAG 2.1 AA 4.5:1 kontrast standardı ve responsive düzen esnetilemez. Kod blokları yazmaz.
+- **Tasarım Kuralları:** Varsayılan olarak kurumsal, erişilebilir 60-30-10 paletini uygular; çamur gölgeler ve rastgele utility kullanımı yasaktır. Proje türüne göre kullanıcıdan açıklayıcı formatta (Şahsi Site - Tilki/Fox, Kurumsal Site - B2B/SaaS, Ticaret - E-Ticaret/Katalog) onay alır. Kullanıcı açıkça Cyberpunk, Retro, Brutalist veya Neumorphic gibi alternatif bir estetik stil talep ettiğinde bu tercihe uyar; ancak WCAG 2.1 AA 4.5:1 kontrast standardı ve responsive düzen esnetilemez. Kod blokları yazmaz.
 - **Çıktı Biçimi:**
   ```yaml
   [UI-SYSTEMS]:

@@ -1,7 +1,8 @@
 # SHARED SKILL FOOTER — COMMON DIRECTIVES (_shared-skill-footer.md)
 
 > **Purpose:** Centralized source of truth for common prohibitions, execution protocols, and QA checklists shared across all skills.  
-> **Usage:** Referenced at the end of each skill module via `> For common prohibitions, execution protocol, and QA checklist: see [_shared-skill-footer.md](../_shared-skill-footer.md)`.
+> **Usage:** Referenced at the end of each skill module via `> For common prohibitions, execution protocol, and QA checklist: see [_shared-skill-footer.md](../_shared-skill-footer.md)`.  
+> **Deduplication Protocol:** When multiple skills (1–3) are loaded into runtime context, the shared footer directives are injected globally once at the end of the active prompt stream (leveraging recency bias) rather than duplicated, preventing semantic dilution and attention degradation.
 
 ---
 
