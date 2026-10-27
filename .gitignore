@@ -52,3 +52,6 @@ temp/
 ai-log.local.md
 test md/
 
+# Benchmark local raw run logs
+benchmarks/results/raw-results-*.json
+
