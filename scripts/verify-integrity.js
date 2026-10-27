@@ -526,7 +526,8 @@ function getHeadingAnchors(filePath) {
     const content = stripCodeBlocks(fs.readFileSync(filePath, 'utf8'));
     const slugCounts = new Map();
 
-    content.split('\n').forEach(line => {
+    content.split(/\r?\n/).forEach(rawLine => {
+      const line = rawLine.trim();
       const match = line.match(/^#{1,6}\s+(.+)$/);
       if (match) {
         let title = match[1].trim();
