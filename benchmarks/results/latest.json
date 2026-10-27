@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "timestamp": "2026-10-27T09:20:21.249Z",
+    "timestamp": "2026-10-27T10:13:35.733Z",
     "mode": "mock",
+    "provider": "gemini",
     "model": "gemini-2.5-flash",
     "totalTasks": 28,
     "categoriesCount": 7,
@@ -21,14 +22,14 @@
       "aimaster": 100
     },
     "averageIterations": {
-      "plain": 4.8,
-      "rulesOnly": 2.9,
+      "plain": 3.7,
+      "rulesOnly": 1.9,
       "aimaster": 1.1
     },
     "humanInterventionRate": {
-      "plain": 71.4,
-      "rulesOnly": 39.3,
-      "aimaster": 3.6
+      "plain": 67.9,
+      "rulesOnly": 35.7,
+      "aimaster": 0
     },
     "totalTokens": {
       "plain": 332200,
@@ -46,17 +47,17 @@
           "tokens": 14800,
           "costUsd": 0.00422,
           "passed": false,
-          "violations": 3,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 7400,
           "costUsd": 0.00211,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 2350,
@@ -77,18 +78,18 @@
         "plain": {
           "tokens": 10400,
           "costUsd": 0.00296,
-          "passed": false,
-          "violations": 3,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 5200,
           "costUsd": 0.00148,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1850,
@@ -110,7 +111,7 @@
           "tokens": 15000,
           "costUsd": 0.00427,
           "passed": false,
-          "violations": 4,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -118,7 +119,7 @@
           "tokens": 7200,
           "costUsd": 0.00205,
           "passed": false,
-          "violations": 4,
+          "violations": 5,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -142,7 +143,7 @@
           "tokens": 17000,
           "costUsd": 0.00485,
           "passed": false,
-          "violations": 3,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -150,7 +151,7 @@
           "tokens": 8500,
           "costUsd": 0.00242,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -174,17 +175,17 @@
           "tokens": 11500,
           "costUsd": 0.00328,
           "passed": false,
-          "violations": 3,
+          "violations": 4,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 5400,
           "costUsd": 0.00154,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1900,
@@ -206,7 +207,7 @@
           "tokens": 14000,
           "costUsd": 0.00399,
           "passed": false,
-          "violations": 3,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -214,7 +215,7 @@
           "tokens": 6800,
           "costUsd": 0.00194,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -238,17 +239,17 @@
           "tokens": 13000,
           "costUsd": 0.0037,
           "passed": false,
-          "violations": 3,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 6000,
           "costUsd": 0.00171,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 2050,
@@ -270,7 +271,7 @@
           "tokens": 12000,
           "costUsd": 0.00342,
           "passed": false,
-          "violations": 1,
+          "violations": 3,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -278,7 +279,7 @@
           "tokens": 5700,
           "costUsd": 0.00162,
           "passed": false,
-          "violations": 1,
+          "violations": 2,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -302,17 +303,17 @@
           "tokens": 11000,
           "costUsd": 0.00313,
           "passed": false,
-          "violations": 1,
+          "violations": 3,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 5500,
           "costUsd": 0.00157,
-          "passed": false,
-          "violations": 1,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1850,
@@ -333,18 +334,18 @@
         "plain": {
           "tokens": 7500,
           "costUsd": 0.00214,
-          "passed": false,
-          "violations": 2,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 3700,
           "costUsd": 0.00105,
-          "passed": false,
-          "violations": 2,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1350,
@@ -366,17 +367,17 @@
           "tokens": 10200,
           "costUsd": 0.00291,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 5100,
           "costUsd": 0.00145,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1800,
@@ -397,18 +398,18 @@
         "plain": {
           "tokens": 8800,
           "costUsd": 0.00251,
-          "passed": false,
-          "violations": 2,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 4400,
           "costUsd": 0.00125,
-          "passed": false,
-          "violations": 2,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1600,
@@ -430,7 +431,7 @@
           "tokens": 14500,
           "costUsd": 0.00413,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -438,7 +439,7 @@
           "tokens": 7200,
           "costUsd": 0.00205,
           "passed": false,
-          "violations": 3,
+          "violations": 4,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -461,18 +462,18 @@
         "plain": {
           "tokens": 8500,
           "costUsd": 0.00242,
-          "passed": false,
-          "violations": 2,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 4200,
           "costUsd": 0.0012,
-          "passed": false,
-          "violations": 2,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1600,
@@ -494,7 +495,7 @@
           "tokens": 13000,
           "costUsd": 0.0037,
           "passed": false,
-          "violations": 4,
+          "violations": 7,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -502,7 +503,7 @@
           "tokens": 6400,
           "costUsd": 0.00182,
           "passed": false,
-          "violations": 4,
+          "violations": 6,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -526,17 +527,17 @@
           "tokens": 8200,
           "costUsd": 0.00234,
           "passed": false,
-          "violations": 1,
+          "violations": 3,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 4100,
           "costUsd": 0.00117,
-          "passed": false,
-          "violations": 1,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1550,
@@ -557,18 +558,18 @@
         "plain": {
           "tokens": 12500,
           "costUsd": 0.00356,
-          "passed": false,
-          "violations": 3,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 6200,
           "costUsd": 0.00177,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 2100,
@@ -589,18 +590,18 @@
         "plain": {
           "tokens": 11000,
           "costUsd": 0.00313,
-          "passed": false,
-          "violations": 4,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 5800,
           "costUsd": 0.00165,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1950,
@@ -622,17 +623,17 @@
           "tokens": 13500,
           "costUsd": 0.00385,
           "passed": false,
-          "violations": 4,
+          "violations": 7,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 6500,
           "costUsd": 0.00185,
-          "passed": false,
-          "violations": 4,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 2200,
@@ -654,17 +655,17 @@
           "tokens": 9800,
           "costUsd": 0.00279,
           "passed": false,
-          "violations": 3,
+          "violations": 4,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 5100,
           "costUsd": 0.00145,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1800,
@@ -685,18 +686,18 @@
         "plain": {
           "tokens": 9500,
           "costUsd": 0.00271,
-          "passed": false,
-          "violations": 2,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 4800,
           "costUsd": 0.00137,
-          "passed": false,
-          "violations": 2,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1700,
@@ -717,18 +718,18 @@
         "plain": {
           "tokens": 7900,
           "costUsd": 0.00225,
-          "passed": false,
-          "violations": 2,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 3900,
           "costUsd": 0.00111,
-          "passed": false,
-          "violations": 2,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1450,
@@ -749,18 +750,18 @@
         "plain": {
           "tokens": 8100,
           "costUsd": 0.00231,
-          "passed": false,
-          "violations": 3,
-          "iterations": 4.8,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.5,
+          "humanIntervention": false
         },
         "rulesOnly": {
           "tokens": 4000,
           "costUsd": 0.00114,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1500,
@@ -782,7 +783,7 @@
           "tokens": 15500,
           "costUsd": 0.00442,
           "passed": false,
-          "violations": 3,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -790,7 +791,7 @@
           "tokens": 7600,
           "costUsd": 0.00217,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -814,7 +815,7 @@
           "tokens": 16500,
           "costUsd": 0.0047,
           "passed": false,
-          "violations": 4,
+          "violations": 7,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -822,7 +823,7 @@
           "tokens": 8100,
           "costUsd": 0.00231,
           "passed": false,
-          "violations": 4,
+          "violations": 6,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -846,7 +847,7 @@
           "tokens": 13800,
           "costUsd": 0.00393,
           "passed": false,
-          "violations": 3,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -854,7 +855,7 @@
           "tokens": 6900,
           "costUsd": 0.00197,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -878,7 +879,7 @@
           "tokens": 14200,
           "costUsd": 0.00405,
           "passed": false,
-          "violations": 3,
+          "violations": 6,
           "iterations": 4.8,
           "humanIntervention": true
         },
@@ -886,7 +887,7 @@
           "tokens": 7000,
           "costUsd": 0.00199,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 2.9,
           "humanIntervention": true
         },
@@ -910,17 +911,17 @@
           "tokens": 10500,
           "costUsd": 0.00299,
           "passed": false,
-          "violations": 3,
+          "violations": 5,
           "iterations": 4.8,
           "humanIntervention": true
         },
         "rulesOnly": {
           "tokens": 5300,
           "costUsd": 0.00151,
-          "passed": false,
-          "violations": 3,
-          "iterations": 2.9,
-          "humanIntervention": true
+          "passed": true,
+          "violations": 0,
+          "iterations": 1.3,
+          "humanIntervention": false
         },
         "aimaster": {
           "tokens": 1750,

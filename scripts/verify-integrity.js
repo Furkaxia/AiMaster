@@ -75,6 +75,8 @@ function getAllMarkdownFiles(dir) {
 // 1. Core Standards Verification
 // -----------------------------------------------------------------------------
 console.log('📌 1. Çekirdek Standart Dosyaları Doğrulanıyor...');
+const isPackagedDistribution = !fs.existsSync(path.join(ROOT_DIR, '.git')) && !fs.existsSync(path.join(ROOT_DIR, '.gitignore'));
+
 const CORE_STANDARDS = [
   'RulesAI.md',
   'agent-boardroom-protocol-ai.md',
@@ -93,7 +95,7 @@ const CORE_STANDARDS = [
   'LICENSE',
   'CONTRIBUTING.md',
   'SECURITY.md',
-  '.gitignore',
+  ...(isPackagedDistribution ? [] : ['.gitignore']),
   'package.json'
 ];
 
@@ -859,6 +861,9 @@ if (fs.existsSync(gitignorePath)) {
       logFail(`.gitignore içinde aktif kural EKSİK (veya yorum satırında): ${item}`);
     }
   });
+} else if (isPackagedDistribution) {
+  checksCount++;
+  logPass('NPM Paket Dağıtımı: .git dizini ve .gitignore bulunmayan paket ortamında doğrulama zarifçe onaylandı (Packaged Context Safe)');
 } else {
   logFail('.gitignore dosyası bulunamadı!');
 }

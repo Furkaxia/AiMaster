@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Enterprise CI & Benchmark](https://img.shields.io/badge/Kurumsal%20CI%20%26%20Benchmark-Passing-brightgreen.svg?style=for-the-badge)](https://github.com/Furkaxia/AiMaster/actions/workflows/ci.yml)
 [![Skills Count](https://img.shields.io/badge/Yetenekler-80%20On--Demand%20Skill-emerald.svg?style=for-the-badge)](skills/README.md)
-[![Empirical Token Reduction](https://img.shields.io/badge/Token%20Tasarrufu--%2583.5%20(%2595%20GA)-blueviolet.svg?style=for-the-badge)](benchmarks/BENCHMARK_REPORT.md)
+[![Empirical Token Reduction](https://img.shields.io/badge/Token%20Tasarrufu-83.5%25%20(%2595%20GA)-blueviolet.svg?style=for-the-badge)](benchmarks/BENCHMARK_REPORT.md)
 [![Empirical Benchmark Suite](https://img.shields.io/badge/Ampirik%20G%C3%B6revler-28%20Golden%20Spec-indigo.svg?style=for-the-badge)](benchmarks/tasks/task.schema.json)
 [![Node Compatibility](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-informational.svg?style=for-the-badge)](package.json)
 
@@ -91,10 +91,11 @@ AIMASTER mimarisinin verimliliği, 7 mimari kategoride (Frontend, Backend, Datab
 | **Yeniden İşleme & Hata Ayıklama** | Tüm dosyayı 4–8 kez baştan üretme (~80K+ token) | Doğrulama bariyerli cerrahi diff (~5K token) | **4.3 Kat Daha Hızlı Çözüm** |
 | **Toplam Görev Ayak İzi** | **332.200 Token (Kümülatif)** | **54.950 Token (Kümülatif)** | **%83.5 (±%0.5) Ampirik Net Tasarruf** |
 
-> **Tekrarlanabilirlik & Bilimsel Rapor:** Ham veri seti, standart sapma hesaplamaları ve görev tanımları [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) dosyasında belgelenmiştir. Testler yerel ortamda bağımsız olarak çalıştırılabilir:
+> **Tekrarlanabilirlik & Bilimsel Rapor:** Ham veri seti, standart sapma hesaplamaları ve görev tanımları [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) dosyasında belgelenmiştir. Veriler, 28 golden görev üzerinde belirlenimci mimari test motoruyla anayasal sınır ve bağlam optimizasyonu doğrulanarak elde edilmiştir. Canlı LLM modeli değerlendirmeleri aktif bir sağlayıcı API anahtarıyla (Gemini, OpenAI, Anthropic) `npm run benchmark:live` komutuyla icra edilebilir. Testler yerel ortamda bağımsız olarak çalıştırılabilir:
 > ```bash
 > npm run benchmark:mock     # Deterministik çevrimdışı değerlendirme motorunu çalıştırır
 > npm run benchmark:report   # İstatistiki markdown analiz raporu üretir
+> npm run benchmark:live     # Canlı LLM sağlayıcı değerlendirmesini çalıştırır
 > ```
 
 ---

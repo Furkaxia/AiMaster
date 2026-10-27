@@ -105,7 +105,17 @@ function createMockRepo(destDir) {
     'package.json'
   ];
   coreFiles.forEach(f => {
-    fs.copyFileSync(path.join(REPO_ROOT, f), path.join(destDir, f));
+    const srcPath = path.join(REPO_ROOT, f);
+    if (fs.existsSync(srcPath)) {
+      fs.copyFileSync(srcPath, path.join(destDir, f));
+    } else if (f === '.gitignore') {
+      // Packaged NPM distribution fallback (npm pack omits .gitignore)
+      fs.writeFileSync(
+        path.join(destDir, f),
+        '# Enterprise Security Hygiene Invariants\n.env\n.env.*\n*.pem\n*.key\n*.p12\n*.pfx\nid_rsa\n*.log\n.handoff/\nai-log.local.md\n',
+        'utf8'
+      );
+    }
   });
 
   fs.cpSync(path.join(REPO_ROOT, 'skills'), path.join(destDir, 'skills'), { recursive: true });

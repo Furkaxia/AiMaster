@@ -14,8 +14,15 @@ AIMASTER considers platform security, credential containment, and boundary integ
 
 ## 2. Vulnerability Reporting & Responsible Disclosure
 
-If you discover a potential security vulnerability, prompt jailbreak, or architectural bypass within AIMASTER:
+If you discover a potential security vulnerability, prompt firewall bypass, unintended file-system traversal, or architectural escape within AIMASTER:
 - **Do NOT open a public GitHub issue.**
-- Submit your findings directly via private vulnerability reporting on GitHub Security Advisories or via email to security@thevulpes.dev.
-- Provide a detailed Proof-of-Concept (PoC), reproduction steps, and impact assessment.
-- We acknowledge security reports within 48 hours and work with researchers to coordinate disclosure following remediation.
+- Submit your disclosure securely via [GitHub Private Vulnerability Reporting](https://github.com/Furkaxia/AiMaster/security/advisories/new).
+- Alternatively, email our security team directly at `security@aimaster.dev` (or author contact: `furkanerturk@outlook.com`) with the subject `[SECURITY VULNERABILITY] AIMASTER`.
+- Include a detailed technical description:
+  1. Reproduction steps and affected environment (IDE preset, CLI, or skill module).
+  2. Proof-of-Concept (PoC) prompt or input vector.
+  3. Security impact analysis (e.g. secret exfiltration, destructive command execution, boundary escape).
+- **SLA Commitment:**
+  - Initial triage acknowledgment: within **48 hours**.
+  - Remediation patch and coordinated public disclosure: within **7 to 14 business days**.
+  - Public credit and recognition in release notes for responsible disclosure.

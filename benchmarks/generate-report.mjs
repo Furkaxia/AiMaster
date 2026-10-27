@@ -61,14 +61,24 @@ export function generateReport(updateReadme = false) {
     categoryRows += `| **${catName}** | ${stats.count} | ${stats.plainTokens.toLocaleString()}t | ${stats.aimasterTokens.toLocaleString()}t | **-${savings}%** | ${passRate}% |\n`;
   }
 
+  const modeLabel = meta.mode === 'live'
+    ? 'LIVE LLM PROVIDER EVALUATION'
+    : 'DETERMINISTIC ARCHITECTURAL SIMULATION & CALIBRATION (MOCK)';
+
+  const modeNotice = meta.mode === 'live'
+    ? `> **Live Execution Mode:** Real-world model evaluations executed against production LLM endpoint (\`${meta.provider}:${meta.model}\`) with actual token accounting and AST invariant verification.`
+    : `> **Simulation Calibration Mode:** Deterministic baseline calibration across 28 tasks verifying invariant adherence, context budget sizing, and surgical diff mechanics. For live model execution (LLM API), execute \`npm run benchmark:live\` with an active API key (\`GEMINI_API_KEY\`, \`OPENAI_API_KEY\`, or \`ANTHROPIC_API_KEY\`).`;
+
   const reportMarkdown = `# 🔬 AIMASTER EMPIRICAL BENCHMARK & REPRODUCIBILITY REPORT
 
 > **Evaluation Suite Version:** v1.0.0  
-> **Evaluation Mode:** ${meta.mode.toUpperCase()}  
-> **Model Provider:** ${meta.model}  
+> **Evaluation Mode:** ${modeLabel}  
+> **Model Provider:** ${meta.provider || 'gemini'}:${meta.model}  
 > **Benchmark Timestamp:** ${meta.timestamp}  
 > **Dataset:** 28 Golden Empirical Engineering Tasks (7 Categories)  
 > **Standard Confidence:** 95% Confidence Interval (z = 1.96, σ = ${stdDev}%)
+
+${modeNotice}
 
 ---
 
@@ -118,7 +128,7 @@ npm run benchmark:mock
 # 2. Generate updated report:
 npm run benchmark:report
 
-# 3. Live LLM Evaluation (Requires GEMINI_API_KEY or OPENAI_API_KEY):
+# 3. Live LLM Evaluation (Requires GEMINI_API_KEY, OPENAI_API_KEY, or ANTHROPIC_API_KEY):
 npm run benchmark:live
 \`\`\`
 
@@ -136,13 +146,13 @@ The benchmark confirms that **agentic engineering frameworks produce measurable 
   console.log(`\x1b[32m✔ Generated scientific benchmark report:\x1b[0m ${REPORT_OUTPUT_FILE}`);
 
   if (updateReadme) {
-    updateReadmeFiles(agg, meanSavings, ciUpper);
+    updateReadmeFiles(agg, meanSavings, ciUpper, meta);
   }
 
   return reportMarkdown;
 }
 
-function updateReadmeFiles(agg, meanSavings, ciUpper) {
+function updateReadmeFiles(agg, meanSavings, ciUpper, meta = { mode: 'mock' }) {
   const margin = (ciUpper - meanSavings).toFixed(1);
   const empiricalTable = `| Phase | Monolithic Prompts (Baseline A) | AIMASTER Architecture | Measured Advantage |
 | :--- | :--- | :--- | :--- |
@@ -151,7 +161,7 @@ function updateReadmeFiles(agg, meanSavings, ciUpper) {
 | **Rework & Bug Debugging** | 4–8 cycles of regenerating entire files (~80K+ tokens) | Surgical diffs with verification gates (~5K tokens) | **4.3x Faster Convergence** |
 | **Total Task Footprint** | **${agg.totalTokens.plain.toLocaleString()} Tokens (Cumulative)** | **${agg.totalTokens.aimaster.toLocaleString()} Tokens (Cumulative)** | **🔥 ${meanSavings}% (±${margin}%) Empirical Net Savings** |
 
-> *Empirical Benchmark Note:* Figures are verified by the empirical benchmark harness (\`npm run benchmark:mock\` on 28 golden coding tasks across 7 architecture categories). Results demonstrate **${meanSavings}% net token reduction (95% CI ±${margin}%)**, **${agg.taskSuccessRate.aimaster}% Pass@1 success rate**, and a **reduction in human intervention from 71.4% to ${agg.humanInterventionRate.aimaster}%**. See [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) for raw datasets and reproducibility protocols.`;
+> *Empirical Benchmark Note:* Figures reflect deterministic architectural evaluation across 28 golden tasks (\`npm run benchmark:mock\`) verifying invariant adherence, context budget sizing, and surgical diff mechanics. Live LLM evaluations can be executed via \`npm run benchmark:live\` with an active provider key (Gemini, OpenAI, Anthropic). See [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) for full methodology and reproducibility protocols.`;
 
   const empiricalTableTr = `| Aşama | Monolitik Promptlar (Baseline A) | AIMASTER Mimarisi | Ölçülen Avantaj |
 | :--- | :--- | :--- | :--- |
@@ -160,7 +170,7 @@ function updateReadmeFiles(agg, meanSavings, ciUpper) {
 | **Yeniden İşleme & Hata Ayıklama** | Tüm dosyayı 4–8 kez baştan üretme (~80K+ token) | Doğrulama bariyerli cerrahi diff (~5K token) | **4.3 Kat Daha Hızlı Çözüm** |
 | **Toplam Görev Ayak İzi** | **${agg.totalTokens.plain.toLocaleString()} Token (Kümülatif)** | **${agg.totalTokens.aimaster.toLocaleString()} Token (Kümülatif)** | **🔥 %${meanSavings} (±%${margin}) Ampirik Net Tasarruf** |
 
-> *Ampirik Benchmark Notu:* Veriler, 7 kategoride 28 golden kodlama görevi üzerinde koşturulan ampirik test motoruyla (\`npm run benchmark:mock\`) doğrulanmıştır. Sonuçlar **%${meanSavings} net token tasarrufu (%95 GA ±%${margin})**, **%${agg.taskSuccessRate.aimaster} Pass@1 başarı oranı** ve **insan müdahalesinde %71.4'ten %${agg.humanInterventionRate.aimaster}'e düşüş** ortaya koymaktadır. Ham veri seti ve tekrarlanabilirlik protokolü için [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) dokümanını inceleyin.`;
+> *Ampirik Benchmark Notu:* Veriler, 7 kategoride 28 golden görev üzerinde koşturulan belirlenimci mimari test motoruyla (\`npm run benchmark:mock\`) anayasal sınır ve bağlam optimizasyonu doğrulanarak elde edilmiştir. Canlı LLM modeli değerlendirmeleri aktif bir sağlayıcı API anahtarıyla (Gemini, OpenAI, Anthropic) \`npm run benchmark:live\` komutuyla icra edilebilir. Metodoloji ve tekrarlanabilirlik protokolü için [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) dokümanını inceleyin.`;
 
   // Update README.md
   if (fs.existsSync(README_EN)) {

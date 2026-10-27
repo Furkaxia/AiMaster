@@ -153,6 +153,37 @@ function runVerify() {
   process.exit(0);
 }
 
+let BACKUP_DIR = null;
+function getOrCreateBackupDir() {
+  if (!BACKUP_DIR) {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    BACKUP_DIR = path.join(TARGET_DIR, `.aimaster-backup-${timestamp}`);
+    fs.mkdirSync(BACKUP_DIR, { recursive: true });
+    console.log(`\x1b[36m📦 Safety Backup directory initialized -> ${path.relative(TARGET_DIR, BACKUP_DIR)}\x1b[0m`);
+  }
+  return BACKUP_DIR;
+}
+
+function backupExistingFile(filePath) {
+  if (fs.existsSync(filePath)) {
+    const backupRoot = getOrCreateBackupDir();
+    const rel = path.relative(TARGET_DIR, filePath);
+    const backupTarget = path.join(backupRoot, rel);
+    fs.mkdirSync(path.dirname(backupTarget), { recursive: true });
+    fs.copyFileSync(filePath, backupTarget);
+  }
+}
+
+function backupExistingDirectory(dirPath) {
+  if (fs.existsSync(dirPath)) {
+    const backupRoot = getOrCreateBackupDir();
+    const rel = path.relative(TARGET_DIR, dirPath);
+    const backupTarget = path.join(backupRoot, rel);
+    fs.mkdirSync(backupTarget, { recursive: true });
+    copyRecursiveSync(dirPath, backupTarget);
+  }
+}
+
 function installPreset(key, force = false, dryRun = false) {
   const preset = PRESETS[key];
   if (!preset) {
@@ -178,9 +209,12 @@ function installPreset(key, force = false, dryRun = false) {
     fs.mkdirSync(destDir, { recursive: true });
   }
 
-  if (fs.existsSync(destPath) && !force) {
-    console.log(`\x1b[33m⚠ Skipped: ${preset.dest} already exists (use --force to overwrite)\x1b[0m`);
-    return true;
+  if (fs.existsSync(destPath)) {
+    if (!force) {
+      console.log(`\x1b[33m⚠ Skipped: ${preset.dest} already exists (use --force to overwrite)\x1b[0m`);
+      return true;
+    }
+    backupExistingFile(destPath);
   }
 
   fs.copyFileSync(srcPath, destPath);
@@ -197,6 +231,9 @@ function installRulesAI(force = false, dryRun = false) {
       return;
     }
     if (!fs.existsSync(dest) || force) {
+      if (fs.existsSync(dest) && force) {
+        backupExistingFile(dest);
+      }
       fs.copyFileSync(src, dest);
       console.log(`\x1b[32m✔ Installed Constitutional Rules -> RulesAI.md\x1b[0m`);
     } else {
@@ -215,6 +252,9 @@ function installProtocols(force = false, dryRun = false) {
         console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install protocol -> ${file}`);
         count++;
       } else if (!fs.existsSync(dest) || force) {
+        if (fs.existsSync(dest) && force) {
+          backupExistingFile(dest);
+        }
         fs.copyFileSync(src, dest);
         count++;
       } else {
@@ -237,12 +277,12 @@ function installSkills(force = false, dryRun = false) {
     }
     if (!fs.existsSync(dest) || force) {
       if (fs.existsSync(dest) && force) {
-        console.log(`\x1b[33m⚠ --force active: Purging existing ${dest} to clear deprecated/zombie skills...\x1b[0m`);
-        fs.rmSync(dest, { recursive: true, force: true });
+        console.log(`\x1b[33m⚠ --force active: Backing up existing ./skills/ directory before synchronizing...\x1b[0m`);
+        backupExistingDirectory(dest);
       }
-      console.log(`\x1b[36m⏳ Copying 80 domain skills to ./skills/... \x1b[0m`);
+      console.log(`\x1b[36m⏳ Synchronizing 80 domain skills to ./skills/... \x1b[0m`);
       copyRecursiveSync(src, dest);
-      console.log(`\x1b[32m✔ Installed 80 domain skills -> ./skills/\x1b[0m`);
+      console.log(`\x1b[32m✔ Synchronized 80 domain skills -> ./skills/\x1b[0m`);
     } else {
       console.log(`\x1b[33m⚠ Skipped: ./skills/ directory already exists (use --force to overwrite)\x1b[0m`);
     }

@@ -2,10 +2,12 @@
 
 /**
  * ==============================================================================
- * AIMASTER BEHAVIORAL EVAL BENCHMARK RUNNER (v1.0)
+ * AIMASTER ADVERSARIAL INVARIANT & RULE BINDING VALIDATION (v1.0)
  * ==============================================================================
- * Validates the 20 Golden Adversarial Benchmark Prompts against system
+ * Validates the 23 Golden Adversarial Scenario specifications against system
  * invariants and verifies rule coverage in RulesAI.md, skills, and presets.
+ * For live LLM evaluation of these adversarial scenarios, use:
+ *   npm run benchmark:live
  */
 
 const fs = require('fs');
@@ -15,7 +17,7 @@ const ROOT_DIR = process.env.AIMASTER_TEST_ROOT ? path.resolve(process.env.AIMAS
 const EVALS_FILE = path.join(ROOT_DIR, 'tests', 'adversarial-prompts.json');
 
 console.log('\n🧠 ======================================================');
-console.log('   AIMASTER BEHAVIORAL ADVERSARIAL EVAL RUNNER');
+console.log('   AIMASTER ADVERSARIAL INVARIANT & RULE BINDING VALIDATION');
 console.log('======================================================\n');
 
 if (!fs.existsSync(EVALS_FILE)) {
