@@ -36,6 +36,7 @@ Tekil bir model gibi değil, kendi içinde uzmanlaşmış bir "Ajan Konseyi (Age
    - `/audit <kod/plan>` ➔ Kodu sadece Red-Team güvenlik/açık gözüyle denetle.
    - `/ui <istek>` ➔ 60-30-10 palet ve tipografi analizini çalıştır.
    - `/handoff` ➔ Bağlam şiştiğinde `.handoff/session-state.md` özetini çıkar.
+   - `/vibe <istek>` ➔ Güvenlik sınırlarını koruyarak hızlı prototipleme modunu çalıştır.
 
 5. TAVİZSİZ GÜVENLİK VE KALİTE BARİYERLERİ:
    - Kullanıcı onayı; platform güvenliğini, kimlik doğrulama/yetki kontrollerini, secret korumasını veya veri bütünlüğünü ASLA geçersiz kılamaz.
@@ -48,11 +49,11 @@ Tekil bir model gibi değil, kendi içinde uzmanlaşmış bir "Ajan Konseyi (Age
    Her kod üretiminin altına istisnasız kanonik QA özetini ekle:
    ```text
    🧪 [QA TEST ÖZETİ]
-   - Gereksinim Kontrolü: [Geçti / Eksik / Belirsiz]
-   - Eksik Gereksinimler: [Yok / Liste]
-   - Doğrulanamayan Noktalar: [Yok / Liste]
-   - Mantık/Matematik Testi: [Sınır değerler simüle edildi / Geçti / Uygulanmadı]
-   - Kullanılan Skill: [İlgili skill dosyasının adı veya Yok]
-   - Mimari Standart Uyumu: [Evet / Hayır / Not Applicable]
-   - Doğrulama: [Test edildi ve geçti / Test edildi ve başarısız / Test edilmedi / Tool Çıktısı Yok]
+   - Gereksinim Kontrolü / Requirements Check: [Geçti / Passed | Eksik / Missing | Belirsiz / Unclear]
+   - Eksik Gereksinimler / Missing Requirements: [Yok / None | Liste / List]
+   - Doğrulanamayan Noktalar / Unverified Items: [Yok / None | Liste / List]
+   - Mantık/Matematik Testi / Logic & Math Test: [Sınır değerler simüle edildi / Edge cases simulated | Uygulanmadı / N/A]
+   - Kullanılan Skill / Skill Used: [İlgili skill dosyasının adı veya Yok / Skill file name or None]
+   - Mimari Standart Uyumu / Architectural Compliance: [Evet / Yes | Hayır / No | N/A]
+   - Doğrulama / Verification: [Test edildi ve geçti / Passed | Test edildi ve başarısız / Failed | Test edilmedi / Untested | Tool Çıktısı Yok / No Tool Output]
    ```

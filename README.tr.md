@@ -127,6 +127,16 @@ npx aimaster init
 # Belirli bir IDE için doğrudan kurulum:
 npx aimaster init --ide cursor
 npx aimaster init --ide windsurf --with-skills
+npx aimaster init --ide all --with-skills --with-protocols
+
+# Simülasyon modu (diske yazmadan önizleme):
+npx aimaster init --ide cursor --dry-run
+
+# Mevcut IDE şablonlarını listele:
+npx aimaster list
+
+# Kurumsal bütünlük, fixture ve adversarial benchmark testlerini çalıştır:
+npx aimaster verify
 
 # Unix / macOS curl tek satır kurulum:
 curl -fsSL https://raw.githubusercontent.com/Furkaxia/AiMaster/main/install.sh | bash -s -- --ide cursor
@@ -170,28 +180,35 @@ aimaster/
 ├── CONTRIBUTING.md                 # 🤝 Topluluk Katkı Kılavuzu
 ├── SECURITY.md                     # 🛡️ Güvenlik ve Zafiyet Politikası
 ├── package.json                    # 📦 NPM Test & Proje Üstbilgisi
+├── bin/                            # 🚀 Zero-Config Çalıştırılabilir CLI (aimaster)
+│   └── aimaster.js                 # Init, List, Verify & Preset Yöneticisi
 │
-├── integrations/                    # 🚀 Hazır IDE ve Platform Presets
-│   ├── cursor/.cursorrules          # Cursor AI Entegrasyonu
-│   ├── claude/claude-project-prompt # Claude Projects Sistem Promptu
-│   ├── antigravity/GEMINI.md        # Google Antigravity & Gemini CLI
-│   ├── windsurf/.windsurfrules      # Windsurf Cascade Kuralları
-│   ├── chatgpt/custom-instructions  # ChatGPT Ayarları
-│   └── copilot/copilot-instructions # GitHub Copilot Workspace
+├── integrations/                   # 🚀 Hazır IDE ve Platform Presets
+│   ├── cursor/.cursorrules         # Cursor AI Entegrasyonu
+│   ├── claude/claude-project-prompt# Claude Projects Sistem Promptu
+│   ├── antigravity/GEMINI.md       # Google Antigravity & Gemini CLI
+│   ├── windsurf/.windsurfrules     # Windsurf Cascade Kuralları
+│   ├── chatgpt/custom-instructions # ChatGPT Ayarları
+│   └── copilot/copilot-instructions# GitHub Copilot Workspace
 │
-├── scripts/                         # 🛠️ Sıfır Bağımlılıklı CI & Bütünlük Scriptleri
-│   └── verify-integrity.js          # Otomatik Link, Sızıntı & Bütünlük Doğrulayıcı
+├── scripts/                        # 🛠️ Sıfır Bağımlılıklı CI & Bütünlük Scriptleri
+│   ├── verify-integrity.js         # Otomatik Link, Sızıntı & Bütünlük Doğrulayıcı
+│   ├── test-integrity-fixtures.js  # Adversarial Linter Fixture Testleri
+│   └── test-adversarial-evals.js   # 20 Golden Davranışsal Karşıt Benchmark Koşucusu
 │
-└── skills/                          # 🧠 80 Adet On-Demand Uzmanlık Yeteneği (7 Kategori)
-    ├── _shared-skill-footer.md      # Token Tasarruflu Ortak Yasak & QA Şablonu
-    ├── README.md                    # Dinamik Yetenek Kataloğu ve Router
-    ├── 01-architecture-planning/    # Mimari Sentez, Monorepo, Cross-Lingual (9 Skill)
-    ├── 02-frontend-ui/              # Motion, Design Tokens, Charts, Tailwind, A11y (10 Skill)
-    ├── 03-backend-data/             # RAG & Vector, Mesaj Kuyrukları, Ödeme, SQL (19 Skill)
-    ├── 04-security-audit/           # KVKK/GDPR, Kriptografi, Red-Team, Auth, Hardening (9 Skill)
-    ├── 05-testing-quality/          # Kaos Testi, Snapshot, Görsel Regresyon, Birim (10 Skill)
-    ├── 06-devops-tooling/           # Kubernetes, IaC Terraform, DNS/SSL, CI/CD, Docker (11 Skill)
-    └── 07-code-craft/               # GoF & SOLID Desenleri, i18n Runtime, Anti-Any TS (12 Skill)
+├── tests/                          # 🧪 Davranışsal Değerlendirme Veri Seti
+│   └── adversarial-prompts.json    # 20 Golden Benchmark Senaryoları
+│
+└── skills/                         # 🧠 80 Adet On-Demand Uzmanlık Yeteneği (7 Kategori)
+    ├── _shared-skill-footer.md     # Token Tasarruflu Ortak Yasak & QA Şablonu
+    ├── README.md                   # Dinamik Yetenek Kataloğu ve Router
+    ├── 01-architecture-planning/   # Mimari Sentez, Monorepo, Cross-Lingual (9 Skill)
+    ├── 02-frontend-ui/             # Motion, Design Tokens, Charts, Tailwind, A11y (10 Skill)
+    ├── 03-backend-data/            # RAG & Vector, Mesaj Kuyrukları, Ödeme, SQL (19 Skill)
+    ├── 04-security-audit/          # KVKK/GDPR, Kriptografi, Red-Team, Auth, Hardening (9 Skill)
+    ├── 05-testing-quality/         # Kaos Testi, Snapshot, Görsel Regresyon, Birim (10 Skill)
+    ├── 06-devops-tooling/          # Kubernetes, IaC Terraform, DNS/SSL, CI/CD, Docker (11 Skill)
+    └── 07-code-craft/              # GoF & SOLID Desenleri, i18n Runtime, Anti-Any TS (12 Skill)
 ```
 
 ---
@@ -205,6 +222,7 @@ Ajanla konuşurken modu değiştirmek için şu komutları kullanabilirsiniz:
 - `/audit <kod/plan>` ➔ Yalnızca Red-Team Auditor'ı tetikler; acımasız açık ve risk raporu döker.
 - `/ui <istek>` ➔ Yalnızca UI Systems rolünü tetikler; 60-30-10 palet ve token analizi yapar.
 - `/handoff` ➔ Bağlam şiştiğinde anında `.handoff/session-state.md` oluşturup yeni sohbete geçiş masterpromptu üretir.
+- `/vibe <istek>` ➔ Güvenlik sınırlarını koruyarak hızlı prototip modunu çalıştırır.
 
 ---
 

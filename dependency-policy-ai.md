@@ -52,7 +52,7 @@ The following packages are pre-approved as industry standards for modern web and
 | :--- | :--- |
 | `express`, `fastify` | HTTP web server |
 | `prisma`, `@prisma/client` | Type-safe ORM & migrations |
-| `jsonwebtoken`, `bcryptjs` | Token authentication & hashing |
+| `jsonwebtoken`, `bcryptjs` / `bcrypt` | Token authentication & password hashing (`bcryptjs`: pure-JS, zero-native-build portability for serverless/containers; `bcrypt`: native C++ bindings for high-throughput) |
 | `dotenv` | Environment configuration |
 | `cors`, `helmet` | HTTP security middleware |
 | `winston`, `pino` | Structured asynchronous logging |

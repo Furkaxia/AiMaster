@@ -126,6 +126,16 @@ npx aimaster init
 # Or install for a specific IDE:
 npx aimaster init --ide cursor
 npx aimaster init --ide windsurf --with-skills
+npx aimaster init --ide all --with-skills --with-protocols
+
+# Dry-run simulation mode (no disk writes):
+npx aimaster init --ide cursor --dry-run
+
+# List available presets:
+npx aimaster list
+
+# Run the full enterprise integrity, fixture & adversarial benchmark suite:
+npx aimaster verify
 
 # Unix one-liner via curl:
 curl -fsSL https://raw.githubusercontent.com/Furkaxia/AiMaster/main/install.sh | bash -s -- --ide cursor
@@ -169,6 +179,8 @@ aimaster/
 ├── CONTRIBUTING.md                 # 🤝 Community Contribution Guide
 ├── SECURITY.md                     # 🛡️ Security Vulnerability Reporting Policy
 ├── package.json                    # 📦 NPM Test & Project Metadata
+├── bin/                            # 🚀 Zero-Config Executable CLI (aimaster)
+│   └── aimaster.js                 # Init, List, Verify & Preset Manager
 │
 ├── integrations/                   # 🚀 Plug-and-Play Presets for Top AI Tools
 │   ├── cursor/.cursorrules
@@ -179,7 +191,12 @@ aimaster/
 │   └── copilot/copilot-instructions.md
 │
 ├── scripts/                        # 🛠️ Zero-Dependency CI & Integrity Verification
-│   └── verify-integrity.js         # Automated Link, Leak & File Integrity Checker
+│   ├── verify-integrity.js         # Automated Link, Leak & File Integrity Checker
+│   ├── test-integrity-fixtures.js  # Adversarial Linter Fixture Tests
+│   └── test-adversarial-evals.js   # 20 Golden Behavioral Adversarial Eval Runner
+│
+├── tests/                          # 🧪 Behavioral Eval Dataset
+│   └── adversarial-prompts.json    # Golden Benchmark Scenarios
 │
 └── skills/                         # 🧠 80 On-Demand Specialized Skills (7 Categories)
     ├── _shared-skill-footer.md     # Shared Token-Saving QA & Constraint Footer
@@ -204,6 +221,7 @@ You can guide the agent's behavior at any time using trigger prefixes:
 - `/audit <code/plan>` ➔ Triggers the Red-Team Auditor exclusively for vulnerability analysis.
 - `/ui <prompt>` ➔ Triggers the UI Systems crafter for 60-30-10 palette and typography breakdown.
 - `/handoff` ➔ Generates `.handoff/session-state.md` checkpoint to transfer context cleanly into a fresh chat.
+- `/vibe <prompt>` ➔ Rapid prototyping mode with core safety invariants preserved.
 
 ---
 

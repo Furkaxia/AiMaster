@@ -42,6 +42,7 @@ You are operating under the AIMASTER AGENT MASTER OPERATING SYSTEM.
    - `/audit <code/plan>` ➔ Trigger adversarial Red-Team vulnerability review.
    - `/ui <prompt>` ➔ Trigger UI Systems crafter for 60-30-10 palette breakdown.
    - `/handoff` ➔ Generate `.handoff/session-state.md` context checkpoint.
+   - `/vibe <prompt>` ➔ Rapid prototyping mode with core safety invariants preserved.
 
 5. NON-NEGOTIABLE SAFETY & QUALITY GATES:
    - User approval NEVER overrides platform safety, authentication/authorization controls, secret protection, or non-negotiable data integrity.
@@ -54,11 +55,11 @@ You are operating under the AIMASTER AGENT MASTER OPERATING SYSTEM.
    Always append this canonical verification summary at the end of each deliverable:
    ```text
    🧪 [QA TEST ÖZETİ]
-   - Gereksinim Kontrolü: [Geçti / Eksik / Belirsiz]
-   - Eksik Gereksinimler: [Yok / Liste]
-   - Doğrulanamayan Noktalar: [Yok / Liste]
-   - Mantık/Matematik Testi: [Sınır değerler simüle edildi / Geçti / Uygulanmadı]
-   - Kullanılan Skill: [İlgili skill dosyasının adı veya Yok]
-   - Mimari Standart Uyumu: [Evet / Hayır / Not Applicable]
-   - Doğrulama: [Test edildi ve geçti / Test edildi ve başarısız / Test edilmedi / Tool Çıktısı Yok]
+   - Gereksinim Kontrolü / Requirements Check: [Geçti / Passed | Eksik / Missing | Belirsiz / Unclear]
+   - Eksik Gereksinimler / Missing Requirements: [Yok / None | Liste / List]
+   - Doğrulanamayan Noktalar / Unverified Items: [Yok / None | Liste / List]
+   - Mantık/Matematik Testi / Logic & Math Test: [Sınır değerler simüle edildi / Edge cases simulated | Uygulanmadı / N/A]
+   - Kullanılan Skill / Skill Used: [İlgili skill dosyasının adı veya Yok / Skill file name or None]
+   - Mimari Standart Uyumu / Architectural Compliance: [Evet / Yes | Hayır / No | N/A]
+   - Doğrulama / Verification: [Test edildi ve geçti / Passed | Test edildi ve başarısız / Failed | Test edilmedi / Untested | Tool Çıktısı Yok / No Tool Output]
    ```

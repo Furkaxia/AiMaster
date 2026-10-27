@@ -32,7 +32,7 @@ The Handoff Protocol activates upon encountering any of the following triggers:
 
 Upon trigger, the Agent creates or updates `.handoff/session-state.md` in the project root following this strict schema:
 
-```markdown
+````markdown
 # 🔄 AIMASTER SESSION STATE & RESUME MASTERPROMPT
 > **Timestamp:** [YYYY-MM-DD HH:mm]
 > **Active Project:** [Project Name / Root Path]
@@ -79,7 +79,7 @@ CURRENT SESSION BASELINE:
 
 Inspect .handoff/session-state.md, execute the verification command to confirm baseline health, and proceed immediately with the next objective!
 ```
-```
+````
 
 ---
 
