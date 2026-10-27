@@ -1,0 +1,32 @@
+{
+  "id": "be-001-rest-pagination-cursor",
+  "category": "backend",
+  "difficulty": "medium",
+  "title": "High-Throughput Cursor-Based REST Pagination",
+  "prompt": "Design a Node.js/Express or Fastify endpoint for paginated audit log feeds using opaque cursor-based pagination (Base64 encoded created_at + UUID). Avoid OFFSET/LIMIT degradation, enforce max page limit clamp, and return standardized RFC-7807 error envelopes.",
+  "context_files": [
+    "skills/03-backend-data/skill-api.md",
+    "skills/03-backend-data/skill-database-performance.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/\\bOFFSET\\s+[0-9$]+/i",
+      "/res\\.status\\(500\\)\\.send\\(err\\.message\\)/"
+    ],
+    "required_patterns": [
+      "/Buffer\\.from\\(.*base64.*\\)|atob\\(/i",
+      "/Math\\.min\\(.*limit.*\\)/",
+      "/next_cursor|has_more/i"
+    ],
+    "ast_checks": [
+      "no_raw_offset_query",
+      "error_envelope_rfc7807"
+    ],
+    "max_token_budget": 3300
+  },
+  "expected_baseline_tokens": {
+    "plain": 11500,
+    "rules_only": 5400,
+    "aimaster": 1900
+  }
+}

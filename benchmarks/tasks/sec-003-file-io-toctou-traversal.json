@@ -1,0 +1,32 @@
+{
+  "id": "sec-003-file-io-toctou-traversal",
+  "category": "security",
+  "difficulty": "hard",
+  "title": "Path Traversal & TOCTOU-Safe File Upload Handler",
+  "prompt": "Implement a secure file upload storage utility in Node.js saving files into `/app/storage/uploads/`. Must verify canonical realpath against base directory boundary, prevent path traversal (`../`, null bytes), handle non-existent nested parents safely, and use `O_NOFOLLOW` flag to prevent symlink race conditions.",
+  "context_files": [
+    "skills/03-backend-data/skill-file-system-io.md",
+    "skills/04-security-audit/skill-web-security.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/path\\.resolve\\(uploadDir,\\s*filename\\)(?!.*realpath)/",
+      "/fs\\.createWriteStream\\(userPath\\)(?!.*O_NOFOLLOW)/"
+    ],
+    "required_patterns": [
+      "/fs\\.realpathSync\\.native|fs\\.realpathSync/",
+      "/O_NOFOLLOW|constants\\.O_NOFOLLOW/",
+      "/startsWith\\(baseDir\\)|relative\\(baseDir/"
+    ],
+    "ast_checks": [
+      "realpath_boundary_verification",
+      "symlink_nofollow_flag"
+    ],
+    "max_token_budget": 3600
+  },
+  "expected_baseline_tokens": {
+    "plain": 14200,
+    "rules_only": 7000,
+    "aimaster": 2200
+  }
+}

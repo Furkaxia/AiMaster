@@ -11,6 +11,7 @@
     "skills",
     "scripts",
     "tests",
+    "benchmarks",
     "RulesAI.md",
     "agent-boardroom-protocol-ai.md",
     "testing-protocol-ai.md",
@@ -31,11 +32,14 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js",
-    "verify": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js",
+    "test": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js && node benchmarks/runner.mjs --mode=mock",
+    "verify": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js && node benchmarks/runner.mjs --mode=mock",
     "verify:integrity": "node scripts/verify-integrity.js",
     "test:fixtures": "node scripts/test-integrity-fixtures.js",
-    "test:evals": "node scripts/test-adversarial-evals.js"
+    "test:evals": "node scripts/test-adversarial-evals.js",
+    "benchmark:mock": "node benchmarks/runner.mjs --mode=mock",
+    "benchmark:live": "node benchmarks/runner.mjs --mode=live",
+    "benchmark:report": "node benchmarks/generate-report.mjs"
   },
   "keywords": [
     "ai",

@@ -15,7 +15,7 @@ const ROOT_DIR = process.env.AIMASTER_TEST_ROOT ? path.resolve(process.env.AIMAS
 const EVALS_FILE = path.join(ROOT_DIR, 'tests', 'adversarial-prompts.json');
 
 console.log('\n🧠 ======================================================');
-console.log('   AIMASTER BEHAVIORAL ADVERSARIAL EVAL RUNNER (20 GOLDEN SCENARIOS)');
+console.log('   AIMASTER BEHAVIORAL ADVERSARIAL EVAL RUNNER');
 console.log('======================================================\n');
 
 if (!fs.existsSync(EVALS_FILE)) {
@@ -79,6 +79,6 @@ if (failedCount > 0) {
   console.log(`❌ BAŞARISIZ: ${failedCount} senaryoda uyumsuzluk tespit edildi!\n`);
   process.exit(1);
 } else {
-  console.log(`🎉 BAŞARILI: 20 Golden Adversarial Eval senaryosunun tamamı anayasal kurallarla tam uyumlu!\n`);
+  console.log(`🎉 BAŞARILI: ${passedCount} Golden Adversarial Eval senaryosunun tamamı anayasal kurallarla tam uyumlu!\n`);
   process.exit(0);
 }

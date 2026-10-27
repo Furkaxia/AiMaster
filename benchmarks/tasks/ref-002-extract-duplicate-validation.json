@@ -1,0 +1,30 @@
+{
+  "id": "ref-002-extract-duplicate-validation",
+  "category": "refactoring",
+  "difficulty": "easy",
+  "title": "DRY Extraction of Duplicated Validation Logic",
+  "prompt": "Identify duplicated email and phone number regex checks copied across 4 separate route files. Extract them into a single, pure, unit-tested validation module with branded TypeScript types (`EmailString`, `PhoneNumberString`).",
+  "context_files": [
+    "skills/07-code-craft/skill-modern-code-craft.md",
+    "skills/07-code-craft/skill-refactor-cleanup.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/type\\s+EmailString\\s*=\\s*string;(?![^&]*__brand)/"
+    ],
+    "required_patterns": [
+      "/export\\s+function\\s+validate/i",
+      "/__brand|declare const brand/i"
+    ],
+    "ast_checks": [
+      "branded_types_used",
+      "single_source_of_truth"
+    ],
+    "max_token_budget": 2700
+  },
+  "expected_baseline_tokens": {
+    "plain": 7900,
+    "rules_only": 3900,
+    "aimaster": 1450
+  }
+}

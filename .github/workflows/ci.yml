@@ -1,0 +1,63 @@
+name: AIMASTER Enterprise CI & Continuous Assurance (CI/CA)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  integrity-and-benchmarks:
+    name: Node.js ${{ matrix.node-version }} Integrity & Benchmark Suite
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18, 20, 22, 24]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Execute Full Verification Suite (Linter, Fixtures, Evals & Mock Benchmark)
+        run: npm test
+
+      - name: Verify Empirical Report Generation
+        run: npm run benchmark:report
+
+  continuous-assurance:
+    name: Enterprise Continuous Assurance & Packaging Audit
+    runs-on: ubuntu-latest
+    needs: integrity-and-benchmarks
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Distribution Tarball Hygiene Audit
+        run: |
+          echo "Verifying npm distribution package contents..."
+          npm pack --dry-run
+
+      - name: Zero-Dependency Supply Chain Verification
+        run: |
+          echo "Auditing production dependencies..."
+          npm audit --omit=dev || true
+
+      - name: CLI Command & Simulation Assurance
+        run: |
+          echo "Verifying CLI entrypoint..."
+          node bin/aimaster.js --version
+          node bin/aimaster.js list
+          node bin/aimaster.js init --ide all --dry-run
+          node bin/aimaster.js init --ide cursor --dry-run --with-skills --with-protocols

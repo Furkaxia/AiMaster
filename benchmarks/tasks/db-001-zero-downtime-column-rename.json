@@ -1,0 +1,32 @@
+{
+  "id": "db-001-zero-downtime-column-rename",
+  "category": "database",
+  "difficulty": "hard",
+  "title": "Zero-Downtime Database Migration: Expand and Contract Pattern",
+  "prompt": "Write a safe SQL migration and dual-writing application bridge in PostgreSQL for renaming `phone_number` to `contact_msisdn` in a table with 10M rows. Must use expand-contract pattern: add column, dual-write trigger, backfill in batches, drop old column in next release.",
+  "context_files": [
+    "skills/03-backend-data/skill-migration-data-seed.md",
+    "skills/03-backend-data/skill-database.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/ALTER\\s+TABLE\\s+[a-zA-Z0-9_]+\\s+RENAME\\s+COLUMN/i",
+      "/UPDATE\\s+[a-zA-Z0-9_]+\\s+SET\\s+contact_msisdn\\s*=\\s*phone_number\\s*;(?![^\\n]*WHERE)/i"
+    ],
+    "required_patterns": [
+      "/ADD\\s+COLUMN\\s+(IF\\s+NOT\\s+EXISTS\\s+)?contact_msisdn/i",
+      "/CREATE\\s+(OR\\s+REPLACE\\s+)?TRIGGER/i",
+      "/LIMIT\\s+[0-9]+/i"
+    ],
+    "ast_checks": [
+      "no_blocking_rename",
+      "batch_backfill_enforced"
+    ],
+    "max_token_budget": 3500
+  },
+  "expected_baseline_tokens": {
+    "plain": 14500,
+    "rules_only": 7200,
+    "aimaster": 2300
+  }
+}

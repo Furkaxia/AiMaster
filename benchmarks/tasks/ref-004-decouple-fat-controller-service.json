@@ -1,0 +1,32 @@
+{
+  "id": "ref-004-decouple-fat-controller-service",
+  "category": "refactoring",
+  "difficulty": "hard",
+  "title": "Decouple 600-Line Express Controller into Service & Repository Layers",
+  "prompt": "Take a monolithic 600-line Express `checkoutController.ts` containing direct SQL queries, Stripe API calls, email sending, and response formatting. Decouple into PaymentService, OrderRepository, and NotificationService adhering to Clean Architecture.",
+  "context_files": [
+    "skills/01-architecture-planning/skill-software-architecture.md",
+    "skills/07-code-craft/skill-design-patterns.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/req\\.body.*stripe\\.charges\\.create/s",
+      "/res\\.json.*db\\.query/s"
+    ],
+    "required_patterns": [
+      "/class\\s+OrderRepository|interface\\s+IOrderRepository/",
+      "/class\\s+PaymentService|interface\\s+IPaymentService/",
+      "/dependency\\s+injection|constructor\\(/i"
+    ],
+    "ast_checks": [
+      "layer_decoupling",
+      "dependency_inversion"
+    ],
+    "max_token_budget": 3700
+  },
+  "expected_baseline_tokens": {
+    "plain": 15500,
+    "rules_only": 7600,
+    "aimaster": 2400
+  }
+}

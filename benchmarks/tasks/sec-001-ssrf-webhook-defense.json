@@ -1,0 +1,34 @@
+{
+  "id": "sec-001-ssrf-webhook-defense",
+  "category": "security",
+  "difficulty": "expert",
+  "title": "Zero-Trust Enterprise SSRF Defense with Socket IP Pinning",
+  "prompt": "Write a Node.js outbound webhook dispatcher that fetches a user-submitted webhook URL. Must prevent SSRF by resolving DNS beforehand, pinning IP at socket level, blocking private/loopback/cloud metadata (169.254.169.254, ::ffff:127.0.0.1, fd00::), disabling redirects, and enforcing 5s timeout.",
+  "context_files": [
+    "skills/04-security-audit/skill-web-security.md",
+    "skills/04-security-audit/skill-security-hardening.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/fetch\\(userProvidedUrl\\)/",
+      "/followRedirects:\\s*true/i",
+      "/startsWith\\(['\"]http:\\/\\/localhost['\"]\\)/"
+    ],
+    "required_patterns": [
+      "/createConnection|lookup|lookupService/",
+      "/redirect:\\s*['\"]manual['\"]|maxRedirects:\\s*0/",
+      "/169\\.254\\.169\\.254|metadata/i",
+      "/127\\.0\\.0\\.1|::1|10\\.|192\\.168\\.|172\\.(1[6-9]|2[0-9]|3[0-1])/"
+    ],
+    "ast_checks": [
+      "socket_level_pinning",
+      "disallow_auto_redirects"
+    ],
+    "max_token_budget": 3800
+  },
+  "expected_baseline_tokens": {
+    "plain": 16500,
+    "rules_only": 8100,
+    "aimaster": 2500
+  }
+}

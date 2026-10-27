@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIMASTER Benchmark Task Specification Schema",
+  "description": "Validation schema for empirical coding tasks evaluated under the AIMASTER Benchmark Engine",
+  "type": "object",
+  "required": ["id", "category", "difficulty", "title", "prompt", "context_files", "evaluation_rules"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z]{2,4}-[0-9]{3}-[a-z0-9-]+$"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "frontend",
+        "backend",
+        "database",
+        "security",
+        "refactoring",
+        "bug-fixing",
+        "architecture"
+      ]
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard", "expert"]
+    },
+    "title": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "context_files": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evaluation_rules": {
+      "type": "object",
+      "required": [
+        "forbidden_patterns",
+        "required_patterns",
+        "ast_checks",
+        "max_token_budget"
+      ],
+      "properties": {
+        "forbidden_patterns": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "required_patterns": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "ast_checks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "max_token_budget": {
+          "type": "number"
+        },
+        "prohibited_actions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "expected_baseline_tokens": {
+      "type": "object",
+      "properties": {
+        "plain": { "type": "number" },
+        "rules_only": { "type": "number" },
+        "aimaster": { "type": "number" }
+      }
+    }
+  }
+}

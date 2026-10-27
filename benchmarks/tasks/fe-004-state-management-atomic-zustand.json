@@ -1,0 +1,31 @@
+{
+  "id": "fe-004-state-management-atomic-zustand",
+  "category": "frontend",
+  "difficulty": "medium",
+  "title": "Optimized Multi-Tenant Filter State with Zustand & Selectors",
+  "prompt": "Implement an e-commerce faceted search filter state manager using Zustand in TypeScript. Must use fine-grained atomic selectors to prevent unnecessary re-renders of the product list, support URL sync, and enforce readonly immutability.",
+  "context_files": [
+    "skills/02-frontend-ui/skill-state.md",
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/useStore\\(\\)(?!\\s*=>)/",
+      "/state\\.[a-zA-Z0-9_]+\\s*=\\s*/"
+    ],
+    "required_patterns": [
+      "/create<[a-zA-Z0-9_]+>\\(/",
+      "/useShallow|selector/i",
+      "/readonly\\s+[a-zA-Z0-9_]+/"
+    ],
+    "ast_checks": [
+      "no_store_destructure_without_selector"
+    ],
+    "max_token_budget": 3100
+  },
+  "expected_baseline_tokens": {
+    "plain": 9800,
+    "rules_only": 5100,
+    "aimaster": 1800
+  }
+}

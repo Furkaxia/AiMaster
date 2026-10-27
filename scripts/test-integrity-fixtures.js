@@ -110,6 +110,9 @@ function createMockRepo(destDir) {
 
   fs.cpSync(path.join(REPO_ROOT, 'skills'), path.join(destDir, 'skills'), { recursive: true });
   fs.cpSync(path.join(REPO_ROOT, 'integrations'), path.join(destDir, 'integrations'), { recursive: true });
+  if (fs.existsSync(path.join(REPO_ROOT, 'benchmarks'))) {
+    fs.cpSync(path.join(REPO_ROOT, 'benchmarks'), path.join(destDir, 'benchmarks'), { recursive: true });
+  }
 }
 
 try {

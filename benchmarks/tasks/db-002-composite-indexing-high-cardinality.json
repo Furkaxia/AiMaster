@@ -1,0 +1,28 @@
+{
+  "id": "db-002-composite-indexing-high-cardinality",
+  "category": "database",
+  "difficulty": "medium",
+  "title": "Multi-Column Composite Indexing for Filter-Sort Query",
+  "prompt": "Given a PostgreSQL query filtering by `tenant_id = $1 AND status = 'active'` and ordering by `created_at DESC`, design the optimal composite index. Explain why column order matters (Equality first, Range/Sort second) and provide EXPLAIN verification.",
+  "context_files": [
+    "skills/03-backend-data/skill-database-performance.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/CREATE\\s+INDEX.*ON.*\\(\\s*created_at\\s*,/i"
+    ],
+    "required_patterns": [
+      "/CREATE\\s+INDEX.*\\(\\s*tenant_id\\s*,\\s*status\\s*,\\s*created_at\\s*(DESC)?\\s*\\)/i",
+      "/EXPLAIN\\s+(ANALYZE\\s+)?/i"
+    ],
+    "ast_checks": [
+      "equality_before_range_index_order"
+    ],
+    "max_token_budget": 2900
+  },
+  "expected_baseline_tokens": {
+    "plain": 8500,
+    "rules_only": 4200,
+    "aimaster": 1600
+  }
+}

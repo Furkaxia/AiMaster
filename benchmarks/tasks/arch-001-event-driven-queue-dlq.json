@@ -1,0 +1,31 @@
+{
+  "id": "arch-001-event-driven-queue-dlq",
+  "category": "architecture",
+  "difficulty": "hard",
+  "title": "Idempotent Event Consumer with Dead Letter Queue & Exponential Backoff",
+  "prompt": "Design an event-driven worker consuming payment events from a queue. Must enforce idempotency via transactional event IDs, implement exponential backoff with jitter on transient failures, and route unrecoverable failures to a Dead Letter Queue (DLQ).",
+  "context_files": [
+    "skills/01-architecture-planning/skill-software-architecture.md",
+    "skills/03-backend-data/skill-message-queue-events.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/catch\\s*\\([a-zA-Z0-9_]*\\)\\s*\\{\\s*await\\s+queue\\.ack/s"
+    ],
+    "required_patterns": [
+      "/dlq|dead-letter|deadLetter/i",
+      "/idempotency_key|eventId/i",
+      "/Math\\.pow\\(2,|exponential/i"
+    ],
+    "ast_checks": [
+      "idempotency_check_before_process",
+      "dlq_routing_on_max_retries"
+    ],
+    "max_token_budget": 3700
+  },
+  "expected_baseline_tokens": {
+    "plain": 14800,
+    "rules_only": 7400,
+    "aimaster": 2350
+  }
+}

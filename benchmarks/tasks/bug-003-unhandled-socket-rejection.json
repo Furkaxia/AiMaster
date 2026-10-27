@@ -1,0 +1,30 @@
+{
+  "id": "bug-003-unhandled-socket-rejection",
+  "category": "bug-fixing",
+  "difficulty": "medium",
+  "title": "Fix Process Crash on Client Abort During Streaming Response",
+  "prompt": "Production servers crash with `ERR_STREAM_PREMATURE_CLOSE` whenever a user closes their browser tab mid-download. Add proper error listeners to the readable and writable streams, handle `req.on('close')`, and clean up temporary files.",
+  "context_files": [
+    "skills/03-backend-data/skill-file-system-io.md",
+    "skills/07-code-craft/skill-error-handling-logging.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/stream\\.pipe\\(res\\);(?![^}]*pipeline)/"
+    ],
+    "required_patterns": [
+      "/stream\\.pipeline|pipeline\\(/",
+      "/req\\.on\\(['\"]close['\"]/",
+      "/fs\\.unlink|cleanup/i"
+    ],
+    "ast_checks": [
+      "safe_stream_pipeline"
+    ],
+    "max_token_budget": 3200
+  },
+  "expected_baseline_tokens": {
+    "plain": 10200,
+    "rules_only": 5100,
+    "aimaster": 1800
+  }
+}

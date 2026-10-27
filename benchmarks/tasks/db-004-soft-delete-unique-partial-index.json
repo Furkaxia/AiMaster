@@ -1,0 +1,27 @@
+{
+  "id": "db-004-soft-delete-unique-partial-index",
+  "category": "database",
+  "difficulty": "medium",
+  "title": "Soft Delete with Re-usable Unique Email Constraint",
+  "prompt": "Design a users table in PostgreSQL supporting soft deletion (`deleted_at TIMESTAMP NULL`). Ensure `email` remains unique among active users, but allows previously deleted emails to be re-registered using a partial unique index.",
+  "context_files": [
+    "skills/03-backend-data/skill-database.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/email\\s+VARCHAR\\([^)]*\\)\\s+UNIQUE/i"
+    ],
+    "required_patterns": [
+      "/CREATE\\s+UNIQUE\\s+INDEX.*ON.*\\(\\s*lower\\(email\\)|email\\s*\\)\\s+WHERE\\s+deleted_at\\s+IS\\s+NULL/i"
+    ],
+    "ast_checks": [
+      "partial_unique_index_predicate"
+    ],
+    "max_token_budget": 2800
+  },
+  "expected_baseline_tokens": {
+    "plain": 8200,
+    "rules_only": 4100,
+    "aimaster": 1550
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "fe-003-accessible-dialog-modal",
+  "category": "frontend",
+  "difficulty": "hard",
+  "title": "WCAG 2.1 AA Accessible Dialog Modal with Focus Trap",
+  "prompt": "Create an accessible modal dialog in Vanilla JS/TypeScript that traps focus within the modal, dismisses on ESC key, restores focus to the triggering element on close, locks body scroll without layout shift, and supports screen reader announcements.",
+  "context_files": [
+    "skills/02-frontend-ui/skill-frontend-accessibility.md",
+    "ui-standards-ai.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/outline:\\s*none\\s*;(?![^}]*focus-visible)/",
+      "/document\\.body\\.style\\.overflow\\s*=\\s*['\"]hidden['\"](?![^;]*scrollbar)/"
+    ],
+    "required_patterns": [
+      "/role=['\"]dialog['\"]/",
+      "/aria-modal=['\"]true['\"]/",
+      "/tabIndex|focus\\(\\)/",
+      "/keydown.*Escape|key === ['\"]Escape['\"]/"
+    ],
+    "ast_checks": [
+      "focus_trap_present",
+      "restore_focus_handler"
+    ],
+    "max_token_budget": 3400
+  },
+  "expected_baseline_tokens": {
+    "plain": 13500,
+    "rules_only": 6500,
+    "aimaster": 2200
+  }
+}

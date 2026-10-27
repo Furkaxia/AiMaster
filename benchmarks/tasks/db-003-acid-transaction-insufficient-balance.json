@@ -1,0 +1,33 @@
+{
+  "id": "db-003-acid-transaction-insufficient-balance",
+  "category": "database",
+  "difficulty": "hard",
+  "title": "Atomic Wallet Transfer with Row Locking and Rollback",
+  "prompt": "Write a Node.js / PostgreSQL service function transferring credit from sender to recipient wallet. Must run in an isolated transaction, lock rows in consistent order (SELECT ... FOR UPDATE) to avoid deadlocks, check non-negative balance, and rollback on any failure.",
+  "context_files": [
+    "skills/03-backend-data/skill-database.md",
+    "skills/07-code-craft/skill-error-handling-logging.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/UPDATE.*balance.*WHERE(?![^;]*FOR\\s+UPDATE)/i",
+      "/catch\\s*\\([a-zA-Z0-9_]*\\)\\s*\\{\\s*\\}/"
+    ],
+    "required_patterns": [
+      "/BEGIN|TRANSACTION/i",
+      "/FOR\\s+UPDATE/i",
+      "/ROLLBACK/i",
+      "/COMMIT/i"
+    ],
+    "ast_checks": [
+      "row_level_locking",
+      "mandatory_rollback_on_error"
+    ],
+    "max_token_budget": 3600
+  },
+  "expected_baseline_tokens": {
+    "plain": 13000,
+    "rules_only": 6400,
+    "aimaster": 2100
+  }
+}

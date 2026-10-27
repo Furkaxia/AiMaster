@@ -1,34 +1,50 @@
-# AIMASTER KATKI KILAVUZU (CONTRIBUTING)
+# AIMASTER CONTRIBUTION GUIDELINES & STANDARDS (CONTRIBUTING)
 
-AIMASTER, yapay zeka ajanlarını kontrolsüz halüsinasyon ve spagetti kod üreten araçlar olmaktan çıkarıp, **Staff Engineer disiplininde çalışan otonom bir orkestraya** dönüştürmeyi amaçlayan açık kaynaklı bir işletim sistemidir.
-
-Topluluktan gelen katkıları büyük bir memnuniyetle karşılıyoruz!
+AIMASTER is an enterprise-grade agentic operating system designed to transform LLM coding agents into an autonomous, disciplined Staff Engineering Council. We welcome contributions that adhere to the highest architectural standards.
 
 ---
 
-## 🛠️ Nasıl Katkıda Bulunabilirsiniz?
+## 1. Contribution Procedures
 
-1. **Yeni Bir Yetenek (Skill) Eklemek:**
-   - Skill dosyaları `skills/<kategori>/skill-<isim>.md` formatında olmalıdır.
-   - Her skill dosyası mutlaka şu bölümleri içermelidir:
-     - Header: Rol tanımı ve temel amaç
-     - Bölüm 1: Domain Uzmanlığı & Katı Kurallar
-     - Bölüm 2: Kesin Yasaklar (Veya `_shared-skill-footer.md` referansı)
-     - Bölüm 3: 4 Aşamalı İcra Protokolü
-     - Bölüm 4: QA Kontrol Listesi
-   - Yeni eklenen skill'i `skills/README.md` ve `RulesAI.md` kataloğuna eklemeyi unutmayın.
+### A. Proposing a New Domain Skill (`skills/`)
+- All skills must reside under `skills/<category>/skill-<name>.md`.
+- Each skill document must strictly adhere to the standardized schema:
+  1. **Header Metadata:** File Location, Role Definition, Core Mission, Category, Standard Compliance.
+  2. **Section 1:** Domain Expertise & Non-Negotiable Rules.
+  3. **Section 2:** Absolute Prohibitions (or reference to `_shared-skill-footer.md`).
+  4. **Section 3:** 4-Stage Execution Protocol.
+  5. **Section 4:** Quality Assurance Verification Checklist.
+- Register all newly created skills in both `skills/README.md` and the `RulesAI.md` catalog.
 
-2. **Bir Çekirdek Standart (Core Standard) Önermek:**
-   - Çekirdek standartlar kök dizinde `<isim>-ai.md` formatında bulunur.
-   - Sadece tüm mimariyi doğrudan etkileyen evrensel kurallar çekirdek standart olabilir.
+### B. Proposing Core Architectural Standards (`*-ai.md`)
+- Core standards reside in the repository root and define universal system invariants (e.g. `dependency-policy-ai.md`, `error-recovery-escalation-ai.md`).
+- Core standards require unanimous consensus across the Boardroom personas and zero conflicting rules.
 
-3. **Entegrasyon Şablonlarını (Presets) Genişletmek:**
-   - Yeni bir IDE, yapay zeka arayüzü veya CLI için `integrations/` altında şablon oluşturabilirsiniz.
+### C. Expanding IDE Integration Presets (`integrations/`)
+- Tool integration templates must enforce top-loaded security invariants within the first 1,500 characters and contain no security bypass directives.
 
 ---
 
-## 📜 Çekme İsteği (Pull Request) Standartları
+## 2. Pull Request & Verification Mandate
 
-- Commit mesajları Conventional Commits formatında olmalıdır (`feat:`, `fix:`, `docs:`, `refactor:`).
-- Token israfı yaratacak uzun, laf kalabalığı içeren metinler yerine cerrahi, yüksek sinyal-gürültü oranına sahip kurallar tercih edilir.
-- Değişikliklerinizi göndermeden önce mevcut dosyalarla çelişmediğini doğrulayın.
+Before submitting any Pull Request, contributors MUST run and pass the automated verification suite:
+
+```bash
+# 1. Full integrity, broken link, and semantic contract linter:
+node scripts/verify-integrity.js
+
+# 2. Adversarial fixture linter resilience tests:
+npm run test:fixtures
+
+# 3. Golden behavioral adversarial evals:
+npm run test:evals
+
+# 4. Empirical benchmark suite (mock / offline mode):
+npm run benchmark:mock
+
+# 5. Full test runner:
+npm test
+```
+
+### Commit Convention
+All commit messages must strictly comply with Conventional Commits (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`). See [git-commit-convention-ai.md](git-commit-convention-ai.md) for full specifications.

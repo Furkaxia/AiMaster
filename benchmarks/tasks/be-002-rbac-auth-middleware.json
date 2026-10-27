@@ -1,0 +1,33 @@
+{
+  "id": "be-002-rbac-auth-middleware",
+  "category": "backend",
+  "difficulty": "hard",
+  "title": "Multi-Tenant RBAC Authorization Middleware with Boundary Check",
+  "prompt": "Write a type-safe Express/Fastify authorization middleware verifying JWT claims and enforcing role/permission hierarchies across tenant boundaries. Ensure tenant ID in token strictly matches request parameters to block IDOR/tenant hopping.",
+  "context_files": [
+    "skills/04-security-audit/skill-auth-security.md",
+    "skills/03-backend-data/skill-api.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/jwt\\.decode\\(/",
+      "/req\\.user\\s*=\\s*payload;\\s*next\\(\\);(?![^}]*tenant)/",
+      "/req\\.params\\.tenantId\\s*===?\\s*undefined/"
+    ],
+    "required_patterns": [
+      "/jwt\\.verify\\(/",
+      "/tenant_id|tenantId/",
+      "/403|Forbidden|UNAUTHORIZED/"
+    ],
+    "ast_checks": [
+      "jwt_verify_with_algorithm",
+      "tenant_cross_check"
+    ],
+    "max_token_budget": 3500
+  },
+  "expected_baseline_tokens": {
+    "plain": 14000,
+    "rules_only": 6800,
+    "aimaster": 2150
+  }
+}

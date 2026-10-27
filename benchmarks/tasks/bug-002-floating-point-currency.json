@@ -1,0 +1,30 @@
+{
+  "id": "bug-002-floating-point-currency",
+  "category": "bug-fixing",
+  "difficulty": "easy",
+  "title": "Fix IEEE 754 Floating-Point Inaccuracy in Invoice Totals",
+  "prompt": "An accounting audit identified a $0.01 discrepancy when calculating item taxes: `0.1 + 0.2 === 0.30000000000000004`. Fix all currency arithmetic by storing monetary amounts in minor units (integer cents) with BigInt or Decimal representation.",
+  "context_files": [
+    "skills/05-testing-quality/skill-bug-investigator.md",
+    "skills/03-backend-data/skill-payment-billing.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/price\\s*\\*\\s*taxRate(?![^;]*Math\\.round)/",
+      "/Number\\(total\\.toFixed\\(2\\)\\)/"
+    ],
+    "required_patterns": [
+      "/cents|minor_units|BigInt|Dinero|Decimal/i",
+      "/Math\\.round\\(/i"
+    ],
+    "ast_checks": [
+      "integer_minor_units_enforced"
+    ],
+    "max_token_budget": 2600
+  },
+  "expected_baseline_tokens": {
+    "plain": 7500,
+    "rules_only": 3700,
+    "aimaster": 1350
+  }
+}

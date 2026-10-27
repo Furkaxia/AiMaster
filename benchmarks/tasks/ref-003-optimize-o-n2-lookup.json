@@ -1,0 +1,30 @@
+{
+  "id": "ref-003-optimize-o-n2-lookup",
+  "category": "refactoring",
+  "difficulty": "medium",
+  "title": "Eliminate O(N^2) Nested Array Find with Precomputed Map",
+  "prompt": "Refactor an algorithm matching 50,000 order line items with 10,000 product SKUs currently doing `orders.map(o => items.find(i => i.id === o.itemId))`. Convert to an O(1) Map lookup with benchmarked time complexity reduction.",
+  "context_files": [
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/\\.map\\(.*\\.find\\(/s",
+      "/\\.filter\\(.*\\.includes\\(/s"
+    ],
+    "required_patterns": [
+      "/new\\s+Map<[a-zA-Z0-9_,\\s]+>\\(/",
+      "/\\.get\\(/",
+      "/\\.set\\(/"
+    ],
+    "ast_checks": [
+      "map_indexed_lookup"
+    ],
+    "max_token_budget": 2800
+  },
+  "expected_baseline_tokens": {
+    "plain": 8100,
+    "rules_only": 4000,
+    "aimaster": 1500
+  }
+}

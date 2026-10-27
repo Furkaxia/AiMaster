@@ -1,0 +1,33 @@
+{
+  "id": "arch-003-micro-spec-feature-breakdown",
+  "category": "architecture",
+  "difficulty": "hard",
+  "title": "Boardroom Micro-Spec Task Decomposition for Real-Time Collaborative Canvas",
+  "prompt": "Produce an architectural Micro-Spec breakdown for adding real-time multiplayer drawing to a canvas. Follow the AIMASTER Boardroom Protocol: specialist analysis, adversarial red-team review, conflict resolution, atomic steps with blast radius assessment, and QA gates.",
+  "context_files": [
+    "agent-boardroom-protocol-ai.md",
+    "skills/01-architecture-planning/skill-autonomous-planner.md",
+    "skills/01-architecture-planning/skill-system-synthesizer.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/Let's dive right into writing code/",
+      "/No need for tests/"
+    ],
+    "required_patterns": [
+      "/MICRO-SPEC|TECHNICAL\\s+SPECIFICATION/i",
+      "/ADVERSARIAL|RED-TEAM|RISK\\s+ASSESSMENT/i",
+      "/CONSENSUS|DECISION\\s+RECORD/i",
+      "/BLAST\\s+RADIUS|ATOMIC\\s+STEPS/i"
+    ],
+    "ast_checks": [
+      "boardroom_consensus_structure"
+    ],
+    "max_token_budget": 3600
+  },
+  "expected_baseline_tokens": {
+    "plain": 15000,
+    "rules_only": 7200,
+    "aimaster": 2250
+  }
+}

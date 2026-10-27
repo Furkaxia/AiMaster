@@ -1,0 +1,33 @@
+{
+  "id": "fe-002-form-validation-zod",
+  "category": "frontend",
+  "difficulty": "medium",
+  "title": "Type-Safe Registration Form with Zod & Debounced Async Check",
+  "prompt": "Build a user onboarding registration form in TypeScript with React Hook Form and Zod validation. Must include debounced async username uniqueness check, field-level error messages with ARIA live regions, and zero 'any' casts.",
+  "context_files": [
+    "skills/02-frontend-ui/skill-form-validation.md",
+    "skills/07-code-craft/skill-typescript-strict.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/:\\s*any\\b/",
+      "/as\\s+any\\b/",
+      "/catch\\s*\\([a-zA-Z0-9_]*\\)\\s*\\{\\s*\\}/"
+    ],
+    "required_patterns": [
+      "/z\\.object\\(/",
+      "/zodResolver\\(/",
+      "/aria-invalid|aria-live/"
+    ],
+    "ast_checks": [
+      "no_any",
+      "no_empty_catch"
+    ],
+    "max_token_budget": 3200
+  },
+  "expected_baseline_tokens": {
+    "plain": 11000,
+    "rules_only": 5800,
+    "aimaster": 1950
+  }
+}

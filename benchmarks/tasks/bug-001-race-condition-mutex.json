@@ -1,0 +1,28 @@
+{
+  "id": "bug-001-race-condition-mutex",
+  "category": "bug-fixing",
+  "difficulty": "hard",
+  "title": "Fix Concurrent Double-Spend Race Condition in Inventory Decrement",
+  "prompt": "A bug report reveals customers are able to purchase the last remaining item simultaneously during flash sales. Identify the race condition in the `decrementInventory(sku, qty)` method and fix it using atomic database updates or distributed lock.",
+  "context_files": [
+    "skills/05-testing-quality/skill-bug-investigator.md",
+    "skills/03-backend-data/skill-database.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/const\\s+stock\\s*=\\s*await\\s+getStock\\(sku\\);\\s*if\\s*\\(stock\\s*>=?\\s*qty\\)\\s*\\{\\s*await\\s+setStock\\(sku,\\s*stock\\s*-\\s*qty\\);/s"
+    ],
+    "required_patterns": [
+      "/UPDATE.*inventory.*SET.*quantity\\s*=\\s*quantity\\s*-\\s*\\$?[0-9]*.*WHERE.*quantity\\s*>=?\\s*\\$?[0-9]*/i"
+    ],
+    "ast_checks": [
+      "atomic_decrement_sql"
+    ],
+    "max_token_budget": 3100
+  },
+  "expected_baseline_tokens": {
+    "plain": 11000,
+    "rules_only": 5500,
+    "aimaster": 1850
+  }
+}

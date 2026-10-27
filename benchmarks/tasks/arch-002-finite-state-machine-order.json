@@ -1,0 +1,30 @@
+{
+  "id": "arch-002-finite-state-machine-order",
+  "category": "architecture",
+  "difficulty": "medium",
+  "title": "Deterministic Finite State Machine for Order Lifecycle Transitions",
+  "prompt": "Model an e-commerce order status workflow (`draft` -> `pending_payment` -> `paid` -> `shipped` -> `delivered` / `cancelled`) as a finite state machine. Throw explicit domain errors on illegal transitions (e.g. `delivered` -> `pending_payment`).",
+  "context_files": [
+    "skills/01-architecture-planning/skill-state-machine-logic.md",
+    "skills/07-code-craft/skill-design-patterns.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/order\\.status\\s*=\\s*newStatus;\\s*(?!if|switch|stateMachine)/"
+    ],
+    "required_patterns": [
+      "/transition\\(|canTransition\\(/i",
+      "/IllegalStateTransitionError|InvalidStateError/i",
+      "/Record<OrderStatus|readonly transitions/i"
+    ],
+    "ast_checks": [
+      "guarded_state_transitions"
+    ],
+    "max_token_budget": 3200
+  },
+  "expected_baseline_tokens": {
+    "plain": 10400,
+    "rules_only": 5200,
+    "aimaster": 1850
+  }
+}

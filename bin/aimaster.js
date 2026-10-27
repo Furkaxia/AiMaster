@@ -14,8 +14,8 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const TARGET_DIR = process.cwd();
 
 const BANNER = `
-\x1b[1m\x1b[36m⚡ AIMASTER CLI — Autonomous Agentic Engineering OS\x1b[0m
-\x1b[90mTransforming AI Coding Models into a Disciplined Staff Engineering Council\x1b[0m
+\x1b[1m\x1b[36mAIMASTER CLI — Enterprise Agentic Engineering Operating System\x1b[0m
+\x1b[90mMulti-Persona Governance & Invariant Enforcement for AI Coding Agents\x1b[0m
 `;
 
 const PRESETS = {
@@ -129,11 +129,12 @@ function printPresetList() {
 
 function runVerify() {
   console.log(BANNER);
-  console.log('\x1b[1m🔍 Running AiMaster Comprehensive Integrity & Benchmark Suite...\x1b[0m\n');
+  console.log('\x1b[1mRunning AIMASTER Enterprise Integrity & Benchmark Suite...\x1b[0m\n');
   const testSteps = [
     { name: 'Enterprise Integrity Linter', script: path.join(REPO_ROOT, 'scripts', 'verify-integrity.js') },
     { name: 'Adversarial Fixtures Test', script: path.join(REPO_ROOT, 'scripts', 'test-integrity-fixtures.js') },
-    { name: 'Behavioral Benchmark Evals', script: path.join(REPO_ROOT, 'scripts', 'test-adversarial-evals.js') }
+    { name: 'Behavioral Benchmark Evals', script: path.join(REPO_ROOT, 'scripts', 'test-adversarial-evals.js') },
+    { name: 'Empirical Benchmark Harness', script: path.join(REPO_ROOT, 'benchmarks', 'runner.mjs'), args: ['--mode=mock'] }
   ];
 
   for (const step of testSteps) {
@@ -141,13 +142,14 @@ function runVerify() {
       console.error(`\x1b[31m✖ Test script not found: ${step.script}\x1b[0m`);
       process.exit(1);
     }
-    const result = spawnSync(process.execPath, [step.script], { stdio: 'inherit' });
+    const spawnArgs = [step.script, ...(step.args || [])];
+    const result = spawnSync(process.execPath, spawnArgs, { stdio: 'inherit' });
     if (result.status !== 0) {
       console.error(`\n\x1b[31m✖ ${step.name} failed with status code ${result.status}\x1b[0m`);
       process.exit(result.status || 1);
     }
   }
-  console.log(`\n\x1b[1m\x1b[32m🎉 All AiMaster integrity, fixture, and adversarial tests passed successfully!\x1b[0m\n`);
+  console.log(`\n\x1b[1m\x1b[32m✔ All AIMASTER integrity, fixture, adversarial and benchmark tests passed successfully.\x1b[0m\n`);
   process.exit(0);
 }
 
@@ -331,7 +333,7 @@ async function main() {
     }
   }
 
-  console.log(`\n\x1b[1m🚀 Initializing AIMASTER for: \x1b[36m${selectedIDE.toUpperCase()}\x1b[0m\n`);
+  console.log(`\n\x1b[1mInitializing AIMASTER configuration for: \x1b[36m${selectedIDE.toUpperCase()}\x1b[0m\n`);
 
   if (selectedIDE === 'all') {
     Object.keys(PRESETS).forEach((key) => installPreset(key, force, dryRun));
@@ -351,12 +353,12 @@ async function main() {
 
   if (dryRun) {
     console.log(`
-\x1b[1m\x1b[35m🎉 [DRY-RUN] Simulation complete! No changes were made.\x1b[0m
-\x1b[90mRun again without --dry-run to execute changes.\x1b[0m
+\x1b[1m\x1b[35m[DRY-RUN] Simulation complete. No changes written to disk.\x1b[0m
+\x1b[90mRun again without --dry-run to apply changes.\x1b[0m
 `);
   } else {
     console.log(`
-\x1b[1m\x1b[32m🎉 AIMASTER successfully initialized!\x1b[0m
+\x1b[1m\x1b[32m✔ AIMASTER initialized successfully.\x1b[0m
 \x1b[90mStart your AI IDE or open a new chat session to activate the Agentic Boardroom.\x1b[0m
 - Constitutional Reference: \x1b[36mRulesAI.md\x1b[0m
 - Documentation & Skills: \x1b[36mhttps://github.com/Furkaxia/AiMaster\x1b[0m

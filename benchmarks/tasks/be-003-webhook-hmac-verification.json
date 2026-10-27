@@ -1,0 +1,32 @@
+{
+  "id": "be-003-webhook-hmac-verification",
+  "category": "backend",
+  "difficulty": "hard",
+  "title": "Secure Webhook Ingestion with Timing-Safe HMAC & Idempotency",
+  "prompt": "Implement a webhook receiver endpoint for Stripe/Shopify style payloads. Must verify raw body HMAC-SHA256 signature using timing-safe comparison, reject timestamps older than 300 seconds to block replay attacks, and record idempotency key.",
+  "context_files": [
+    "skills/03-backend-data/skill-webhook-integrations.md",
+    "skills/04-security-audit/skill-cryptography.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/===|!==(?=.*signature)/",
+      "/JSON\\.stringify\\(req\\.body\\)/"
+    ],
+    "required_patterns": [
+      "/crypto\\.timingSafeEqual\\(/",
+      "/crypto\\.createHmac\\(/",
+      "/Math\\.abs\\(.*timestamp.*\\)|300/"
+    ],
+    "ast_checks": [
+      "raw_body_preserved",
+      "timing_safe_compare"
+    ],
+    "max_token_budget": 3600
+  },
+  "expected_baseline_tokens": {
+    "plain": 13000,
+    "rules_only": 6000,
+    "aimaster": 2050
+  }
+}

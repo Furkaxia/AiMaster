@@ -1,0 +1,33 @@
+{
+  "id": "sec-002-prompt-injection-firewall",
+  "category": "security",
+  "difficulty": "hard",
+  "title": "AI Untrusted Content Quarantine & Instruction Injection Defense",
+  "prompt": "Create an AI processing pipeline module in TypeScript that ingests untrusted third-party documents (e.g. uploaded user resumes or scrapings) and formats them into LLM prompts. Must quarantine untrusted text in strict XML boundaries, scrub override delimiters ('Ignore previous instructions'), and enforce system instruction primacy.",
+  "context_files": [
+    "skills/04-security-audit/skill-adversarial-auditor.md",
+    "integrations/cursor/.cursorrules"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/`.*\\$\\{untrustedInput\\}.*`/s",
+      "/eval\\(/",
+      "/new\\s+Function\\(/"
+    ],
+    "required_patterns": [
+      "/<untrusted_user_content>|<sanitized_input>/",
+      "/replace|escape|sanitize/i",
+      "/\\[UNTRUSTED_CONTENT_BLOCKED\\]|SYSTEM_PROMPT_PRELUDE/i"
+    ],
+    "ast_checks": [
+      "xml_containment_boundary",
+      "untrusted_input_scrubbing"
+    ],
+    "max_token_budget": 3400
+  },
+  "expected_baseline_tokens": {
+    "plain": 13800,
+    "rules_only": 6900,
+    "aimaster": 2150
+  }
+}

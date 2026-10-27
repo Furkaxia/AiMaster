@@ -1,0 +1,33 @@
+{
+  "id": "fe-001-responsive-kpi-dashboard",
+  "category": "frontend",
+  "difficulty": "medium",
+  "title": "Responsive KPI Analytics Grid with Container Queries",
+  "prompt": "Implement a responsive KPI metrics dashboard component in React/TypeScript with Tailwind CSS. Must support container queries for modular embedding, zero layout overflow on mobile (320px+), dark mode tokens, and WCAG compliant contrast ratios.",
+  "context_files": [
+    "skills/02-frontend-ui/skill-responsive-web.md",
+    "skills/02-frontend-ui/skill-tailwind-design-system.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/!important/",
+      "/overflow-x-scroll/",
+      "/style=\\{[^}]*width:\\s*['\"][0-9]+px['\"][^}]*\\}/"
+    ],
+    "required_patterns": [
+      "/@container|grid-cols-|gap-/",
+      "/dark:/",
+      "/aria-label|aria-describedby/"
+    ],
+    "ast_checks": [
+      "no_any",
+      "no_inline_pixel_width"
+    ],
+    "max_token_budget": 3500
+  },
+  "expected_baseline_tokens": {
+    "plain": 12500,
+    "rules_only": 6200,
+    "aimaster": 2100
+  }
+}

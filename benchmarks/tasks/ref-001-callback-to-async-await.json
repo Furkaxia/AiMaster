@@ -1,0 +1,32 @@
+{
+  "id": "ref-001-callback-to-async-await",
+  "category": "refactoring",
+  "difficulty": "medium",
+  "title": "Refactor Nested Callback Hell to Promise.allSettled Async/Await",
+  "prompt": "Refactor a legacy Node.js script using deeply nested callbacks (3 levels: readFile, httpFetch, writeFile) into clean TypeScript async/await. Must use Promise.allSettled for parallel items, preserve original error stack traces, and eliminate callback pyramid of doom.",
+  "context_files": [
+    "skills/07-code-craft/skill-refactor-cleanup.md",
+    "skills/07-code-craft/skill-typescript-strict.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/function\\s*\\(err,\\s*data\\)\\s*\\{/s",
+      "/fs\\.readFile\\(.*,\\s*function/s"
+    ],
+    "required_patterns": [
+      "/async\\s+|await\\s+/",
+      "/Promise\\.allSettled|Promise\\.all/",
+      "/try\\s*\\{[^}]*\\}\\s*catch/s"
+    ],
+    "ast_checks": [
+      "async_await_conversion",
+      "proper_try_catch_rethrow"
+    ],
+    "max_token_budget": 3000
+  },
+  "expected_baseline_tokens": {
+    "plain": 9500,
+    "rules_only": 4800,
+    "aimaster": 1700
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "arch-004-tenant-isolation-rag-pipeline",
+  "category": "architecture",
+  "difficulty": "expert",
+  "title": "Zero-Trust Multi-Tenant RAG Vector Pipeline Architecture",
+  "prompt": "Architect a Retrieval-Augmented Generation (RAG) vector search ingestion and querying pipeline. Must enforce strict tenant metadata pre-filtering at the vector database query level (never post-filtering), scrub PII prior to embedding generation, and isolate namespace collections.",
+  "context_files": [
+    "skills/03-backend-data/skill-rag-vector-search.md",
+    "skills/04-security-audit/skill-data-privacy-compliance.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/vectorDb\\.query\\(.*\\);\\s*results\\.filter\\(r => r\\.tenantId/s"
+    ],
+    "required_patterns": [
+      "/filter:\\s*\\{\\s*tenant_id|namespace:\\s*tenant/i",
+      "/scrubPII|anonymize|maskPII/i",
+      "/pre-filter|hard boundary/i"
+    ],
+    "ast_checks": [
+      "vector_pre_filter_mandatory",
+      "pii_scrubbing_before_embed"
+    ],
+    "max_token_budget": 3900
+  },
+  "expected_baseline_tokens": {
+    "plain": 17000,
+    "rules_only": 8500,
+    "aimaster": 2600
+  }
+}

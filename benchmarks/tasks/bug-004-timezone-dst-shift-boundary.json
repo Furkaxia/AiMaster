@@ -1,0 +1,29 @@
+{
+  "id": "bug-004-timezone-dst-shift-boundary",
+  "category": "bug-fixing",
+  "difficulty": "medium",
+  "title": "Fix Monthly Subscription Renewal Failure on Daylight Saving Transition",
+  "prompt": "Monthly subscriptions created on October 31st fail to renew on November 30th due to naive 30-day offset adding and Daylight Saving Time (DST) hour shifts. Fix using UTC-normalized date operations and end-of-month clamping.",
+  "context_files": [
+    "skills/05-testing-quality/skill-bug-investigator.md",
+    "skills/03-backend-data/skill-background-cron.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/Date\\.now\\(\\)\\s*\\+\\s*30\\s*\\*\\s*24\\s*\\*\\s*60\\s*\\*\\s*60\\s*\\*\\s*1000/"
+    ],
+    "required_patterns": [
+      "/getUTCFullYear|toISOString|UTC/i",
+      "/date-fns|luxon|dayjs|setUTCDate/i"
+    ],
+    "ast_checks": [
+      "utc_explicit_normalization"
+    ],
+    "max_token_budget": 2900
+  },
+  "expected_baseline_tokens": {
+    "plain": 8800,
+    "rules_only": 4400,
+    "aimaster": 1600
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "be-004-caching-redis-stampede-mutex",
+  "category": "backend",
+  "difficulty": "medium",
+  "title": "Redis Cache-Aside with Singleflight / Mutex Stampede Prevention",
+  "prompt": "Develop a caching service layer in TypeScript using Redis. Must implement Cache-Aside with probabilistic early expiration (XFetch) or singleflight in-flight mutex to prevent thundering herd / cache stampede on expired hot keys.",
+  "context_files": [
+    "skills/03-backend-data/skill-caching-redis.md",
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/redis\\.get\\(.*\\);\\s*const\\s+val\\s*=\\s*await\\s+fetchFromDb\\(\\);\\s*await\\s+redis\\.set\\(/s"
+    ],
+    "required_patterns": [
+      "/SETNX|lock|mutex|singleflight|inFlight/i",
+      "/EX|PX|ttl/i"
+    ],
+    "ast_checks": [
+      "mutex_or_probabilistic_early_refresh"
+    ],
+    "max_token_budget": 3400
+  },
+  "expected_baseline_tokens": {
+    "plain": 12000,
+    "rules_only": 5700,
+    "aimaster": 1950
+  }
+}
