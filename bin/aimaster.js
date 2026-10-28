@@ -14,9 +14,64 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const TARGET_DIR = process.cwd();
 
 const BANNER = `
-\x1b[1m\x1b[36mAIMASTER CLI — Enterprise Agentic Engineering Operating System\x1b[0m
-\x1b[90mMulti-Persona Governance & Invariant Enforcement for AI Coding Agents\x1b[0m
+\x1b[38;2;79;70;229m   █████╗ ██╗███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗ \x1b[0m
+\x1b[38;2;99;102;241m  ██╔══██╗██║████╗ ████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗\x1b[0m
+\x1b[38;2;129;140;248m  ███████║██║██╔████╔██║███████║███████╗   ██║   █████╗  ██████╔╝\x1b[0m
+\x1b[38;2;56;189;248m  ██╔══██║██║██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗\x1b[0m
+\x1b[38;2;45;212;191m  ██║  ██║██║██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║\x1b[0m
+\x1b[38;2;16;185;129m  ╚═╝  ╚═╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝\x1b[0m
+\x1b[90m        ─── \x1b[1m\x1b[38;2;56;189;248mA G E N T I C   O P E R A T I N G   S Y S T E M\x1b[0m\x1b[90m ───\x1b[0m
+\x1b[90m        Multi-Persona Boardroom Governance • 80 Skills • Zero Rework\x1b[0m
 `;
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function createSpinner(text) {
+  const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+  const dots = ['●○○○○', '●●○○○', '●●●○○', '●●●●○', '●●●●●', '○●●●●', '○○●●●', '○○○●●', '○○○○●'];
+  let i = 0;
+  let interval = null;
+
+  if (process.stdout.isTTY) {
+    interval = setInterval(() => {
+      const frame = frames[i % frames.length];
+      const dot = dots[i % dots.length];
+      process.stdout.write(`\r\x1b[38;2;56;189;248m${frame}\x1b[0m ${text} \x1b[38;2;79;70;229m[${dot}]\x1b[0m`);
+      i++;
+    }, 80);
+  } else {
+    console.log(`\x1b[36m⏳\x1b[0m ${text}...`);
+  }
+
+  return {
+    succeed: (msg) => {
+      if (interval) clearInterval(interval);
+      if (process.stdout.isTTY) {
+        process.stdout.write(`\r\x1b[2K\x1b[32m✔\x1b[0m ${msg || text}\n`);
+      } else {
+        console.log(`\x1b[32m✔\x1b[0m ${msg || text}`);
+      }
+    },
+    fail: (msg) => {
+      if (interval) clearInterval(interval);
+      if (process.stdout.isTTY) {
+        process.stdout.write(`\r\x1b[2K\x1b[31m✖\x1b[0m ${msg || text}\n`);
+      } else {
+        console.log(`\x1b[31m✖\x1b[0m ${msg || text}`);
+      }
+    },
+    warn: (msg) => {
+      if (interval) clearInterval(interval);
+      if (process.stdout.isTTY) {
+        process.stdout.write(`\r\x1b[2K\x1b[33m⚠\x1b[0m ${msg || text}\n`);
+      } else {
+        console.log(`\x1b[33m⚠\x1b[0m ${msg || text}`);
+      }
+    }
+  };
+}
 
 const PRESETS = {
   cursor: {
@@ -189,7 +244,7 @@ function backupExistingDirectory(dirPath) {
   }
 }
 
-function installPreset(key, force = false, dryRun = false) {
+async function installPreset(key, force = false, dryRun = false) {
   const preset = PRESETS[key];
   if (!preset) {
     console.error(`\x1b[31m✖ Unknown IDE preset: "${key}"\x1b[0m`);
@@ -209,6 +264,9 @@ function installPreset(key, force = false, dryRun = false) {
     return true;
   }
 
+  const spinner = createSpinner(`Configuring ${preset.name} preset (${preset.dest})`);
+  await sleep(100);
+
   const destDir = path.dirname(destPath);
   if (!fs.existsSync(destDir)) {
     fs.mkdirSync(destDir, { recursive: true });
@@ -216,18 +274,18 @@ function installPreset(key, force = false, dryRun = false) {
 
   if (fs.existsSync(destPath)) {
     if (!force) {
-      console.log(`\x1b[33m⚠ Skipped: ${preset.dest} already exists (use --force to overwrite)\x1b[0m`);
+      spinner.warn(`Skipped: ${preset.dest} already exists (use --force to overwrite)`);
       return true;
     }
     backupExistingFile(destPath);
   }
 
   fs.copyFileSync(srcPath, destPath);
-  console.log(`\x1b[32m✔ Installed ${preset.name} preset -> ${preset.dest}\x1b[0m`);
+  spinner.succeed(`Configured ${preset.name} preset -> ${preset.dest}`);
   return true;
 }
 
-function installRulesAI(force = false, dryRun = false) {
+async function installRulesAI(force = false, dryRun = false) {
   const src = path.join(REPO_ROOT, 'RulesAI.md');
   const dest = path.join(TARGET_DIR, 'RulesAI.md');
   if (fs.existsSync(src)) {
@@ -235,44 +293,49 @@ function installRulesAI(force = false, dryRun = false) {
       console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install Constitutional Rules -> RulesAI.md`);
       return;
     }
+    const spinner = createSpinner('Synthesizing Constitutional Invariants (RulesAI.md)');
+    await sleep(100);
     if (!fs.existsSync(dest) || force) {
       if (fs.existsSync(dest) && force) {
         backupExistingFile(dest);
       }
       fs.copyFileSync(src, dest);
-      console.log(`\x1b[32m✔ Installed Constitutional Rules -> RulesAI.md\x1b[0m`);
+      spinner.succeed('Constitutional Rules verified & installed -> RulesAI.md');
     } else {
-      console.log(`\x1b[33m⚠ Skipped: RulesAI.md already exists (use --force to overwrite)\x1b[0m`);
+      spinner.warn('Skipped: RulesAI.md already exists (use --force to overwrite)');
     }
   }
 }
 
-function installProtocols(force = false, dryRun = false) {
+async function installProtocols(force = false, dryRun = false) {
+  if (dryRun) {
+    console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install 11 standard protocols (*-ai.md)`);
+    return;
+  }
+  const spinner = createSpinner('Linking 11 Engineering Council Protocols (*-ai.md)');
+  await sleep(100);
   let count = 0;
   PROTOCOLS.forEach((file) => {
     const src = path.join(REPO_ROOT, file);
     const dest = path.join(TARGET_DIR, file);
     if (fs.existsSync(src)) {
-      if (dryRun) {
-        console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install protocol -> ${file}`);
-        count++;
-      } else if (!fs.existsSync(dest) || force) {
+      if (!fs.existsSync(dest) || force) {
         if (fs.existsSync(dest) && force) {
           backupExistingFile(dest);
         }
         fs.copyFileSync(src, dest);
         count++;
-      } else {
-        console.log(`\x1b[33m⚠ Skipped: ${file} already exists (use --force to overwrite)\x1b[0m`);
       }
     }
   });
-  if (count > 0 && !dryRun) {
-    console.log(`\x1b[32m✔ Installed ${count} standard protocols (*-ai.md)\x1b[0m`);
+  if (count > 0) {
+    spinner.succeed(`Installed ${count} Engineering Council Protocols (*-ai.md)`);
+  } else {
+    spinner.warn('Skipped: Protocols already exist (use --force to overwrite)');
   }
 }
 
-function installSkills(force = false, dryRun = false) {
+async function installSkills(force = false, dryRun = false) {
   const src = path.join(REPO_ROOT, 'skills');
   const dest = path.join(TARGET_DIR, 'skills');
   if (fs.existsSync(src)) {
@@ -280,16 +343,16 @@ function installSkills(force = false, dryRun = false) {
       console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install 80 domain skills to ./skills/`);
       return;
     }
+    const spinner = createSpinner('Compiling 80 Active Domain Skills into ./skills/ (7 Categories)');
+    await sleep(150);
     if (!fs.existsSync(dest) || force) {
       if (fs.existsSync(dest) && force) {
-        console.log(`\x1b[33m⚠ --force active: Backing up existing ./skills/ directory before synchronizing...\x1b[0m`);
         backupExistingDirectory(dest);
       }
-      console.log(`\x1b[36m⏳ Synchronizing 80 domain skills to ./skills/... \x1b[0m`);
       copyRecursiveSync(src, dest);
-      console.log(`\x1b[32m✔ Synchronized 80 domain skills -> ./skills/\x1b[0m`);
+      spinner.succeed('Synchronized 80 Active Domain Skills -> ./skills/');
     } else {
-      console.log(`\x1b[33m⚠ Skipped: ./skills/ directory already exists (use --force to overwrite)\x1b[0m`);
+      spinner.warn('Skipped: ./skills/ directory already exists (use --force to overwrite)');
     }
   }
 }
@@ -381,19 +444,21 @@ async function main() {
   console.log(`\n\x1b[1mInitializing AIMASTER configuration for: \x1b[36m${selectedIDE.toUpperCase()}\x1b[0m\n`);
 
   if (selectedIDE === 'all') {
-    Object.keys(PRESETS).forEach((key) => installPreset(key, force, dryRun));
+    for (const key of Object.keys(PRESETS)) {
+      await installPreset(key, force, dryRun);
+    }
   } else {
-    installPreset(selectedIDE, force, dryRun);
+    await installPreset(selectedIDE, force, dryRun);
   }
 
-  installRulesAI(force, dryRun);
+  await installRulesAI(force, dryRun);
 
   if (withProtocols) {
-    installProtocols(force, dryRun);
+    await installProtocols(force, dryRun);
   }
 
   if (withSkills) {
-    installSkills(force, dryRun);
+    await installSkills(force, dryRun);
   }
 
   if (dryRun) {
