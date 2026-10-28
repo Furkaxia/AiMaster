@@ -332,7 +332,7 @@ async function main() {
       const pkg = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8'));
       console.log(`aimaster v${pkg.version}`);
     } catch {
-      console.log('aimaster v1.0.0');
+      console.log('aimaster v1.0.0-rc.1');
     }
     process.exit(0);
   }

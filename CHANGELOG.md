@@ -29,7 +29,7 @@ AiMaster transforms AI code models (in Cursor, Windsurf, Google Antigravity, Cop
     3. Constitutional Security Invariants (no `any`/`as any`, no hardcoded secrets, no `eval`)
     4. Anti-Pattern Scanners (scanned strictly on comment-stripped executable code)
     5. Required Architecture & API Signatures
-    6. 43 Deterministic AST Semantic Node Checkers
+    6. 43 Deterministic Semantic & Invariant Checkers
     7. Scientific Failure Classification
 - **Adversarial Mutation Testing Suite (`tests/test-validator-mutations.mjs`):**
   - 12 deliberate adversarial mutations (timing attacks, TOCTOU symlink traversal, non-atomic race conditions, blocking table locks, type bypasses, eval injection, DLQ exhaustion, SSRF bypasses, idempotency bypasses, transaction leaks, UTC DST drift).
@@ -50,8 +50,8 @@ AiMaster transforms AI code models (in Cursor, Windsurf, Google Antigravity, Cop
   - Executes 6-suite integrity checks (linters, fixtures, evals, engine, mutations, mock benchmarks) in under 6 seconds with zero external npm dependencies.
 
 ### Changed
-- **Zero External Runtime Dependencies:** Pure Node.js ESM/CommonJS standard library implementation with zero third-party packages in `package.json` for zero supply-chain attack surface.
-- **Comment-Stripped AST Scanners:** Scanners strip single-line and multi-line comments before pattern matching, preventing false positives when refactored code references deprecated patterns in docstrings.
+- **Zero Third-Party Runtime Dependencies:** Pure Node.js ESM/CommonJS standard library implementation with zero external dependencies in `package.json`, eliminating third-party runtime supply-chain risk and dependency bloat.
+- **Comment-Stripped Semantic Scanners:** Scanners strip single-line and multi-line comments before pattern matching, preventing false positives when refactored code references deprecated patterns in docstrings.
 
 ### Fixed
 - Fixed CRLF newline normalization across Windows and POSIX in heading anchor verifiers.

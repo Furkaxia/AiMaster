@@ -10,7 +10,7 @@
  *   Stage 3: Constitutional Security Invariants (Anti-Any, Secret Ban, Fail-Closed)
  *   Stage 4: Prohibited / Anti-Pattern Scanner (Isolated strictly to canonical code)
  *   Stage 5: Required Architecture & Signature Patterns
- *   Stage 6: AST Semantic Invariants (43 deterministic semantic node checks)
+ *   Stage 6: Deterministic Semantic & Invariant Checkers (43 deterministic checks)
  *   Stage 7: Scientific Failure Classification & Recovery Diagnostics
  *
  * Zero external dependencies (Native Node.js ESM).
@@ -20,7 +20,7 @@ import { extractCanonicalDelivery } from './canonical-delivery.mjs';
 import { classifyFailure, FAILURE_CLASSES } from './failure-classifier.mjs';
 
 /**
- * 43 Deterministic AST and Semantic Architecture Checkers
+ * 43 Deterministic Semantic & Invariant Checkers
  */
 export const AST_CHECKERS = Object.freeze({
   async_await_conversion: (code) => /async\s+function|async\s*\(/.test(code) && /await\s+/.test(code),
@@ -75,6 +75,9 @@ export const AST_CHECKERS = Object.freeze({
   saga_compensating_transaction: (code) => /compensate|rollbackSaga|compensating/i.test(code),
   deadlock_prevention_ordering: (code) => /sort|order/i.test(code) && /lock|acquire/i.test(code)
 });
+
+export const INVARIANT_CHECKERS = AST_CHECKERS;
+export const SEMANTIC_INVARIANT_CHECKERS = AST_CHECKERS;
 
 /**
  * Validates model output through the complete multi-stage pipeline.

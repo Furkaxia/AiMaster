@@ -7,7 +7,7 @@
 ## Phase 1: Empirical Verification & Release Candidate (CURRENT)
 - [x] **Zero-Dependency Core:** 100% native Node.js implementation without external npm dependencies.
 - [x] **50 Golden Architectural Tasks:** Covering 12 critical domains (Auth, Database, Security, Concurrency, etc.).
-- [x] **AST Semantic & Security Pipeline:** 43 deterministic invariant checkers with comment-stripping.
+- [x] **Deterministic Semantic & Invariant Pipeline:** 43 deterministic invariant checkers with comment-stripping.
 - [x] **Adversarial Mutation Suite:** 12/12 (100%) mutation rejection rate on adversarial vulnerabilities.
 - [x] **NVIDIA NIM Comparative Matrix:** 4-paradigm empirical benchmarking across 6 live cohort models.
 - [x] **Tiered JIT Context Compiler:** 62%–84% token reduction vs monolithic prompt injection.

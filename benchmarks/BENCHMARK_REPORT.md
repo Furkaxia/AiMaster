@@ -1,13 +1,13 @@
-# 🔬 AIMASTER EMPIRICAL BENCHMARK & REPRODUCIBILITY REPORT
+# 🔬 AIMASTER ARCHITECTURAL BENCHMARK & REPRODUCIBILITY REPORT
 
-> **Evaluation Suite Version:** v1.0.0  
-> **Evaluation Mode:** DETERMINISTIC ARCHITECTURAL SIMULATION & CALIBRATION (MOCK)  
+> **Evaluation Suite Version:** v1.0.0-rc.1  
+> **Evaluation Mode:** DETERMINISTIC ARCHITECTURAL HARNESS EVALUATION (MOCK)  
 > **Model Provider:** nvidia:nvidia/nemotron-3.5-lightning-30b-a3b  
-> **Benchmark Timestamp:** 2026-10-28T14:03:50.967Z  
-> **Dataset:** 50 Golden Empirical Engineering Tasks (12 Categories)  
+> **Benchmark Timestamp:** 2026-10-28T21:05:19.706Z  
+> **Dataset:** 50 Golden Architectural Tasks (12 Categories)  
 > **Standard Confidence:** 95% Confidence Interval (z = 1.96, σ = 1.06%)
 
-> **Simulation Calibration Mode:** Deterministic baseline calibration across 50 tasks in 12 categories verifying invariant adherence, context budget sizing, and surgical diff mechanics. For live model execution (LLM API), execute `npm run benchmark:live` with an active API key (`GEMINI_API_KEY`, `OPENAI_API_KEY`, or `ANTHROPIC_API_KEY`).
+> **Deterministic Harness Mode:** Offline deterministic baseline evaluation across 50 tasks in 12 categories verifying invariant adherence, context budget sizing, and surgical diff mechanics using canonical reference baselines. For live model execution (LLM API), execute `npm run benchmark:live` with an active API key (`GEMINI_API_KEY`, `OPENAI_API_KEY`, or `ANTHROPIC_API_KEY`).
 
 ---
 
@@ -55,7 +55,7 @@ This empirical evaluation benchmark compares three distinct operational paradigm
 ### Evaluation Harness Design
 The benchmark runs deterministic test specifications defined under `benchmarks/tasks/*.json`. Each task specification specifies:
 - **Exact Input Context:** Realistic developer prompts across full-stack domains.
-- **Required Invariant Patterns:** AST nodes, timing-safe crypto methods, realpath boundaries, container queries, and Zod schemas.
+- **Required Invariant Patterns:** Semantic invariant patterns, timing-safe crypto methods, realpath boundaries, container queries, and Zod schemas.
 - **Forbidden Anti-Patterns:** Direct SQL string interpolation, `any` double-casting, unchecked SSRF redirects, and unclosed streams.
 - **Token Accounting:** Input, output, and rework token allocations modeled against standard tokenizers.
 

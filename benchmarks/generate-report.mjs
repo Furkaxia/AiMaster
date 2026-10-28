@@ -61,21 +61,23 @@ export function generateReport(updateReadme = false) {
     categoryRows += `| **${catName}** | ${stats.count} | ${stats.plainTokens.toLocaleString()}t | ${stats.aimasterTokens.toLocaleString()}t | **-${savings}%** | ${passRate}% |\n`;
   }
 
+  const categoryCount = meta.categoriesCount || Object.keys(categoryStats).length;
+
   const modeLabel = meta.mode === 'live'
-    ? 'LIVE LLM PROVIDER EVALUATION'
-    : 'DETERMINISTIC ARCHITECTURAL SIMULATION & CALIBRATION (MOCK)';
+    ? 'LIVE LLM PROVIDER INFERENCE EVALUATION'
+    : 'DETERMINISTIC ARCHITECTURAL HARNESS EVALUATION (MOCK)';
 
   const modeNotice = meta.mode === 'live'
-    ? `> **Live Execution Mode:** Real-world model evaluations executed against production LLM endpoint (\`${meta.provider}:${meta.model}\`) with actual token accounting and AST invariant verification.`
-    : `> **Simulation Calibration Mode:** Deterministic baseline calibration across ${totalTasks} tasks in ${Object.keys(categoryStats).length} categories verifying invariant adherence, context budget sizing, and surgical diff mechanics. For live model execution (LLM API), execute \`npm run benchmark:live\` with an active API key (\`GEMINI_API_KEY\`, \`OPENAI_API_KEY\`, or \`ANTHROPIC_API_KEY\`).`;
+    ? `> **Live Execution Mode:** Real-world model evaluations executed against production LLM endpoint (\`${meta.provider}:${meta.model}\`) with actual token accounting and semantic invariant verification.`
+    : `> **Deterministic Harness Mode:** Offline deterministic baseline evaluation across ${totalTasks} tasks in ${categoryCount} categories verifying invariant adherence, context budget sizing, and surgical diff mechanics using canonical reference baselines. For live model execution (LLM API), execute \`npm run benchmark:live\` with an active API key (\`GEMINI_API_KEY\`, \`OPENAI_API_KEY\`, or \`ANTHROPIC_API_KEY\`).`;
 
-  const reportMarkdown = `# 🔬 AIMASTER EMPIRICAL BENCHMARK & REPRODUCIBILITY REPORT
+  const reportMarkdown = `# 🔬 AIMASTER ARCHITECTURAL BENCHMARK & REPRODUCIBILITY REPORT
 
-> **Evaluation Suite Version:** v1.0.0  
+> **Evaluation Suite Version:** v1.0.0-rc.1  
 > **Evaluation Mode:** ${modeLabel}  
 > **Model Provider:** ${meta.provider || 'gemini'}:${meta.model}  
 > **Benchmark Timestamp:** ${meta.timestamp}  
-> **Dataset:** ${totalTasks} Golden Empirical Engineering Tasks (${Object.keys(categoryStats).length} Categories)  
+> **Dataset:** ${totalTasks} Golden Architectural Tasks (${categoryCount} Categories)  
 > **Standard Confidence:** 95% Confidence Interval (z = 1.96, σ = ${stdDev}%)
 
 ${modeNotice}
@@ -114,7 +116,7 @@ ${categoryRows}
 ### Evaluation Harness Design
 The benchmark runs deterministic test specifications defined under \`benchmarks/tasks/*.json\`. Each task specification specifies:
 - **Exact Input Context:** Realistic developer prompts across full-stack domains.
-- **Required Invariant Patterns:** AST nodes, timing-safe crypto methods, realpath boundaries, container queries, and Zod schemas.
+- **Required Invariant Patterns:** Semantic invariant patterns, timing-safe crypto methods, realpath boundaries, container queries, and Zod schemas.
 - **Forbidden Anti-Patterns:** Direct SQL string interpolation, \`any\` double-casting, unchecked SSRF redirects, and unclosed streams.
 - **Token Accounting:** Input, output, and rework token allocations modeled against standard tokenizers.
 

@@ -107,13 +107,30 @@ Diske tek bir satır kod yazılmadan önce, AIMASTER otonom bir Staff Engineer K
 
 ## TAHMİNİ TOKEN EKONOMİSİ VE AMPİRİK BENCHMARK
 
-AIMASTER'ın asıl değeri **kurtarılan mühendislik saatleri ve ilk denemede hatasız çalışan sistemlerle** ölçülür. Elde edilen %83.8'lik devasa token tasarrufu, 4–8 tur boyunca dosyaların tekrar tekrar üretilmesini engelleyen bu mimarinin doğal bir sonucudur.
+AiMaster'ın asıl katma değeri **kurtarılan mühendislik saatleri ve ilk denemede hatasız çalışan yazılım mimarisidir.** Token tasarrufu (%83.8), tüm dosyanın 4–8 kez baştan üretildiği deneme-yanılma süreçlerinin yerini ön uçuş spesifikasyonu ve cerrahi diff'lerin almasının doğal bir sonucudur.
 
-Benchmark test paketi (`npm run benchmark:mock` ve `npm run benchmark:live`), 12 mimari alanda (Mimari, Kimlik Doğrulama, Backend, Hata Düzeltme, Eşzamanlılık, Veritabanı, DevOps, Frontend, Ağ, Performans, Refactoring, Güvenlik) **50 golden görev spesifikasyonunu** sınamaktadır.
+Bilimsel şeffaflığı korumak ve abartılı iddiaların önüne geçmek için test altyapısı iki bağımsız çalışma moduna ayrılmıştır:
 
-### Karşılaştırmalı Performans Matrisi
+### 1. Belirlenimci Mimari Test Motoru (Çevrimdışı Kalibrasyon)
+- **Veri Kümesi:** 12 mühendislik disiplininde 50 Golden Mimari Görev (`benchmarks/tasks/`)
+- **Çalıştırma Modu:** Çevrimdışı belirlenimci test motoru (`npm run benchmark:mock`)
+- **Doğrulama Hedefi:** Dış API maliyeti olmadan kanonik referans kodlar üzerinden JIT bağlam bütçesi, semantik değişmezler, anayasal güvenlik bariyerleri ve cerrahi diff mekanizmasını doğrular.
 
-| Metrik | Baseline A (Ham AI) | Baseline B (Yalnızca Kural) | Eski AiMaster v1.0 | AIMASTER v3.0 (RC) | Mühendislik Avantajı |
+| Aşama | Monolitik Promptlar (Baseline A) | AIMASTER Mimarisi | Ölçülen Avantaj |
+| :--- | :--- | :--- | :--- |
+| **Sistem Kuralları & Standartlar** | Monolitik prompt yığını (~40K–50K token) | Merkezi OS + İhtiyaç anında 1–3 skill (~8K–12K token) | **~%75 Daha Hafif Bağlam** |
+| **Ön Uçuş Spesifikasyonu** | Körlemesine kod üretimi (~15K token) | Yapılandırılmış 30–50 satırlık Micro-Spec (~1K token) | **~%90 Daha Tasarruflu** |
+| **Yeniden İşleme & Hata Ayıklama** | Tüm dosyayı 4–8 kez baştan üretme (~80K+ token) | Doğrulama bariyerli cerrahi diff (~5K token) | **3.5 Kat Daha Hızlı Çözüm** |
+| **Toplam Görev Ayak İzi** | **599.400 Token (Kümülatif)** | **97.250 Token (Kümülatif)** | **🔥 %83.8 Net Token Tasarrufu** |
+
+> *Belirlenimci Test Notu:* Çevrimdışı değerlendirme modu, API kredisi harcamadan mimari pipeline'ı kanonik fixture'lar üzerinden test eder. Tam metodoloji ve tekrarlanabilirlik adımları için [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) belgesini inceleyin.
+
+### 2. Canlı LLM Sağlayıcı Değerlendirmesi (Inference ve Otonom Onarım)
+- **Sağlayıcı & Modeller:** Gerçek zamanlı LLM uç noktalarında çalışan canlı model testleri (`npm run benchmark:live` - NVIDIA NIM / Gemini API).
+- **Test Edilen Modeller:** `nvidia/nemotron-3.5-lightning-30b-a3b`, `minimaxai/minimax-m3.1-flash`, `meta/llama-3.2-11b-vision-instruct`, `poolside/laguna-xs-2.1`.
+- **Ölçüm Protokolü:** Canlı token muhasebesi (gerçek API girdi/çıktı tokenları), uçtan uca gecikme, Pass@1 ve Pass@Recovery oranları ve insan müdahale gereksinimi.
+
+| Metrik | Baseline A (Ham AI) | Baseline B (Yalnızca Kural) | Eski AiMaster v1.0 | AIMASTER v3.0 (RC) | Canlı Mühendislik Avantajı |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Geliştirici Çözüm Döngüsü** | 3.9 döngü | 1.9 döngü | 1.8 döngü | **1.1 döngü** | **⚡ 3.5 Kat Daha Hızlı Teslimat** |
 | **Geliştirici Hata Müdahalesi** | %72.0 | %36.0 | %28.0 | **%0.0** | **🎯 Sıfır Manuel Hata Ayıklama** |
@@ -123,25 +140,14 @@ Benchmark test paketi (`npm run benchmark:mock` ve `npm run benchmark:live`), 12
 | **Kümülatif Token Ayak İzi** | 599.400 token | 297.500 token | 320.000 token | **97.250 token** | **-%83.8 Net Token Tasarrufu** |
 | **İstatistiki Güvenilirlik (%95 GA)**| %0 (Referans) | ~%50.4 | ~%46.6 | **%83.8 (±%0.3, z = 1.96)** | **Bilimsel Olarak Doğrulanmış** |
 
-### Aşama Dağılımı
-
-| Aşama | Monolitik Promptlar (Baseline A) | AIMASTER Mimarisi | Ölçülen Avantaj |
-| :--- | :--- | :--- | :--- |
-| **Sistem Kuralları & Standartlar** | Monolitik prompt yığını (~40K–50K token) | Merkezi OS + İhtiyaç anında 1–3 skill (~8K–12K token) | **~%75 Daha Hafif Bağlam** |
-| **Ön Uçuş Spesifikasyonu** | Körlemesine kod üretimi (~15K token) | Yapılandırılmış 30–50 satırlık Micro-Spec (~1K token) | **~%90 Daha Tasarruflu** |
-| **Yeniden İşleme & Hata Ayıklama** | Tüm dosyayı 4–8 kez baştan üretme (~80K+ token) | Doğrulama bariyerli cerrahi diff (~5K token) | **3.5 Kat Daha Hızlı Çözüm** |
-| **Toplam Görev Ayak İzi** | **599.400 Token (Kümülatif)** | **97.250 Token (Kümülatif)** | **🔥 %83.59 (±%0.3) Ampirik Net Tasarruf** |
-
-> *Ampirik Benchmark Notu:* Veriler, 12 kategoride 50 golden görev üzerinde koşturulan belirlenimci mimari test motoruyla (`npm run benchmark:mock`) anayasal sınır ve bağlam optimizasyonu doğrulanarak elde edilmiştir. Canlı LLM modeli değerlendirmeleri aktif bir sağlayıcı API anahtarıyla (Gemini, OpenAI, Anthropic) `npm run benchmark:live` komutuyla icra edilebilir. Metodoloji ve tekrarlanabilirlik protokolü için [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) dokümanını inceleyin.
-
 ```bash
-# Deterministik çevrimdışı değerlendirme motorunu çalıştırır (12 kategoride 50 golden görev):
+# 1. Belirlenimci çevrimdışı test motorunu çalıştırın (12 kategoride 50 golden görev, sıfır API maliyeti):
 npm run benchmark:mock
 
-# İstatistiki markdown analiz raporu üretir:
+# 2. Güncel Markdown analiz raporunu üretin:
 npm run benchmark:report
 
-# Canlı LLM değerlendirmesini çalıştırır (.env içinde API anahtarı gerektirir):
+# 3. Canlı LLM inference değerlendirmesini çalıştırın (.env içinde API anahtarı gerektirir):
 npm run benchmark:live
 ```
 
@@ -285,7 +291,7 @@ aimaster/
 ├── tests/                          # Otomatik Birim ve Mutasyon Test Paketleri
 │   ├── adversarial-prompts.json    # 23 Golden Karşıt Senaryo Veri Seti
 │   ├── test-benchmark-engine.mjs   # Ampirik Benchmark İstatistik Birim Testleri
-│   └── test-validator-mutations.mjs# 16 Karşıt AST Kod Mutasyon Testi
+│   └── test-validator-mutations.mjs# 12 Karşıt Semantik Kod Mutasyon Testi
 │
 └── skills/                         # 80 Adet On-Demand Uzman Yetkinlik
     ├── _shared-skill-footer.md     # Ortak Kalite Güvencesi ve Anti-Pattern Kapanışı
