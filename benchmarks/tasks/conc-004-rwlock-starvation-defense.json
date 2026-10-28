@@ -1,0 +1,30 @@
+{
+  "id": "conc-004-rwlock-starvation-defense",
+  "category": "concurrency",
+  "difficulty": "hard",
+  "title": "Reader-Writer Lock with Writer-Priority Starvation Prevention",
+  "prompt": "Implement an in-memory Reader-Writer lock (RWLock) allowing multiple concurrent readers or a single exclusive writer. To prevent writer starvation from continuous reader arrivals, prioritize queued writer requests by blocking new readers when writers are pending.",
+  "context_files": [
+    "skills/07-code-craft/skill-design-patterns.md",
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/:\\s*any\\b|as\\s+any\\b/i"
+    ],
+    "required_patterns": [
+      "/acquireRead|readLock/i",
+      "/acquireWrite|writeLock/i",
+      "/waitingWriters|writerPending/i"
+    ],
+    "ast_checks": [
+      "no_any"
+    ],
+    "max_token_budget": 3500
+  },
+  "expected_baseline_tokens": {
+    "plain": 13000,
+    "rules_only": 6500,
+    "aimaster": 2000
+  }
+}

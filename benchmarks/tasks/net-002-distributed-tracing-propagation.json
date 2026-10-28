@@ -1,0 +1,32 @@
+{
+  "id": "net-002-distributed-tracing-propagation",
+  "category": "networking",
+  "difficulty": "medium",
+  "title": "W3C TraceContext Distributed Tracing Header Injector & Extractor",
+  "prompt": "Implement W3C TraceContext distributed tracing middleware for HTTP clients and servers. Extract incoming 'traceparent' and 'tracestate' headers, generate a compliant new 16-byte span ID while maintaining the 32-byte trace ID, and propagate downstream via outbound HTTP fetch.",
+  "context_files": [
+    "skills/06-devops-tooling/skill-observability.md",
+    "skills/03-backend-data/skill-api.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/req:\\s*any|res:\\s*any/i"
+    ],
+    "required_patterns": [
+      "/traceparent/i",
+      "/tracestate/i",
+      "/spanId|span_id/i",
+      "/traceId|trace_id/i"
+    ],
+    "ast_checks": [
+      "distributed_tracing_propagation",
+      "no_any"
+    ],
+    "max_token_budget": 3200
+  },
+  "expected_baseline_tokens": {
+    "plain": 11000,
+    "rules_only": 5500,
+    "aimaster": 1800
+  }
+}

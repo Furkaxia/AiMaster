@@ -1,0 +1,31 @@
+{
+  "id": "devops-004-zero-downtime-rolling-deploy",
+  "category": "devops",
+  "difficulty": "hard",
+  "title": "Blue-Green / Canary Traffic Splitting Controller",
+  "prompt": "Implement an atomic HTTP traffic splitter supporting canary rollouts (e.g., 10% canary, 90% stable). Ensure header-based routing overrides (e.g. x-canary: true) take precedence, sticky session hashing on user ID prevents session flapping, and failure telemetry triggers an automatic rollback to stable.",
+  "context_files": [
+    "skills/06-devops-tooling/skill-kubernetes-orchestration.md",
+    "skills/03-backend-data/skill-api.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/Math\\.random\\(\\)\\s*<\\s*0\\.1/i"
+    ],
+    "required_patterns": [
+      "/canary/i",
+      "/stable/i",
+      "/weight|percent|hash/i",
+      "/x-canary|header/i"
+    ],
+    "ast_checks": [
+      "guarded_state_transitions"
+    ],
+    "max_token_budget": 3500
+  },
+  "expected_baseline_tokens": {
+    "plain": 13500,
+    "rules_only": 6800,
+    "aimaster": 2100
+  }
+}

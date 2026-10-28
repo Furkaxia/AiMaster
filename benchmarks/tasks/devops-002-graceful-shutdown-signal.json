@@ -1,0 +1,31 @@
+{
+  "id": "devops-002-graceful-shutdown-signal",
+  "category": "devops",
+  "difficulty": "medium",
+  "title": "POSIX Signal Graceful Termination with Connection Draining",
+  "prompt": "Implement a production-grade graceful shutdown coordinator for a Node.js HTTP and database service. Listen for SIGTERM and SIGINT, stop accepting new connections, set a draining timeout, close active database connection pools, and exit with code 0 or 1 on timeout.",
+  "context_files": [
+    "skills/06-devops-tooling/skill-docker-deployment.md",
+    "skills/07-code-craft/skill-error-handling-logging.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/process\\.exit\\(0\\)[^\\n]*\\n[^\\n]*server\\.close/i"
+    ],
+    "required_patterns": [
+      "/SIGTERM/i",
+      "/SIGINT/i",
+      "/server\\.close/i",
+      "/process\\.exit/i"
+    ],
+    "ast_checks": [
+      "graceful_shutdown_signal"
+    ],
+    "max_token_budget": 3000
+  },
+  "expected_baseline_tokens": {
+    "plain": 9500,
+    "rules_only": 4800,
+    "aimaster": 1600
+  }
+}

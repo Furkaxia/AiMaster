@@ -40,10 +40,11 @@ yarn-error.log*
 .pnpm-debug.log*
 *.log
 
-# Temporary files
+# Temporary files & internal scratchpad
 scratch/
 tmp/
 temp/
+.internal/
 
 # Session handoff & context checkpoints
 .handoff/
@@ -54,4 +55,8 @@ test md/
 
 # Benchmark local raw run logs
 benchmarks/results/raw-results-*.json
+
+# Experiment local run logs
+experiments/nvapi/results/*.json
+
 

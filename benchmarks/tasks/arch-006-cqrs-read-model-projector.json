@@ -1,0 +1,31 @@
+{
+  "id": "arch-006-cqrs-read-model-projector",
+  "category": "architecture",
+  "difficulty": "hard",
+  "title": "CQRS Asynchronous Event Projector for Denormalized Read Views",
+  "prompt": "Implement a CQRS read-model projector. Listen to domain events (e.g. OrderCreated, ItemAdded, OrderPaid), project into a denormalized read-optimized document/table, and maintain projection version/checkpoint for deterministic event replay without side-effects.",
+  "context_files": [
+    "skills/01-architecture-planning/skill-software-architecture.md",
+    "skills/03-backend-data/skill-database.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/:\\s*any\\b|as\\s+any\\b/i"
+    ],
+    "required_patterns": [
+      "/project|projector|applyEvent/i",
+      "/OrderCreated|OrderPaid/i",
+      "/version|checkpoint/i"
+    ],
+    "ast_checks": [
+      "no_any",
+      "guarded_state_transitions"
+    ],
+    "max_token_budget": 3700
+  },
+  "expected_baseline_tokens": {
+    "plain": 14200,
+    "rules_only": 7100,
+    "aimaster": 2200
+  }
+}

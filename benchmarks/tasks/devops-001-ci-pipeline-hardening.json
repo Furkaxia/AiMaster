@@ -1,0 +1,30 @@
+{
+  "id": "devops-001-ci-pipeline-hardening",
+  "category": "devops",
+  "difficulty": "hard",
+  "title": "Hardened Multi-Stage CI Pipeline with OIDC & Pinned SHA Actions",
+  "prompt": "Configure a hardened CI pipeline definition or automation script that enforces zero-trust secret isolation: strictly pin all third-party GitHub actions to full immutable commit SHAs (no mutable tags), configure OIDC short-lived tokens instead of long-lived secrets, and enforce fail-closed status checks.",
+  "context_files": [
+    "skills/06-devops-tooling/skill-ci-cd-pipeline.md",
+    "skills/06-devops-tooling/skill-clean-git-ci.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/uses:\\s*[a-zA-Z0-9_-]+\\/[a-zA-Z0-9_-]+@v[0-9]+/i"
+    ],
+    "required_patterns": [
+      "/[a-f0-9]{40}/i",
+      "/id-token:\\s*write|permissions/i",
+      "/FAIL[-_]CLOSED|strict/i"
+    ],
+    "ast_checks": [
+      "fail_closed_secret_barrier"
+    ],
+    "max_token_budget": 3500
+  },
+  "expected_baseline_tokens": {
+    "plain": 12500,
+    "rules_only": 6200,
+    "aimaster": 1950
+  }
+}

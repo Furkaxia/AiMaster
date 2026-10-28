@@ -1,0 +1,33 @@
+{
+  "id": "arch-005-outbox-pattern-cdc",
+  "category": "architecture",
+  "difficulty": "hard",
+  "title": "Transactional Outbox Pattern with Change Data Capture",
+  "prompt": "Implement the Transactional Outbox pattern. In a single database ACID transaction, persist domain entity changes along with an outbox record containing eventId, payload, and published=false status. Provide an asynchronous relay polling outbox records and publishing to Kafka/RabbitMQ with idempotent status update.",
+  "context_files": [
+    "skills/01-architecture-planning/skill-software-architecture.md",
+    "skills/03-backend-data/skill-message-queue-events.md",
+    "skills/03-backend-data/skill-database.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/await\\s+producer\\.send\\([^)]*\\)[^;]*;\\s*await\\s+db\\.commit/i"
+    ],
+    "required_patterns": [
+      "/outbox/i",
+      "/BEGIN|TRANSACTION/i",
+      "/COMMIT/i",
+      "/published/i"
+    ],
+    "ast_checks": [
+      "mandatory_rollback_on_error",
+      "idempotency_check_before_process"
+    ],
+    "max_token_budget": 3900
+  },
+  "expected_baseline_tokens": {
+    "plain": 15000,
+    "rules_only": 7500,
+    "aimaster": 2350
+  }
+}

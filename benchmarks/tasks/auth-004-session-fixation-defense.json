@@ -1,0 +1,31 @@
+{
+  "id": "auth-004-session-fixation-defense",
+  "category": "auth",
+  "difficulty": "medium",
+  "title": "Session Regeneration on Authentication Boundary",
+  "prompt": "Implement session fixation defense in authentication workflow. Upon successful credential verification, regenerate the session identifier (e.g., req.session.regenerate), issue a new CSRF token, and set HttpOnly, Secure, SameSite=Strict cookies.",
+  "context_files": [
+    "skills/04-security-audit/skill-web-security.md",
+    "skills/04-security-audit/skill-auth-security.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/httpOnly:\\s*false/i"
+    ],
+    "required_patterns": [
+      "/regenerate/i",
+      "/httpOnly:\\s*true/i",
+      "/secure:\\s*true/i",
+      "/sameSite:\\s*['\"]strict['\"]/i"
+    ],
+    "ast_checks": [
+      "no_any"
+    ],
+    "max_token_budget": 2900
+  },
+  "expected_baseline_tokens": {
+    "plain": 10200,
+    "rules_only": 5100,
+    "aimaster": 1650
+  }
+}

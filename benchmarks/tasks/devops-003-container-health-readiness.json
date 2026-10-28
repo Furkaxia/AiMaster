@@ -1,0 +1,31 @@
+{
+  "id": "devops-003-container-health-readiness",
+  "category": "devops",
+  "difficulty": "medium",
+  "title": "Kubernetes Liveness and Readiness Probe Separation",
+  "prompt": "Implement separated HTTP endpoints for liveness (/healthz/liveness) and readiness (/healthz/readiness). The liveness probe must only check process responsiveness to avoid cascading pod death, while the readiness probe must verify downstream database and cache ping before returning 200 OK or 503 Service Unavailable.",
+  "context_files": [
+    "skills/06-devops-tooling/skill-kubernetes-orchestration.md",
+    "skills/06-devops-tooling/skill-docker-deployment.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/req:\\s*any|res:\\s*any/i"
+    ],
+    "required_patterns": [
+      "/liveness/i",
+      "/readiness/i",
+      "/503/i",
+      "/ping|check/i"
+    ],
+    "ast_checks": [
+      "no_any"
+    ],
+    "max_token_budget": 2800
+  },
+  "expected_baseline_tokens": {
+    "plain": 8500,
+    "rules_only": 4200,
+    "aimaster": 1400
+  }
+}

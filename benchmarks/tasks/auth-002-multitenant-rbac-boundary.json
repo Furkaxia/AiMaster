@@ -1,0 +1,32 @@
+{
+  "id": "auth-002-multitenant-rbac-boundary",
+  "category": "auth",
+  "difficulty": "hard",
+  "title": "Zero-Trust Multi-Tenant RBAC Guard with Role Hierarchy",
+  "prompt": "Implement a zero-trust multi-tenant authorization guard that validates both the user's role hierarchy (e.g. Owner > Admin > Member) AND validates that the requested resource tenant_id strictly matches the verified session tenant_id, rejecting cross-tenant impersonation.",
+  "context_files": [
+    "skills/04-security-audit/skill-auth-security.md",
+    "skills/04-security-audit/skill-web-security.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/tenant_id\\s*==\\s*['\"]all['\"]/i"
+    ],
+    "required_patterns": [
+      "/tenant_id|tenantId/i",
+      "/!==|===/i",
+      "/403|Forbidden/i",
+      "/roleHierarchy|ROLES/i"
+    ],
+    "ast_checks": [
+      "tenant_cross_check",
+      "no_any"
+    ],
+    "max_token_budget": 3500
+  },
+  "expected_baseline_tokens": {
+    "plain": 12800,
+    "rules_only": 6400,
+    "aimaster": 2000
+  }
+}

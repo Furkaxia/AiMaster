@@ -1,0 +1,32 @@
+{
+  "id": "auth-003-token-revocation-list",
+  "category": "auth",
+  "difficulty": "medium",
+  "title": "JWT JTI Blacklist & Distributed Token Revocation Check",
+  "prompt": "Implement an instant JWT revocation barrier. Extract the 'jti' (JWT ID) claim from incoming tokens, query an atomic revocation store (Redis SET or Memory bloom filter) with TTL equal to token expiration, and immediately invalidate logged-out or revoked tokens before proceeding.",
+  "context_files": [
+    "skills/04-security-audit/skill-auth-security.md",
+    "skills/03-backend-data/skill-caching-redis.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/req:\\s*any/i"
+    ],
+    "required_patterns": [
+      "/jti/i",
+      "/isRevoked|blacklist|revocation/i",
+      "/401|Unauthorized/i",
+      "/ttl|expire/i"
+    ],
+    "ast_checks": [
+      "jwt_verify_with_algorithm",
+      "no_any"
+    ],
+    "max_token_budget": 3100
+  },
+  "expected_baseline_tokens": {
+    "plain": 11500,
+    "rules_only": 5800,
+    "aimaster": 1850
+  }
+}

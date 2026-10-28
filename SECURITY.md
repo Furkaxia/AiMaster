@@ -17,7 +17,7 @@ AIMASTER considers platform security, credential containment, and boundary integ
 If you discover a potential security vulnerability, prompt firewall bypass, unintended file-system traversal, or architectural escape within AIMASTER:
 - **Do NOT open a public GitHub issue.**
 - Submit your disclosure securely via [GitHub Private Vulnerability Reporting](https://github.com/Furkaxia/AiMaster/security/advisories/new).
-- Alternatively, email our security team directly at `security@aimaster.dev` (or author contact: `furkanerturk@outlook.com`) with the subject `[SECURITY VULNERABILITY] AIMASTER`.
+- Alternatively, email our security team directly at `info@thevulpes.dev`  with the subject `[SECURITY VULNERABILITY] AIMASTER`.
 - Include a detailed technical description:
   1. Reproduction steps and affected environment (IDE preset, CLI, or skill module).
   2. Proof-of-Concept (PoC) prompt or input vector.

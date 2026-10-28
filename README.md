@@ -6,7 +6,7 @@
 [![Enterprise CI & Benchmark](https://img.shields.io/badge/Enterprise%20CI%20%26%20Benchmark-Passing-brightgreen.svg?style=for-the-badge)](https://github.com/Furkaxia/AiMaster/actions/workflows/ci.yml)
 [![Skills Count](https://img.shields.io/badge/Skills-80%20On--Demand%20Skills-emerald.svg?style=for-the-badge)](skills/README.md)
 [![Empirical Token Reduction](https://img.shields.io/badge/Token%20Reduction-83.5%25%20(95%25%20CI)-blueviolet.svg?style=for-the-badge)](benchmarks/BENCHMARK_REPORT.md)
-[![Empirical Benchmark Suite](https://img.shields.io/badge/Empirical%20Tasks-28%20Golden%20Specs-indigo.svg?style=for-the-badge)](benchmarks/tasks/task.schema.json)
+[![Empirical Benchmark Suite](https://img.shields.io/badge/Empirical%20Tasks-50%20Golden%20Specs-indigo.svg?style=for-the-badge)](benchmarks/tasks/task.schema.json)
 [![Node Compatibility](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-informational.svg?style=for-the-badge)](package.json)
 
 **An enterprise AI Agent operating system that transforms AI coding models (Claude, Cursor, Gemini, Windsurf, Copilot, ChatGPT) from unguided code generators into a disciplined, autonomous Staff Engineering Council.**
@@ -88,11 +88,10 @@ The effectiveness of the AIMASTER architecture is measured through an automated 
 | :--- | :--- | :--- | :--- |
 | **System Rules & Standards** | Monolithic prompt dump (~40K–50K tokens) | Central OS + 1–3 skills on demand (~8K–12K tokens) | **~75% Lighter Context** |
 | **Pre-Flight Spec** | Blind code generation (~15K tokens) | Structured 30–50 line Micro-Spec (~1K tokens) | **~90% Cheaper Pre-Flight** |
-| **Rework & Bug Debugging** | 4–8 cycles of regenerating entire files (~80K+ tokens) | Surgical diffs with verification gates (~5K tokens) | **4.3x Faster Convergence** |
-| **Total Task Footprint** | **332,200 Tokens (Cumulative)** | **54,950 Tokens (Cumulative)** | **83.5% (±0.5%) Empirical Net Savings** |
+| **Rework & Bug Debugging** | 4–8 cycles of regenerating entire files (~80K+ tokens) | Surgical diffs with verification gates (~5K tokens) | **3.5x Faster Convergence** |
+| **Total Task Footprint** | **599.400 Tokens (Cumulative)** | **97.250 Tokens (Cumulative)** | **🔥 83.59% (±0.3%) Empirical Net Savings** |
 
-> **Reproducibility & Scientific Report:** Complete raw dataset, standard deviation calculations, and task definitions are documented in [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md). Figures reflect deterministic baseline calibration across 28 golden tasks verifying invariant adherence, context budget sizing, and surgical diff mechanics. Live LLM evaluations can be executed via `npm run benchmark:live` with an active provider key (Gemini, OpenAI, Anthropic). Independent verification:
-> ```bash
+> *Empirical Benchmark Note:* Figures reflect deterministic architectural evaluation across 50 golden tasks in 12 categories (`npm run benchmark:mock`) verifying invariant adherence, context budget sizing, and surgical diff mechanics. Live LLM evaluations can be executed via `npm run benchmark:live` with an active provider key (Gemini, OpenAI, Anthropic). See [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) for full methodology and reproducibility protocols.bash
 > npm run benchmark:mock     # Run deterministic offline evaluation harness
 > npm run benchmark:report   # Generate statistical markdown analysis
 > npm run benchmark:live     # Execute live LLM evaluation (requires API key)
@@ -205,7 +204,7 @@ aimaster/
 │   ├── generate-report.mjs         # Statistical Analysis & Report Generator
 │   ├── BENCHMARK_REPORT.md         # Verified Empirical Benchmark Report
 │   ├── results/                    # Latest and Timestamped Raw JSON Outputs
-│   └── tasks/                      # 28 Golden Empirical Task Specifications
+│   └── tasks/                      # 50 Golden Empirical Task Specifications
 │       ├── task.schema.json        # JSON Schema for Empirical Tasks
 │       └── *.json                  # Individual Domain Tasks across 7 Categories
 │

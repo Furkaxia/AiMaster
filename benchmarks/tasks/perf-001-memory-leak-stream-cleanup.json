@@ -1,0 +1,31 @@
+{
+  "id": "perf-001-memory-leak-stream-cleanup",
+  "category": "performance",
+  "difficulty": "medium",
+  "title": "Stream Lifecycle Cleanup & Memory Leak Prevention",
+  "prompt": "Implement a file transformation pipeline using Node.js stream.pipeline() that safely handles early socket aborts and error events. Ensure all source, transform, and destination streams are properly closed and event listeners removed, preventing uncollected event listener leaks.",
+  "context_files": [
+    "skills/03-backend-data/skill-file-system-io.md",
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/readable\\.pipe\\(writable\\)(?!.*pipeline)/i"
+    ],
+    "required_patterns": [
+      "/pipeline\\(/i",
+      "/stream/i",
+      "/destroy\\(\\)|close/i"
+    ],
+    "ast_checks": [
+      "safe_stream_pipeline",
+      "memory_leak_stream_cleanup"
+    ],
+    "max_token_budget": 3000
+  },
+  "expected_baseline_tokens": {
+    "plain": 9800,
+    "rules_only": 4900,
+    "aimaster": 1550
+  }
+}

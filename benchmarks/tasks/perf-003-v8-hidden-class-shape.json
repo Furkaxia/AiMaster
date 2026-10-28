@@ -1,0 +1,31 @@
+{
+  "id": "perf-003-v8-hidden-class-shape",
+  "category": "performance",
+  "difficulty": "medium",
+  "title": "Monomorphic Object Initialization for V8 Hidden Class Stability",
+  "prompt": "Refactor a dynamic object factory to maintain strict monomorphic hidden class shapes for V8 JIT inline caching. Initialize all fields (id, status, payload, metadata) in identical order within a strongly typed constructor/factory, completely avoiding 'delete' operators or dynamic property addition.",
+  "context_files": [
+    "skills/07-code-craft/skill-performance-optimization.md",
+    "skills/07-code-craft/skill-typescript-strict.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/delete\\s+obj\\./i",
+      "/obj\\[dynamicKey\\]\\s*=/i"
+    ],
+    "required_patterns": [
+      "/constructor|createEntity/i",
+      "/this\\.id/i",
+      "/this\\.status/i"
+    ],
+    "ast_checks": [
+      "no_any"
+    ],
+    "max_token_budget": 2600
+  },
+  "expected_baseline_tokens": {
+    "plain": 8000,
+    "rules_only": 4000,
+    "aimaster": 1300
+  }
+}

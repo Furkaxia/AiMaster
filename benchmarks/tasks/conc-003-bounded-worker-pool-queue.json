@@ -1,0 +1,30 @@
+{
+  "id": "conc-003-bounded-worker-pool-queue",
+  "category": "concurrency",
+  "difficulty": "hard",
+  "title": "Bounded Concurrent Async Task Queue with Backpressure",
+  "prompt": "Implement a bounded worker queue limiting maximum concurrency (e.g. max 5 active tasks) and maximum backlog queue size (e.g. max 100 pending). When queue capacity is exceeded, immediately reject incoming tasks with a 429/QueueOverloadError backpressure signal instead of unboundedly accumulating in memory.",
+  "context_files": [
+    "skills/07-code-craft/skill-performance-optimization.md",
+    "skills/03-backend-data/skill-message-queue-events.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/while\\s*\\(true\\)\\s*\\{\\s*\\}/"
+    ],
+    "required_patterns": [
+      "/concurrency|activeCount/i",
+      "/maxQueueSize|backpressure|QueueOverload/i",
+      "/running|pending/i"
+    ],
+    "ast_checks": [
+      "no_any"
+    ],
+    "max_token_budget": 3400
+  },
+  "expected_baseline_tokens": {
+    "plain": 12500,
+    "rules_only": 6200,
+    "aimaster": 1950
+  }
+}

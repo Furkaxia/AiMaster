@@ -7,7 +7,7 @@
   "properties": {
     "id": {
       "type": "string",
-      "pattern": "^[a-z]{2,4}-[0-9]{3}-[a-z0-9-]+$"
+      "pattern": "^[a-z]{2,6}-[0-9]{3}-[a-z0-9-]+$"
     },
     "category": {
       "type": "string",
@@ -18,7 +18,12 @@
         "security",
         "refactoring",
         "bug-fixing",
-        "architecture"
+        "architecture",
+        "devops",
+        "networking",
+        "concurrency",
+        "performance",
+        "auth"
       ]
     },
     "difficulty": {

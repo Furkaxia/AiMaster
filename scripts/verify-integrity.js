@@ -50,7 +50,7 @@ function getAllMarkdownFiles(dir) {
   try {
     const list = fs.readdirSync(dir);
     list.forEach(file => {
-      if (file === 'node_modules' || file === '.git' || file === '.handoff' || file === 'test md' || file === 'temp') return;
+      if (file === 'node_modules' || file === '.git' || file === '.handoff' || file === 'test md' || file === 'temp' || file === 'scratch' || file === '.internal' || file === 'internal' || file.startsWith('.')) return;
       const filePath = path.join(dir, file);
       try {
         const stat = fs.statSync(filePath);

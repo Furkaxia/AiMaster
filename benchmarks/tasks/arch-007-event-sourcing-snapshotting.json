@@ -1,0 +1,31 @@
+{
+  "id": "arch-007-event-sourcing-snapshotting",
+  "category": "architecture",
+  "difficulty": "expert",
+  "title": "Event Sourcing Aggregate Root with Periodic Snapshotting",
+  "prompt": "Implement an Event-Sourced Aggregate Root with periodic state snapshotting. Rehydrate aggregate state by loading the latest snapshot (e.g., every 100 events) and applying only subsequent events. Enforce optimistic concurrency control using expectedVersion check before committing uncommitted events.",
+  "context_files": [
+    "skills/01-architecture-planning/skill-software-architecture.md",
+    "skills/01-architecture-planning/skill-state-machine-logic.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/catch\\s*\\([^)]*\\)\\s*\\{\\s*\\}/"
+    ],
+    "required_patterns": [
+      "/snapshot|createSnapshot/i",
+      "/expectedVersion|version/i",
+      "/uncommittedEvents|apply/i"
+    ],
+    "ast_checks": [
+      "guarded_state_transitions",
+      "proper_try_catch_rethrow"
+    ],
+    "max_token_budget": 4100
+  },
+  "expected_baseline_tokens": {
+    "plain": 16000,
+    "rules_only": 8000,
+    "aimaster": 2500
+  }
+}

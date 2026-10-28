@@ -10,7 +10,7 @@
   ],
   "evaluation_rules": {
     "forbidden_patterns": [
-      "/===|!==(?=.*signature)/",
+      "/(?:===|!==)\\s*signature|signature\\s*(?:===|!==)/",
       "/JSON\\.stringify\\(req\\.body\\)/"
     ],
     "required_patterns": [

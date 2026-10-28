@@ -51,6 +51,22 @@ The Agent must rigorously respect token economics in every interaction:
 - ⚓ **Periodic Invariant Anchor:** In extended multi-turn sessions (every 10 turns) or following any Level 2+ error, the Agent internally re-validates the 5 core invariants to eliminate prompt drift and Lost-in-the-Middle decay:
   `1. Anti-Any/Double-Cast 2. No-Security-Bypass 3. Surgical Hunk Diff 4. Cryptographic User-State Preserved 5. Pre-Filter Isolation`
 - 🎯 **Operation Summary:** Conclude delivery with a concise 2–3 bullet summary.
+- 📦 **Canonical Output Isolation & Delivery Contract (Output-First):**
+  When producing deliverables for complex engineering tasks, the Agent must isolate verified production deliverables from explanatory prose or anti-pattern discussions:
+  ```xml
+  <aimaster_response>
+  <canonical_delivery>
+  [Production-grade, compilable implementation delivered FIRST. Strict types, zero 'any', verified security invariants.]
+  </canonical_delivery>
+  <deliberation_and_spec>
+  [Architectural rationale, trade-off analysis, legacy anti-pattern explanations, or refactoring context.]
+  </deliberation_and_spec>
+  <verification>
+  [Checklist of verified boundary constraints, edge cases handled, zero secrets, zero regressions.]
+  </verification>
+  </aimaster_response>
+  ```
+  - **Rationale:** Strict output isolation guarantees that static analyzers and AST validators evaluate ONLY production code. Explaining why a legacy pattern (e.g. `eval()` or nested O(N^2) searches) was dangerous will never trigger false-positive invariant violations. Output-First ensures reasoning never exhausts the completion token budget before code is delivered.
 - 📝 **`ai-log-ai.md` Operational Ledger & Git Hygiene:**
   - Do NOT log atomic or single-file changes.
   - Only log large, multi-file architectural changes to `ai-log-ai.md` (or `ai-log.local.md`) in the project root:

@@ -1,0 +1,31 @@
+{
+  "id": "auth-001-oauth2-pkce-flow",
+  "category": "auth",
+  "difficulty": "hard",
+  "title": "OAuth 2.1 Authorization Code Flow with PKCE (Proof Key for Code Exchange)",
+  "prompt": "Implement the OAuth 2.1 authorization code flow with PKCE. Generate a cryptographically secure code_verifier (base64url encoded), compute SHA-256 code_challenge with code_challenge_method='S256', and securely verify the matching verifier on token exchange before issuing tokens.",
+  "context_files": [
+    "skills/04-security-audit/skill-auth-security.md",
+    "skills/04-security-audit/skill-cryptography.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/code_challenge_method\\s*=\\s*['\"]plain['\"]/i"
+    ],
+    "required_patterns": [
+      "/code_verifier/i",
+      "/code_challenge/i",
+      "/S256/i",
+      "/crypto\\.createHash\\(['\"]sha256/i"
+    ],
+    "ast_checks": [
+      "oauth_pkce_verifier_hash"
+    ],
+    "max_token_budget": 3600
+  },
+  "expected_baseline_tokens": {
+    "plain": 13800,
+    "rules_only": 6900,
+    "aimaster": 2150
+  }
+}

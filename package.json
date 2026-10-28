@@ -32,14 +32,18 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js && node benchmarks/runner.mjs --mode=mock",
-    "verify": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js && node benchmarks/runner.mjs --mode=mock",
+    "test": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js && node tests/test-benchmark-engine.mjs && node tests/test-validator-mutations.mjs && node benchmarks/runner.mjs --mode=mock",
+    "verify": "node scripts/verify-integrity.js && node scripts/test-integrity-fixtures.js && node scripts/test-adversarial-evals.js && node tests/test-benchmark-engine.mjs && node tests/test-validator-mutations.mjs && node benchmarks/runner.mjs --mode=mock",
     "verify:integrity": "node scripts/verify-integrity.js",
     "test:fixtures": "node scripts/test-integrity-fixtures.js",
     "test:evals": "node scripts/test-adversarial-evals.js",
+    "test:engine": "node tests/test-benchmark-engine.mjs",
+    "test:mutations": "node tests/test-validator-mutations.mjs",
     "benchmark:mock": "node benchmarks/runner.mjs --mode=mock",
     "benchmark:live": "node benchmarks/runner.mjs --mode=live",
-    "benchmark:report": "node benchmarks/generate-report.mjs"
+    "benchmark:report": "node benchmarks/generate-report.mjs",
+    "nvapi:test": "node .internal/experiments/nvapi/quick-test.mjs",
+    "nvapi:run": "node .internal/experiments/nvapi/runner.mjs"
   },
   "keywords": [
     "ai",
@@ -54,7 +58,11 @@
     "copilot",
     "prompts",
     "system-prompts",
-    "developer-tools"
+    "developer-tools",
+    "aimaster",
+    "AiMaster",
+    "AIMASTER",
+    "AiMaster.AI"
   ],
   "author": "Furkan Ertürk",
   "license": "MIT",

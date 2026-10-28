@@ -1,0 +1,31 @@
+{
+  "id": "perf-002-json-streaming-parser",
+  "category": "performance",
+  "difficulty": "hard",
+  "title": "O(1) Memory Chunked JSON Array Streaming Parser",
+  "prompt": "Implement an incremental streaming JSON parser for multi-gigabyte JSON array files. Instead of loading the entire file into V8 heap via JSON.parse(), process objects chunk-by-chunk using a transform stream or generator, yielding parsed entities with constant O(1) memory overhead.",
+  "context_files": [
+    "skills/03-backend-data/skill-file-system-io.md",
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/JSON\\.parse\\(fs\\.readFileSync/i"
+    ],
+    "required_patterns": [
+      "/stream|createReadStream/i",
+      "/yield|async\\s*\\*|Transform/i",
+      "/chunk|buffer/i"
+    ],
+    "ast_checks": [
+      "safe_stream_pipeline",
+      "no_any"
+    ],
+    "max_token_budget": 3400
+  },
+  "expected_baseline_tokens": {
+    "plain": 12000,
+    "rules_only": 6000,
+    "aimaster": 1900
+  }
+}

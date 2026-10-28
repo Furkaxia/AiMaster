@@ -1,0 +1,31 @@
+{
+  "id": "net-004-socket-pool-exhaustion-defense",
+  "category": "networking",
+  "difficulty": "hard",
+  "title": "HTTP Agent Keep-Alive Pool with Socket Saturation Defense",
+  "prompt": "Configure a production Node.js HTTP/HTTPS Agent pool that avoids file descriptor socket exhaustion. Configure keepAlive: true, maxSockets, maxFreeSockets, and timeout options. Enforce active connection cancellation on client abort signal.",
+  "context_files": [
+    "skills/03-backend-data/skill-api.md",
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/agent:\\s*false/i"
+    ],
+    "required_patterns": [
+      "/keepAlive:\\s*true/i",
+      "/maxSockets/i",
+      "/timeout|timeoutMs/i",
+      "/AbortSignal|abort/i"
+    ],
+    "ast_checks": [
+      "no_any"
+    ],
+    "max_token_budget": 3100
+  },
+  "expected_baseline_tokens": {
+    "plain": 10500,
+    "rules_only": 5200,
+    "aimaster": 1700
+  }
+}

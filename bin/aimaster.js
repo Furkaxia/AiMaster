@@ -134,6 +134,8 @@ function runVerify() {
     { name: 'Enterprise Integrity Linter', script: path.join(REPO_ROOT, 'scripts', 'verify-integrity.js') },
     { name: 'Adversarial Fixtures Test', script: path.join(REPO_ROOT, 'scripts', 'test-integrity-fixtures.js') },
     { name: 'Behavioral Benchmark Evals', script: path.join(REPO_ROOT, 'scripts', 'test-adversarial-evals.js') },
+    { name: 'Benchmark Engine Invariant Suite', script: path.join(REPO_ROOT, 'tests', 'test-benchmark-engine.mjs') },
+    { name: 'Validator Adversarial Mutation Suite', script: path.join(REPO_ROOT, 'tests', 'test-validator-mutations.mjs') },
     { name: 'Empirical Benchmark Harness', script: path.join(REPO_ROOT, 'benchmarks', 'runner.mjs'), args: ['--mode=mock'] }
   ];
 

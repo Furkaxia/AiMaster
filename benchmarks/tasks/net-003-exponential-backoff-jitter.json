@@ -1,0 +1,30 @@
+{
+  "id": "net-003-exponential-backoff-jitter",
+  "category": "networking",
+  "difficulty": "medium",
+  "title": "Full Jitter Exponential Backoff Retry Policy",
+  "prompt": "Implement an algorithmic retry utility featuring full jitter exponential backoff to prevent thundering herd problems on degraded downstream services. Compute delay as rand(0, min(max_delay, base_delay * 2^attempt)). Stop at maxRetries and reject non-retryable 4xx HTTP client errors.",
+  "context_files": [
+    "skills/03-backend-data/skill-api.md",
+    "skills/07-code-craft/skill-performance-optimization.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/delay\\s*=\\s*[0-9]+\\s*\\*\\s*attempt(?!.*random)/i"
+    ],
+    "required_patterns": [
+      "/Math\\.random\\(\\)/i",
+      "/Math\\.pow\\(2,|<<|Math\\.min/i",
+      "/maxRetries|retry|attempt/i"
+    ],
+    "ast_checks": [
+      "exponential_backoff_jitter"
+    ],
+    "max_token_budget": 2900
+  },
+  "expected_baseline_tokens": {
+    "plain": 9200,
+    "rules_only": 4600,
+    "aimaster": 1500
+  }
+}

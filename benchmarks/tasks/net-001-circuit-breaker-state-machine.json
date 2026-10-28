@@ -1,0 +1,32 @@
+{
+  "id": "net-001-circuit-breaker-state-machine",
+  "category": "networking",
+  "difficulty": "hard",
+  "title": "Resilient Three-State Circuit Breaker with Half-Open Probe",
+  "prompt": "Implement an enterprise-grade Circuit Breaker pattern with strictly typed states: 'closed', 'open', and 'half-open'. Must track failure rates within a sliding time window, trip to open upon consecutive failure threshold, transition to half-open after a recovery cooldown, and allow limited test probes before fully resetting.",
+  "context_files": [
+    "skills/01-architecture-planning/skill-state-machine-logic.md",
+    "skills/03-backend-data/skill-api.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/catch\\s*\\([^)]*\\)\\s*\\{\\s*\\}/"
+    ],
+    "required_patterns": [
+      "/closed/i",
+      "/half-open|halfOpen/i",
+      "/open/i",
+      "/failureCount|failureThreshold|state/i"
+    ],
+    "ast_checks": [
+      "circuit_breaker_state_check",
+      "guarded_state_transitions"
+    ],
+    "max_token_budget": 3800
+  },
+  "expected_baseline_tokens": {
+    "plain": 14000,
+    "rules_only": 7000,
+    "aimaster": 2200
+  }
+}

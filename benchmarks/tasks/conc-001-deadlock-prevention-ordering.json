@@ -1,0 +1,31 @@
+{
+  "id": "conc-001-deadlock-prevention-ordering",
+  "category": "concurrency",
+  "difficulty": "hard",
+  "title": "Distributed Multi-Lock Acquisition with Strict Global Ordering",
+  "prompt": "Implement a deadlock-free multi-resource lock coordinator. When an operation requires locking multiple resource keys (e.g., transfer between Account A and Account B), sort the resource keys in strict lexicographical order before sequentially acquiring locks, and release in reverse order in a finally block.",
+  "context_files": [
+    "skills/03-backend-data/skill-caching-redis.md",
+    "skills/07-code-craft/skill-design-patterns.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/Promise\\.all\\(.*lock/i"
+    ],
+    "required_patterns": [
+      "/sort\\(\\)|localeCompare/i",
+      "/finally/i",
+      "/acquire|lock/i",
+      "/release|unlock/i"
+    ],
+    "ast_checks": [
+      "deadlock_prevention_ordering"
+    ],
+    "max_token_budget": 3600
+  },
+  "expected_baseline_tokens": {
+    "plain": 13200,
+    "rules_only": 6600,
+    "aimaster": 2050
+  }
+}

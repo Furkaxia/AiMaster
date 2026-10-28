@@ -1,0 +1,31 @@
+{
+  "id": "conc-002-saga-compensating-transaction",
+  "category": "concurrency",
+  "difficulty": "expert",
+  "title": "Orchestrated Saga Pattern with Backward Compensating Transactions",
+  "prompt": "Implement a distributed Saga Orchestrator for an e-commerce order flow (Reserve Inventory, Charge Payment, Dispatch Courier). If any step fails, sequentially execute compensating undo transactions in reverse order (Refund Payment, Release Inventory) and log compensation audit status.",
+  "context_files": [
+    "skills/01-architecture-planning/skill-software-architecture.md",
+    "skills/03-backend-data/skill-payment-billing.md"
+  ],
+  "evaluation_rules": {
+    "forbidden_patterns": [
+      "/catch\\s*\\([^)]*\\)\\s*\\{\\s*\\}/"
+    ],
+    "required_patterns": [
+      "/compensate|rollbackSaga|compensating/i",
+      "/step|stage/i",
+      "/reverse\\(\\)|unshift|stack/i"
+    ],
+    "ast_checks": [
+      "saga_compensating_transaction",
+      "proper_try_catch_rethrow"
+    ],
+    "max_token_budget": 4200
+  },
+  "expected_baseline_tokens": {
+    "plain": 16500,
+    "rules_only": 8200,
+    "aimaster": 2600
+  }
+}
