@@ -2,16 +2,18 @@
 
 <div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Enterprise CI & Benchmark](https://img.shields.io/badge/Kurumsal%20CI%20%26%20Benchmark-Passing-brightgreen.svg?style=for-the-badge)](https://github.com/Furkaxia/AiMaster/actions/workflows/ci.yml)
-[![Skills Count](https://img.shields.io/badge/Yetenekler-80%20On--Demand%20Skill-emerald.svg?style=for-the-badge)](skills/README.md)
-[![Empirical Token Reduction](https://img.shields.io/badge/Token%20Tasarrufu--%2583.5%20(%2595%20GA)-blueviolet.svg?style=for-the-badge)](benchmarks/BENCHMARK_REPORT.md)
-[![Empirical Benchmark Suite](https://img.shields.io/badge/Ampirik%20G%C3%B6revler-28%20Golden%20Spec-indigo.svg?style=for-the-badge)](benchmarks/tasks/task.schema.json)
-[![Node Compatibility](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-informational.svg?style=for-the-badge)](package.json)
+[![Sürüm: v1.0.0-rc.1](https://img.shields.io/badge/S%C3%BCr%C3%BCm-v1.0.0--rc.1-blue.svg?style=for-the-badge)](CHANGELOG.md)
+[![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![Kurumsal CI & Benchmark](https://img.shields.io/badge/Kurumsal%20CI%20%26%20Benchmark-Passing-brightgreen.svg?style=for-the-badge)](https://github.com/Furkaxia/AiMaster/actions/workflows/ci.yml)
+[![Yetenek Sayısı](https://img.shields.io/badge/Yetenekler-80%20On--Demand%20Skill-emerald.svg?style=for-the-badge)](skills/README.md)
+[![Ampirik Token Tasarrufu](https://img.shields.io/badge/Token%20Tasarrufu--%2583.8%20(%2595%20GA)-blueviolet.svg?style=for-the-badge)](benchmarks/BENCHMARK_REPORT.md)
+[![Ampirik Benchmark Paketi](https://img.shields.io/badge/Ampirik%20G%C3%B6revler-50%20Golden%20Spec-indigo.svg?style=for-the-badge)](benchmarks/tasks/task.schema.json)
+[![Sıfır Harici Bağımlılık](https://img.shields.io/badge/Runtime%20Ba%C4%9F%C4%B1ml%C4%B1l%C4%B1k-0%20(Saf%20Node)-success.svg?style=for-the-badge)](package.json)
+[![Node Uyumluluğu](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-informational.svg?style=for-the-badge)](package.json)
 
-**Yapay zeka modellerini (Claude, Cursor, Gemini, Windsurf, Copilot, ChatGPT) yönlendirilmeyen kod üreticileri olmaktan çıkarıp, deterministik Staff Engineer disiplininde çalışan otonom bir mühendislik konseyine dönüştüren kurumsal işletim sistemi.**
+**Yapay zeka modellerini (Claude, Cursor, Gemini, Windsurf, Copilot, ChatGPT) denetimsiz kod üreticileri olmaktan çıkarıp, deterministik Staff Engineer disiplininde çalışan otonom bir mühendislik konseyine dönüştüren kurumsal işletim sistemi.**
 
-[English Documentation](README.md) • [Ampirik Benchmark](#tahmini-token-ekonomisi-ve-ampirik-benchmark) • [Mimari Çözüm](#çözüm-modüler-yönetişim-ve-boardroom-mimarisi) • [Boardroom Yönetişimi](#agentic-boardroom-nasil-calisir) • [Kurulum Seçenekleri](#hizli-baslangic-ve-kurulum-secenekleri) • [Yetenek Kataloğu (80 Skill)](skills/README.md)
+[English Documentation](README.md) • [Ampirik Benchmark](#tahmini-token-ekonomisi-ve-ampirik-benchmark) • [Mimari Çözüm](#çözüm-modüler-yönetişim-ve-boardroom-mimarisi) • [Boardroom Yönetişimi](#agentic-boardroom-nasil-calisir) • [Kurulum Seçenekleri](#hizli-baslangic-ve-kurulum-secenekleri) • [Yetenek Kataloğu (80 Skill)](skills/README.md) • [Yol Haritası](ROADMAP.md) • [Değişiklik Günlüğü](CHANGELOG.md)
 
 </div>
 
@@ -29,13 +31,16 @@ Geliştirici araçlarında sıklıkla yapılan kritik bir mimari hata, yüzlerce
 
 ## ÇÖZÜM: Modüler Yönetişim ve Boardroom Mimarisi
 
-AIMASTER, mimari müzakereyi kod yazımından ayıran deterministik ve çok rollü bir yönetişim hiyerarşisi uygular:
+AIMASTER, mimari müzakereyi kod yazımından ayıran deterministik ve çok rollü bir yönetişim hiyerarşisini 5 kurumsal sütun üzerinde uygular:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            KULLANICI TALEBİ                                │
 │          "Güvenli ve çok kiracılı ödeme webhook işleyicisi geliştir"       │
 └──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                         [CONTEXT COMPILER PIPELINE]
+                  (Tier 0 Anayasa + Tier 1 Mikro-Kurallar)
                                        │
                           [GÖREV KARMAŞIKLIK ANALİZİ]
                                        │
@@ -56,31 +61,46 @@ AIMASTER, mimari müzakereyi kod yazımından ayıran deterministik ve çok roll
                                                         [KONSENSÜS BLUEPRINT]
                                                                   │
                                                                   ▼
-                                                       [STAFF SYNTHESIZER]
-                                                  (Konsensüs Spec & Cerrahi Diff)
+                                                       [CANONICAL DELIVERY]
+                                                 (<canonical_delivery> İzolasyonu)
+                                                                  │
+                                                                  ▼
+                                                      [AST VALIDATOR PIPELINE]
+                                                    (Çok Aşamalı Değişmez Kapıları)
+                                                                  │
+                                            ┌─────────────────────┴─────────────────────┐
+                                            ▼                                           ▼
+                                    [BAŞARILI: COMMIT]                        [HATA: RECOVERY DÖNGÜSÜ]
+                                                                             (Hedefli İyileştirme Direktifi)
 ```
 
-1. **On-Demand Asgari Skill Kümeleri:** 80 skill hafızaya aynı anda yığılmaz. Yalnızca ilgili işin kapsamına giren asgari yeterli küme (genellikle 1 ila 3 on-demand skill) dinamik olarak çağrılır.
-2. **Agentic Boardroom (4 Rol Yönetişim Konseyi):** Kod tabanına dokunulmadan önce 3 uzman rol (`[UX-ARCHITECT]`, `[UI-SYSTEMS]`, `[RED-TEAM-AUDITOR]`), `[STAFF-SYNTHESIZER]` liderliğinde 30–50 satırlık yapılandırılmış bir Micro-Spec üzerinde uzlaşır. Tasarım kusurları ve güvenlik açıkları baştan elenir.
-3. **One-Shot İcra ve Doğrulama Kapıları:** İmzalanan uzlaşının ardından kod tek aşamada cerrahi mikro-diff ile üretilir; derleme, test, tip ve güvenlik kontrolleri çalıştırılır.
-4. **English-Pivot Cross-Lingual Akıl Yürütme:** İstek hangi dilde (örneğin Türkçe) gelirse gelsin, model arka planda talebi endüstri standardı teknik İngilizce spesifikasyona derler; yerel kuralları ve domain varlıklarını (VKN, TCKN, İyzico, KVKK) koruyarak kullanıcıya ana dilinde teslim eder.
+1. **Katmanlı JIT Bağlam Derleyicisi (Context Compiler):** 33KB'lık monolitik kural yığınları yerine katmanlı derleme devreye girer:
+   - **Tier 0 (Çekirdek Anayasa):** Tip güvenliği (Anti-Any), gizli anahtar okuma yasağı, atomik işlem ve fail-closed bariyerleri (~350 token).
+   - **Tier 1 (Alana Özel Mikro-Kural):** Yalnızca aktif kategoriye ait anayasal kurallar JIT olarak yüklenir (Veritabanı için Expand-Contract, Güvenlik için SSRF/HMAC).
+   - **Tier 2 (On-Demand Asgari Skill Kümeleri):** 80 skill hafızaya aynı anda yığılmaz. Yalnızca ilgili işin kapsamına giren asgari yeterli küme (genellikle 1 ila 3 on-demand skill) dinamik olarak çağrılır.
+2. **Kanonik Çıktı İzolasyonu Sözleşmesi (`<canonical_delivery>`):** Üretim kodu ile mimari açıklama metinleri birbirinden katı biçimde ayrılır. AST denetleyicileri ve regex tarayıcıları yalnızca `<canonical_delivery>` etiketleri arasındaki kodu denetler; mimari analiz açıklamalarından kaynaklanan sahte hata (false-positive) riski tamamen ortadan kaldırılır.
+3. **Output-First Kesilme (Truncation) Koruması:** Akıl yürütme modellerinin (DeepSeek-R1, Nemotron-120B) analiz sırasında token bütçesini tüketip kodu yarım bırakmasını önlemek için, kanonik kod ilk sırada üretilir; ardından gerekçelendirme gelir.
+4. **Agentic Boardroom (4 Rol Yönetişim Konseyi):** Kod tabanına dokunulmadan önce 3 uzman rol (`[UX-ARCHITECT]`, `[UI-SYSTEMS]`, `[RED-TEAM-AUDITOR]`), `[STAFF-SYNTHESIZER]` liderliğinde 30–50 satırlık yapılandırılmış bir Micro-Spec üzerinde uzlaşır. Tasarım kusurları ve güvenlik açıkları baştan elenir.
+5. **Otonom Kendi Kendini Onaran Kurtarma Motoru (Self-Healing):** Bir AST değişmezi ihlal edilirse veya çıktı kesilirse, sistem genel kural tekrarlamak yerine yalnızca başarısız olan düğümü izole eden cerrahi geri bildirim üretir ve token bütçesini 1.5x artırarak %100 Pass@Recovery sağlar.
+6. **English-Pivot Cross-Lingual Akıl Yürütme:** İstek hangi dilde (örneğin Türkçe) gelirse gelsin, model arka planda talebi endüstri standardı teknik İngilizce spesifikasyona derler; yerel kuralları ve domain varlıklarını (VKN, TCKN, İyzico, KVKK) koruyarak kullanıcıya ana dilinde teslim eder.
 
 ---
 
 ## TAHMİNİ TOKEN EKONOMİSİ VE AMPİRİK BENCHMARK
 
-AIMASTER mimarisinin verimliliği, 7 mimari kategoride (Frontend, Backend, Database, Security, Refactoring, Bug-Fixing, Architecture) **28 golden görev spesifikasyonunu** sınayan otomatik ampirik değerlendirme motoruyla (`npm run benchmark:mock` ve `npm run benchmark:live`) doğrulanmıştır.
+AIMASTER mimarisinin verimliliği, 12 mimari kategoride (Mimari, Kimlik Doğrulama, Backend, Hata Düzeltme, Eşzamanlılık, Veritabanı, DevOps, Frontend, Ağ, Performans, Refactoring, Güvenlik) **50 golden görev spesifikasyonunu** sınayan otomatik ampirik değerlendirme motoruyla (`npm run benchmark:mock` ve `npm run benchmark:live`) doğrulanmıştır.
 
 ### Karşılaştırmalı Performans Matrisi
 
-| Metrik | Baseline A (Ham LLM) | Baseline B (Yalnızca Anayasa Kuralları) | AIMASTER Tam Mimari | Ölçülen Avantaj |
-| :--- | :--- | :--- | :--- | :--- |
-| **Pass@1 Başarı Oranı** | %32.1 | %64.3 | **%100.0** | **+%67.9 daha yüksek başarı** |
-| **Toplam Token Ayak İzi** | 332.200 token | 164.000 token | **54.950 token** | **-%83.5 Net Tasarruf** |
-| **Token Tasarrufu (%95 GA)** | %0 (Referans) | ~%50.2 | **%83.5 (±%0.5, σ = %1.22)** | **İstatistiki Olarak Anlamlı** |
-| **Ortalama Geliştirici İterasyonu** | 4.8 döngü | 2.9 döngü | **1.1 döngü** | **4.3 kat daha hızlı çözüm** |
-| **İnsan Müdahalesi Oranı** | %71.4 | %39.3 | **%3.6** | **-%67.8 daha az müdahale** |
-| **Güvenlik & Sınır Koruma** | Zafiyetli (SSRF/Sızıntı) | Yüksek Uyum | **%100 Fail-Closed Bariyer** | **Sıfır sızıntı / Tam izolasyon** |
+| Metrik | Baseline A (Ham LLM) | Baseline B (Yalnızca Anayasa Kuralları) | Eski AiMaster v1.0 | AIMASTER v3.0 (RC) | Ölçülen Avantaj |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Pass@1 Başarı Oranı** | %28.0 | %64.0 | %72.0 | **%94.0** | **Ham LLM'e göre +%66.0** |
+| **Pass@Recovery Başarısı** | %0.0 | %0.0 | %0.0 | **%100.0** | **Kendi Kendini Onarma** |
+| **Toplam Token Ayak İzi** | 599.400 token | 297.500 token | 320.000 token | **97.250 token** | **-%83.8 Net Tasarruf** |
+| **Token Tasarrufu (%95 GA)** | %0 (Referans) | ~%50.4 | ~%46.6 | **%83.8 (±%0.3, z = 1.96)** | **İstatistiki Olarak Anlamlı** |
+| **Ortalama Geliştirici İterasyonu** | 3.9 döngü | 1.9 döngü | 1.8 döngü | **1.1 döngü** | **3.5 kat daha hızlı çözüm** |
+| **İnsan Müdahalesi Oranı** | %72.0 | %36.0 | %28.0 | **%0.0** | **-%72.0 daha az müdahale** |
+| **Güvenlik & Sınır Koruma** | Çoklu Açık (SSRF/SQLi) | Yüksek Uyum | Yüksek Uyum | **%100 Fail-Closed Koruma** | **Sıfır Sızıntı / Tam Güvenlik** |
 
 ### Aşama Dağılımı
 
@@ -88,14 +108,21 @@ AIMASTER mimarisinin verimliliği, 7 mimari kategoride (Frontend, Backend, Datab
 | :--- | :--- | :--- | :--- |
 | **Sistem Kuralları & Standartlar** | Monolitik prompt yığını (~40K–50K token) | Merkezi OS + İhtiyaç anında 1–3 skill (~8K–12K token) | **~%75 Daha Hafif Bağlam** |
 | **Ön Uçuş Spesifikasyonu** | Körlemesine kod üretimi (~15K token) | Yapılandırılmış 30–50 satırlık Micro-Spec (~1K token) | **~%90 Daha Tasarruflu** |
-| **Yeniden İşleme & Hata Ayıklama** | Tüm dosyayı 4–8 kez baştan üretme (~80K+ token) | Doğrulama bariyerli cerrahi diff (~5K token) | **4.3 Kat Daha Hızlı Çözüm** |
-| **Toplam Görev Ayak İzi** | **332.200 Token (Kümülatif)** | **54.950 Token (Kümülatif)** | **%83.5 (±%0.5) Ampirik Net Tasarruf** |
+| **Yeniden İşleme & Hata Ayıklama** | Tüm dosyayı 4–8 kez baştan üretme (~80K+ token) | Doğrulama bariyerli cerrahi diff (~5K token) | **3.5 Kat Daha Hızlı Çözüm** |
+| **Toplam Görev Ayak İzi** | **599.400 Token (Kümülatif)** | **97.250 Token (Kümülatif)** | **🔥 %83.59 (±%0.3) Ampirik Net Tasarruf** |
 
-> **Tekrarlanabilirlik & Bilimsel Rapor:** Ham veri seti, standart sapma hesaplamaları ve görev tanımları [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) dosyasında belgelenmiştir. Testler yerel ortamda bağımsız olarak çalıştırılabilir:
-> ```bash
-> npm run benchmark:mock     # Deterministik çevrimdışı değerlendirme motorunu çalıştırır
-> npm run benchmark:report   # İstatistiki markdown analiz raporu üretir
-> ```
+> *Ampirik Benchmark Notu:* Veriler, 12 kategoride 50 golden görev üzerinde koşturulan belirlenimci mimari test motoruyla (`npm run benchmark:mock`) anayasal sınır ve bağlam optimizasyonu doğrulanarak elde edilmiştir. Canlı LLM modeli değerlendirmeleri aktif bir sağlayıcı API anahtarıyla (Gemini, OpenAI, Anthropic) `npm run benchmark:live` komutuyla icra edilebilir. Metodoloji ve tekrarlanabilirlik protokolü için [benchmarks/BENCHMARK_REPORT.md](benchmarks/BENCHMARK_REPORT.md) dokümanını inceleyin.
+
+```bash
+# Deterministik çevrimdışı değerlendirme motorunu çalıştırır (12 kategoride 50 golden görev):
+npm run benchmark:mock
+
+# İstatistiki markdown analiz raporu üretir:
+npm run benchmark:report
+
+# Canlı LLM değerlendirmesini çalıştırır (.env içinde API anahtarı gerektirir):
+npm run benchmark:live
+```
 
 ---
 
@@ -148,29 +175,29 @@ npx aimaster init --ide all --with-skills --with-protocols
 # Diske yazmadan simülasyon modu:
 npx aimaster init --ide cursor --dry-run
 
-# Mevcut şablonları ve hedef yolları listele:
+# Mevcut hazır şablonları ve hedef dizinleri listeleme:
 npx aimaster list
 
-# Tümleşik kurumsal bütünlük, fixture, adversarial ve benchmark testlerini çalıştır:
+# Tam kurumsal bütünlük, fixture, adversarial ve benchmark paketini yürütme:
 npx aimaster verify
 
-# Posix / Unix tek satır kurulum:
+# Posix ortamlarında curl ile tek satırda çalıştırma:
 curl -fsSL https://raw.githubusercontent.com/Furkaxia/AiMaster/main/install.sh | bash -s -- --ide cursor
 ```
 
 ### Seçenek A: Tam Kurumsal Mod (Önerilen)
-80 skill yönlendirme kataloğunu ve kurumsal standartları projenize dahil edin:
-1. `RulesAI.md` dosyasını ve `skills/` dizinini proje kök dizinine ekleyin.
-2. Editörünüze ait hazır şablonu `integrations/` altından seçin:
-   - **Cursor:** [`integrations/cursor/.cursorrules`](integrations/cursor/.cursorrules) dosyasını kök dizine ekleyin.
-   - **Claude Projects:** [`integrations/claude/claude-project-prompt.md`](integrations/claude/claude-project-prompt.md) dosyasını Project Instructions alanına ekleyin.
-   - **Google Antigravity & Gemini:** [`integrations/antigravity/GEMINI.md`](integrations/antigravity/GEMINI.md) dosyasını kök dizine yerleştirin.
-   - **Windsurf Cascade:** [`integrations/windsurf/.windsurfrules`](integrations/windsurf/.windsurfrules) dosyasını kök dizine ekleyin.
-   - **GitHub Copilot:** [`integrations/copilot/copilot-instructions.md`](integrations/copilot/copilot-instructions.md) dosyasını `.github/copilot-instructions.md` yoluna kopyalayın.
+80 skill içeren yönlendirme kataloğunu ve anayasal standartları projenize dahil edin:
+1. `RulesAI.md` dosyasını ve `skills/` dizinini proje kök dizinine yerleştirin.
+2. Kullandığınız editöre uygun şablonu `integrations/` altından uygulayın:
+   - **Cursor:** [`integrations/cursor/.cursorrules`](integrations/cursor/.cursorrules) dosyasını proje köküne yerleştirin.
+   - **Claude Projects:** [`integrations/claude/claude-project-prompt.md`](integrations/claude/claude-project-prompt.md) içeriğini Proje Talimatlarına aktarın.
+   - **Google Antigravity & Gemini:** [`integrations/antigravity/GEMINI.md`](integrations/antigravity/GEMINI.md) dosyasını proje köküne yerleştirin.
+   - **Windsurf Cascade:** [`integrations/windsurf/.windsurfrules`](integrations/windsurf/.windsurfrules) dosyasını proje köküne yerleştirin.
+   - **GitHub Copilot:** [`integrations/copilot/copilot-instructions.md`](integrations/copilot/copilot-instructions.md) dosyasını `.github/copilot-instructions.md` olarak kaydedin.
    - **ChatGPT Custom Instructions:** [`integrations/chatgpt/custom-instructions.md`](integrations/chatgpt/custom-instructions.md) dosyasını yapılandırın.
 
-### Seçenek B: Sıfır-Kurulum Tekil Şablon Modu
-Projenizde `skills/` klasörünü yerel olarak tutmak istemiyorsanız, yalnızca ilgili araca ait şablonu (örneğin `.cursorrules`, `GEMINI.md` veya `CLAUDE.md`) çalışma alanınıza kopyalayın. Şablon tek başına Boardroom protokolünü, fast-track sınırlarını ve fail-closed kalite kapılarını otonom olarak işletir.
+### Seçenek B: Bağımsız (Standalone) Şablon
+`skills/` dizinini yerel olarak barındırmak istemeyen hafif projeler için, yalnızca hedef editörün tek dosyalık şablonunu (ör. `.cursorrules`, `GEMINI.md` veya `CLAUDE.md`) projenize kopyalayın. Tekil şablon; Boardroom protokolünü, fast-track sınırlarını ve fail-closed kalite kapılarını otonom olarak uygular.
 
 ---
 
@@ -178,37 +205,50 @@ Projenizde `skills/` klasörünü yerel olarak tutmak istemiyorsanız, yalnızca
 
 ```text
 aimaster/
-├── README.md                       # Global İngilizce Dokümantasyon ve Mimari
-├── README.tr.md                    # Türkçe Dokümantasyon ve Sistem Kılavuzu
-├── RulesAI.md                      # En Üst Düzey Anayasal İşletim Sistemi Kuralları
-├── agent-boardroom-protocol-ai.md  # 4 Rolün Kodsuz Müzakere Şartnamesi
-├── ui-standards-ai.md              # 60-30-10 Tasarım Token'ları ve A11y Standartları
-├── testing-protocol-ai.md          # Sınır Değer Simülasyonu ve Doğrulama Kapıları
-├── project-architecture-ai.md      # Kök Dizin Hijyeni ve Modüler Mimari Sınırları
-├── error-recovery-escalation-ai.md # 5 Kademeli Hata Matrisi ve Döngü Kırıcı
-├── dependency-policy-ai.md         # Onaylı Paket Listesi ve Bağımlılık Politikası
-├── git-commit-convention-ai.md     # Conventional Commits Şartnamesi
-├── ai-communication-protocol-ai.md # English-Pivot Akıl Yürütme ve İletişim Protokolü
-├── performance-budget-ai.md        # Core Web Vitals ve API Yanıt Bütçeleri
-├── session-handoff-protocol-ai.md  # Kayıpsız Oturum Geçiş ve Kontrol Noktası Şeması
-├── ai-log-ai.md                    # Mimari Karar ve Operasyonel Denetim Kaydı
+├── README.md                       # Evrensel İngilizce Dokümantasyon ve Sistem Mimarisi
+├── README.tr.md                    # Türkçe Başvuru Kaynağı ve Sistem Kılavuzu
+├── RulesAI.md                      # En Yüksek Anayasal İşletim Sistemi Kuralları
+├── agent-boardroom-protocol-ai.md  # 4 Rol Ön-Kod Müzakere Protokolü
+├── ui-standards-ai.md              # 60-30-10 Tasarım Belirteçleri ve Erişilebilirlik
+├── testing-protocol-ai.md          # Uç Senaryo Simülasyonu ve Doğrulama Kapıları
+├── project-architecture-ai.md      # Kök Dizin Hijyeni ve Modüler Katmanlar
+├── error-recovery-escalation-ai.md # 5 Kademeli Hata Eskalasyonu ve Döngü Kırıcı
+├── dependency-policy-ai.md         # Onaylı Paket Beyaz Listesi ve Güvenlik Politikası
+├── git-commit-convention-ai.md     # Conventional Commits Standartları
+├── ai-communication-protocol-ai.md # English-Pivot Çapraz Dilli Akıl Yürütme
+├── performance-budget-ai.md        # Core Web Vitals ve API Gecikme Bütçeleri
+├── session-handoff-protocol-ai.md  # Kayıpsız Oturum Bağlamı Devir Şeması
+├── ai-log-ai.md                    # Operasyonel Mimari Denetim Defteri
+├── ROADMAP.md                      # Uzun Vadeli Teknik Yol Haritası (2026–2027)
+├── CHANGELOG.md                    # Keep a Changelog Versiyon Geçmişi (v1.0.0-rc.1)
 ├── LICENSE                         # MIT Lisansı
-├── CONTRIBUTING.md                 # Katkı Kılavuzu ve Doğrulama Kriterleri
-├── SECURITY.md                     # Güvenlik ve Zafiyet Bildirim Politikası
-├── package.json                    # Paket Dağıtım Metadata, Scriptler ve Dosya Listesi
-├── bin/                            # Sıfır Bağımlılıklı CLI
-│   └── aimaster.js                 # Init, List, Verify ve Preset Yöneticisi
+├── CONTRIBUTING.md                 # Katkı Sağlama Kılavuzu ve Doğrulama Kriterleri
+├── SECURITY.md                     # Güvenlik Zafiyeti Bildirim Politikası
+├── package.json                    # Dağıtım Metadata, Scriptler ve Beyaz Liste
+├── install.sh                      # Posix CLI Kurulum Betiği
 │
-├── benchmarks/                     # Ampirik Benchmark ve Tekrarlanabilirlik Paketi
+├── bin/                            # Sıfır Bağımlılıklı CLI
+│   └── aimaster.js                 # Init, List, Verify & Preset Yöneticisi
+│
+├── benchmarks/                     # Ampirik Benchmark & Tekrarlanabilirlik Paketi
 │   ├── runner.mjs                  # Çift Modlu Test Motoru (Mock / Live API)
 │   ├── generate-report.mjs         # İstatistiki Analiz ve Rapor Üretici
 │   ├── BENCHMARK_REPORT.md         # Doğrulanmış Ampirik Benchmark Raporu
-│   ├── results/                    # Güncel ve Zaman Damgalı Ham JSON Çıktıları
-│   └── tasks/                      # 28 Golden Ampirik Görev Spesifikasyonu
+│   ├── lib/                        # Modüler Değerlendirme Motorları
+│   │   ├── canonical-delivery.mjs  # Kod İzolasyonu Sözleşmesi (<canonical_delivery>)
+│   │   ├── context-compiler.mjs    # Katmanlı Bağlam Derleme & Kural Budama
+│   │   ├── failure-classifier.mjs  # AST & Truncation Hata Sınıflandırıcısı
+│   │   ├── model-profiles.mjs      # Token Sınırları ve Akıl Yürütme Profilleri
+│   │   ├── recovery-engine.mjs     # Hedefli Kendi Kendini Onarma Motoru
+│   │   ├── report-helpers.mjs      # Wilson Score Güven Aralıkları & Raporlama
+│   │   ├── token-budget-engine.mjs # Uyarlanabilir Token Bütçelendirme
+│   │   └── validator-pipeline.mjs  # Çok Aşamalı AST & Değişmez Doğrulayıcı
+│   ├── results/                    # Sonuç ve Benchmark Çıktı JSON Dosyaları
+│   └── tasks/                      # 50 Golden Ampirik Görev Spesifikasyonu (12 Alan)
 │       ├── task.schema.json        # Ampirik Görevler için JSON Şeması
-│       └── *.json                  # 7 Kategoride Dağıtılmış Görev Dosyaları
+│       └── *.json                  # 12 Kategorideki Tekil Görev Spesifikasyonları
 │
-├── integrations/                   # Editör ve Platform Hazır Entegrasyon Şablonları
+├── integrations/                   # Yerel IDE ve Araç Entegrasyon Şablonları
 │   ├── cursor/.cursorrules
 │   ├── claude/claude-project-prompt.md
 │   ├── antigravity/GEMINI.md
@@ -217,59 +257,61 @@ aimaster/
 │   └── copilot/copilot-instructions.md
 │
 ├── scripts/                        # Otomatik CI Doğrulama Paketi
-│   ├── verify-integrity.js         # Çift Yönlü Link ve Şema Doğrulayıcı (114 Kontrol)
+│   ├── verify-integrity.js         # Çift Yönlü Link ve Şema Denetleyicisi (114 Kontrol)
 │   ├── test-integrity-fixtures.js  # Adversarial Linter Fixture Testleri (15 Test)
-│   └── test-adversarial-evals.js   # Golden Davranışsal Eval Koşucusu (23 Senaryo)
+│   └── test-adversarial-evals.js   # Golden Davranışsal Değerlendirme (23 Senaryo)
 │
-├── tests/                          # Karşıt Test Veri Setleri
-│   └── adversarial-prompts.json    # 23 Golden Karşıt Senaryo
+├── tests/                          # Otomatik Birim ve Mutasyon Test Paketleri
+│   ├── adversarial-prompts.json    # 23 Golden Karşıt Senaryo Veri Seti
+│   ├── test-benchmark-engine.mjs   # Ampirik Benchmark İstatistik Birim Testleri
+│   └── test-validator-mutations.mjs# 16 Karşıt AST Kod Mutasyon Testi
 │
-└── skills/                         # 80 Adet On-Demand Uzmanlık Yeteneği (7 Kategori)
-    ├── _shared-skill-footer.md     # Ortak QA Kuralları ve Kesin Yasaklar Şablonu
-    ├── README.md                   # Dinamik Yetenek Kataloğu ve Kategori Haritası
-    ├── 01-architecture-planning/   # 9 Yetenek (Sistem Mimarisi, Monorepo, Cross-Lingual)
-    ├── 02-frontend-ui/             # 10 Yetenek (Motion, Token'lar, Tailwind, A11y, State)
-    ├── 03-backend-data/            # 19 Yetenek (RAG, Vektör, Mesaj Kuyruğu, SQL, HMAC)
-    ├── 04-security-audit/          # 9 Yetenek (SSRF, Gizlilik, Kriptografi, Kimlik Doğrulama)
-    ├── 05-testing-quality/         # 10 Yetenek (Kaos Testi, Hata Teşhisi, Birim, Görsel)
-    ├── 06-devops-tooling/          # 11 Yetenek (Kubernetes, IaC, DNS/SSL, CI/CD Pipeline)
-    └── 07-code-craft/              # 12 Yetenek (Temiz Kod, Katı TypeScript, Refactoring)
+└── skills/                         # 80 Adet On-Demand Uzman Yetkinlik
+    ├── _shared-skill-footer.md     # Ortak Kalite Güvencesi ve Anti-Pattern Kapanışı
+    ├── README.md                   # Dinamik Yetenek Kayıt Defteri ve Kategori Haritası
+    ├── 01-architecture-planning/   # 9 Yetenek (Sistem Mimarisi, Monorepo, Çapraz Dil)
+    ├── 02-frontend-ui/             # 10 Yetenek (Hareket, Belirteçler, Tailwind, A11y, State)
+    ├── 03-backend-data/            # 19 Yetenek (RAG, Vektör, Mesaj Kuyrukları, SQL, HMAC)
+    ├── 04-security-audit/          # 9 Yetenek (SSRF, Gizlilik, Kriptografi, Kimlik)
+    ├── 05-testing-quality/         # 10 Yetenek (Kaos Testi, Hata Araştırma, Birim, Görsel)
+    ├── 06-devops-tooling/          # 11 Yetenek (Kubernetes, IaC, DNS/SSL, CI/CD Boru Hatları)
+    └── 07-code-craft/              # 12 Yetenek (Temiz Mimari, Typescript Strict)
 ```
 
 ---
 
 ## YETENEK KATALOĞU VE KATEGORİ MATRİSİ
 
-80 adet uzmanlık yeteneği 7 mantıksal mühendislik kategorisine ayrılmıştır:
+Sistemdeki 80 uzman yetenek 7 mantıksal mühendislik kategorisine ayrılmıştır:
 
 | Kategori | Yetenek Sayısı | Odak Alanı |
 | :--- | :--- | :--- |
-| **01-architecture-planning** | 9 Yetenek | Sistem tasarımı, mimari sentez, otonom iş kırılımı, durum makineleri |
-| **02-frontend-ui** | 10 Yetenek | Responsive arayüz, tasarım token'ları, WCAG 2.1 AA erişilebilirlik, Tailwind |
-| **03-backend-data** | 19 Yetenek | REST/GraphQL, veritabanı optimizasyonu, sıfır kesinti migration, RAG vektörler |
-| **04-security-audit** | 9 Yetenek | Zero-trust SSRF, kimlik güvenliği, secret koruması, kriptografi, red-teaming |
-| **05-testing-quality** | 10 Yetenek | Hata teşhisi, kaos dayanıklılığı, birim testleri, entegrasyon ve sözleşme testleri |
-| **06-devops-tooling** | 11 Yetenek | Docker dağıtımı, Kubernetes, Terraform IaC, gözlemlenebilirlik, CI/CD |
-| **07-code-craft** | 12 Yetenek | Katı TypeScript, tasarım desenleri, refactoring, performans optimizasyonu |
+| **01-architecture-planning** | 9 Yetenek | Sistem tasarımı, trade-off sentezi, otonom görev ayrıştırma, durum makineleri |
+| **02-frontend-ui** | 10 Yetenek | Duyarlı tasarım, stil belirteçleri, WCAG 2.1 AA erişilebilirlik, Tailwind, motion |
+| **03-backend-data** | 19 Yetenek | REST/GraphQL, veritabanı optimizasyonu, sıfır kesinti geçişleri, RAG, kuyruklar |
+| **04-security-audit** | 9 Yetenek | Sıfır güven SSRF, kimlik güvenliği, veri gizliliği, kriptografi, kırmızı takım |
+| **05-testing-quality** | 10 Yetenek | Hata avcılığı, kaos dayanıklılığı, birim testleri, entegrasyon ve sözleşme testleri |
+| **06-devops-tooling** | 11 Yetenek | Docker dağıtımı, Kubernetes, Terraform IaC, gözlemlenebilirlik, CI/CD hatları |
+| **07-code-craft** | 12 Yetenek | TypeScript katı modu, tasarım kalıpları, refactoring, performans optimizasyonu |
 
-Detaylı yetenek listesi ve yönlendirme haritası için [skills/README.md](skills/README.md) dokümanını inceleyin.
+Eksiksiz yetenek dizini ve tekil spesifikasyonlar için [skills/README.md](skills/README.md) dosyasını inceleyin.
 
 ---
 
-## ÇALIŞMA ZAMANI KOMUTLARI VE YÖNERGELER
+## ÇALIŞMA ZAMANI KOMUTLARI VE DİREKTİFLER
 
-Ajanın çalışma modunu doğrudan standart prompt önekleriyle yönlendirebilirsiniz:
+Standart prompt önekleriyle ajanın çalışma modunu doğrudan yönetin:
 
-- `AIMASTER: <istek>` veya `/boardroom <istek>`: Kod yazımından önce 4 rollü multi-agent boardroom müzakeresini zorunlu kılar.
-- `FAST: <istek>` veya `/fast <istek>`: Atomik değişiklikler (<20 satır) için müzakereyi atlayıp cerrahi düzeltme modunu açar.
-- `/audit <kod/plan>`: Yalnızca Red-Team Auditor rolünü devreye alarak güvenlik ve risk analizi yürütür.
-- `/ui <istek>`: Tasarım token'ları, arayüz düzeni ve erişilebilirlik analizi için UI Systems rolünü çağırır.
-- `/handoff`: Oturum bağlamı dolduğunda temiz aktarım için `.handoff/session-state.md` şablonu oluşturur.
-- `/vibe <istek>`: Güvenlik sınırlarından taviz vermeden hızlı prototipleme modunu etkinleştirir.
+- `AIMASTER: <talimat>` veya `/boardroom <talimat>`: Kod yazımından önce 4 rollü çoklu ajan müzakeresini başlatır.
+- `FAST: <talimat>` veya `/fast <talimat>`: Atomik düzenlemeler (<20 satır) için doğrudan cerrahi modu devreye alır.
+- `/audit <kod/plan>`: Yalnızca güvenlik açığı ve risk analizi için Red-Team Denetçisini görevlendirir.
+- `/ui <talimat>`: Tasarım belirteci, düzen ve erişilebilirlik analizi için UI Sistemleri uzmanını devreye sokar.
+- `/handoff`: Oturum devri ve bağlam aktarımı için yapılandırılmış `.handoff/session-state.md` kontrol noktası oluşturur.
+- `/vibe <talimat>`: Katı güvenlik sınırlarından ödün vermeden hızlı prototipleme akışını açar.
 
 ---
 
 ## LİSANS VE YÖNETİŞİM
 
-AIMASTER, [MIT Lisansı](LICENSE) kapsamında açık kaynaklı olarak dağıtılmaktadır.  
+AIMASTER, [MIT Lisansı](LICENSE) altında dağıtılan açık kaynaklı bir yazılımdır.  
 Geliştirici: **Furkan Ertürk ([The Vulpes](https://thevulpes.dev))** ve AIMASTER Mühendislik Topluluğu.

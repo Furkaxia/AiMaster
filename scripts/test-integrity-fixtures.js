@@ -96,6 +96,8 @@ function createMockRepo(destDir) {
     'performance-budget-ai.md',
     'session-handoff-protocol-ai.md',
     'ai-log-ai.md',
+    'ROADMAP.md',
+    'CHANGELOG.md',
     'README.md',
     'README.tr.md',
     'LICENSE',
