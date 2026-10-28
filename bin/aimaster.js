@@ -89,10 +89,10 @@ function printHelp() {
   console.log(BANNER);
   console.log(`
 \x1b[1mUSAGE:\x1b[0m
-  npx aimaster init [options]
-  aimaster init [options]
-  aimaster list
-  aimaster verify
+  npx aimaster-os init [options]
+  aimaster-os init [options]
+  aimaster-os list
+  aimaster-os verify
 
 \x1b[1mCOMMANDS:\x1b[0m
   init              Initialize AiMaster configuration in current repository
@@ -109,12 +109,15 @@ function printHelp() {
   -v, --version     Display version
 
 \x1b[1mEXAMPLES:\x1b[0m
-  npx aimaster init --ide cursor
-  npx aimaster init --ide windsurf --with-skills
-  npx aimaster init --ide all --with-skills --with-protocols
-  npx aimaster init --dry-run --with-skills
-  npx aimaster list
-  npx aimaster verify
+  npx aimaster-os init --ide cursor
+  npx aimaster-os init --ide windsurf --with-skills
+  npx aimaster-os init --ide all --with-skills --with-protocols
+  npx aimaster-os init --dry-run --with-skills
+  npx aimaster-os list
+  npx aimaster-os verify
+
+  # Direct zero-install execution via GitHub:
+  npx github:Furkaxia/AiMaster init --ide cursor
 `);
 }
 

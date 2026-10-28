@@ -191,22 +191,25 @@ Geliştirme iş akışınıza uygun kurulum modunu seçin:
 AIMASTER konfigürasyonunu doğrudan projenize entegre edin:
 
 ```bash
-# Etkileşimli kurulum:
-npx aimaster init
+# Etkileşimli kurulum (npm registry üzerinden):
+npx aimaster-os init
 
 # Hedef IDE şablonu ile doğrudan kurulum:
-npx aimaster init --ide cursor
-npx aimaster init --ide windsurf --with-skills
-npx aimaster init --ide all --with-skills --with-protocols
+npx aimaster-os init --ide cursor
+npx aimaster-os init --ide windsurf --with-skills
+npx aimaster-os init --ide all --with-skills --with-protocols
 
-# Diske yazmadan simülasyon modu:
-npx aimaster init --ide cursor --dry-run
+# Diske yazmadan simülasyon modu (kuru çalıştırma):
+npx aimaster-os init --ide cursor --dry-run
 
 # Mevcut hazır şablonları ve hedef dizinleri listeleme:
-npx aimaster list
+npx aimaster-os list
 
 # Tam kurumsal bütünlük, fixture, adversarial ve benchmark paketini yürütme:
-npx aimaster verify
+npx aimaster-os verify
+
+# Paket kurmadan doğrudan GitHub reponuzdan çalıştırma:
+npx github:Furkaxia/AiMaster init --ide cursor
 
 # Posix ortamlarında curl ile tek satırda çalıştırma:
 curl -fsSL https://raw.githubusercontent.com/Furkaxia/AiMaster/main/install.sh | bash -s -- --ide cursor

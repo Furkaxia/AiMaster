@@ -135,7 +135,7 @@ if [ "$WITH_SKILLS" = true ]; then
       if curl -fsSL "https://github.com/Furkaxia/AiMaster/archive/refs/heads/main.tar.gz" | tar -xz --strip-components=1 "AiMaster-main/skills" 2>/dev/null; then
         echo -e "${GREEN}✔ Installed 80 domain skills -> ./skills/${NC}"
       else
-        echo -e "${YELLOW}⚠ Tarball download failed. Run 'npx aimaster' to install skills cleanly.${NC}"
+        echo -e "${YELLOW}⚠ Tarball download failed. Run 'npx aimaster-os' to install skills cleanly.${NC}"
       fi
     fi
   else
@@ -143,11 +143,11 @@ if [ "$WITH_SKILLS" = true ]; then
     if curl -fsSL "https://github.com/Furkaxia/AiMaster/archive/refs/heads/main.tar.gz" | tar -xz --strip-components=1 "AiMaster-main/skills" 2>/dev/null; then
       echo -e "${GREEN}✔ Installed 80 domain skills -> ./skills/${NC}"
     else
-      echo -e "${YELLOW}⚠ Tarball download failed. Run 'npx aimaster' to install skills cleanly.${NC}"
+      echo -e "${YELLOW}⚠ Tarball download failed. Run 'npx aimaster-os' to install skills cleanly.${NC}"
     fi
   fi
 else
-  echo -e "\n${CYAN}💡 Tip: Run with '--with-skills' or use 'npx aimaster' to include all 80 domain skills.${NC}"
+  echo -e "\n${CYAN}💡 Tip: Run with '--with-skills' or use 'npx aimaster-os' to include all 80 domain skills.${NC}"
 fi
 
 echo -e "\n${GREEN}🎉 AIMASTER successfully initialized!${NC}"

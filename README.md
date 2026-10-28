@@ -191,22 +191,25 @@ Choose the installation mode suited to your development workflow:
 Install and configure AIMASTER directly in any repository:
 
 ```bash
-# Interactive setup:
-npx aimaster init
+# Interactive setup (via npm registry):
+npx aimaster-os init
 
 # Targeted IDE preset installation:
-npx aimaster init --ide cursor
-npx aimaster init --ide windsurf --with-skills
-npx aimaster init --ide all --with-skills --with-protocols
+npx aimaster-os init --ide cursor
+npx aimaster-os init --ide windsurf --with-skills
+npx aimaster-os init --ide all --with-skills --with-protocols
 
 # Simulation without writing files to disk:
-npx aimaster init --ide cursor --dry-run
+npx aimaster-os init --ide cursor --dry-run
 
 # List available presets and destination paths:
-npx aimaster list
+npx aimaster-os list
 
 # Execute full enterprise integrity, fixture, adversarial and benchmark suite:
-npx aimaster verify
+npx aimaster-os verify
+
+# Direct zero-install alternative via GitHub repository:
+npx github:Furkaxia/AiMaster init --ide cursor
 
 # Posix one-liner via curl:
 curl -fsSL https://raw.githubusercontent.com/Furkaxia/AiMaster/main/install.sh | bash -s -- --ide cursor
