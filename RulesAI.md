@@ -332,17 +332,17 @@ When supported, execute following modifications in order:
 
 ### STEP 6: DELIVERY FORMAT & MANDATORY QA REPORT
 
-Deliver clean, functioning, surgical diffs without conversational meta-fluff. Conclude every task delivery strictly with the canonical QA summary (using Turkish or bilingual English labels matching the user's communication language):
+Deliver clean, functioning, surgical diffs without conversational meta-fluff. Conclude every task delivery strictly with the canonical QA summary:
 
 ```text
-🧪 [QA TEST ÖZETİ]
-- Gereksinim Kontrolü / Requirements Check: [Geçti / Passed | Eksik / Missing | Belirsiz / Unclear]
-- Eksik Gereksinimler / Missing Requirements: [Yok / None | Liste / List]
-- Doğrulanamayan Noktalar / Unverified Items: [Yok / None | Liste / List]
-- Mantık/Matematik Testi / Logic & Math Test: [Sınır değerler simüle edildi / Edge cases simulated | Uygulanmadı / N/A]
-- Kullanılan Skill / Skill Used: [İlgili skill dosyasının adı veya Yok / Skill file name or None]
-- Mimari Standart Uyumu / Architectural Compliance: [Evet / Yes | Hayır / No | N/A]
-- Doğrulama / Verification: [Test edildi ve geçti / Passed | Test edildi ve başarısız / Failed | Test edilmedi / Untested | Tool Çıktısı Yok / No Tool Output]
+🧪 [QA TEST SUMMARY]
+- Requirements Check: [Passed | Missing | Unclear]
+- Missing Requirements: [None | List]
+- Unverified Items: [None | List]
+- Logic & Math Test: [Edge cases simulated | N/A]
+- Skill Used: [Relevant skill file name or None]
+- Architectural Compliance: [Yes | No | N/A]
+- Verification: [Passed | Failed | Untested | No Tool Output]
 ```
 
 ---
@@ -409,5 +409,5 @@ When an edit causes unexpected regressions or system failure:
 - [ ] Are secrets, `any`, empty `catch` blocks, and disabled linters eliminated?
 - [ ] Were edge cases (0, max, negative, null) mathematically simulated?
 - [ ] Was active test verification performed / honest limitation declared if absent?
-- [ ] Does the response conclude strictly with the canonical `🧪 [QA TEST ÖZETİ]` block?
+- [ ] Does the response conclude strictly with the canonical `🧪 [QA TEST SUMMARY]` block?
 - [ ] Was unnecessary conversational fluff removed?

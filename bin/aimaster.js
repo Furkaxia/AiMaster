@@ -244,6 +244,8 @@ function backupExistingDirectory(dirPath) {
   }
 }
 
+const installedManifest = [];
+
 async function installPreset(key, force = false, dryRun = false) {
   const preset = PRESETS[key];
   if (!preset) {
@@ -261,6 +263,7 @@ async function installPreset(key, force = false, dryRun = false) {
 
   if (dryRun) {
     console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install ${preset.name} preset -> ${preset.dest}`);
+    installedManifest.push({ name: preset.name, dest: preset.dest, status: 'dry-run' });
     return true;
   }
 
@@ -275,6 +278,7 @@ async function installPreset(key, force = false, dryRun = false) {
   if (fs.existsSync(destPath)) {
     if (!force) {
       spinner.warn(`Skipped: ${preset.dest} already exists (use --force to overwrite)`);
+      installedManifest.push({ name: preset.name, dest: preset.dest, status: 'skipped' });
       return true;
     }
     backupExistingFile(destPath);
@@ -282,6 +286,7 @@ async function installPreset(key, force = false, dryRun = false) {
 
   fs.copyFileSync(srcPath, destPath);
   spinner.succeed(`Configured ${preset.name} preset -> ${preset.dest}`);
+  installedManifest.push({ name: preset.name, dest: preset.dest, status: 'installed' });
   return true;
 }
 
@@ -291,6 +296,7 @@ async function installRulesAI(force = false, dryRun = false) {
   if (fs.existsSync(src)) {
     if (dryRun) {
       console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install Constitutional Rules -> RulesAI.md`);
+      installedManifest.push({ name: 'Constitutional Invariants', dest: 'RulesAI.md', status: 'dry-run' });
       return;
     }
     const spinner = createSpinner('Synthesizing Constitutional Invariants (RulesAI.md)');
@@ -301,8 +307,10 @@ async function installRulesAI(force = false, dryRun = false) {
       }
       fs.copyFileSync(src, dest);
       spinner.succeed('Constitutional Rules verified & installed -> RulesAI.md');
+      installedManifest.push({ name: 'Constitutional Invariants', dest: 'RulesAI.md', status: 'installed' });
     } else {
       spinner.warn('Skipped: RulesAI.md already exists (use --force to overwrite)');
+      installedManifest.push({ name: 'Constitutional Invariants', dest: 'RulesAI.md', status: 'skipped' });
     }
   }
 }
@@ -310,6 +318,7 @@ async function installRulesAI(force = false, dryRun = false) {
 async function installProtocols(force = false, dryRun = false) {
   if (dryRun) {
     console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install 11 standard protocols (*-ai.md)`);
+    installedManifest.push({ name: '11 Standard Protocols', dest: '*-ai.md (11 files)', status: 'dry-run' });
     return;
   }
   const spinner = createSpinner('Linking 11 Engineering Council Protocols (*-ai.md)');
@@ -330,8 +339,10 @@ async function installProtocols(force = false, dryRun = false) {
   });
   if (count > 0) {
     spinner.succeed(`Installed ${count} Engineering Council Protocols (*-ai.md)`);
+    installedManifest.push({ name: `${count} Council Protocols`, dest: '*-ai.md (11 files)', status: 'installed' });
   } else {
     spinner.warn('Skipped: Protocols already exist (use --force to overwrite)');
+    installedManifest.push({ name: '11 Council Protocols', dest: '*-ai.md (11 files)', status: 'skipped' });
   }
 }
 
@@ -341,6 +352,7 @@ async function installSkills(force = false, dryRun = false) {
   if (fs.existsSync(src)) {
     if (dryRun) {
       console.log(`\x1b[35m[DRY-RUN]\x1b[0m Would install 80 domain skills to ./skills/`);
+      installedManifest.push({ name: '80 Active Domain Skills', dest: './skills/ (7 Categories)', status: 'dry-run' });
       return;
     }
     const spinner = createSpinner('Compiling 80 Active Domain Skills into ./skills/ (7 Categories)');
@@ -351,38 +363,79 @@ async function installSkills(force = false, dryRun = false) {
       }
       copyRecursiveSync(src, dest);
       spinner.succeed('Synchronized 80 Active Domain Skills -> ./skills/');
+      installedManifest.push({ name: '80 Active Domain Skills', dest: './skills/ (7 Categories)', status: 'installed' });
     } else {
       spinner.warn('Skipped: ./skills/ directory already exists (use --force to overwrite)');
+      installedManifest.push({ name: '80 Active Domain Skills', dest: './skills/ (7 Categories)', status: 'skipped' });
     }
   }
 }
 
-async function promptSelectIDE() {
+async function promptSelectConfiguration() {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
-  return new Promise((resolve) => {
-    console.log(`\x1b[1mSelect your target IDE / AI environment:\x1b[0m`);
-    const keys = Object.keys(PRESETS);
-    keys.forEach((key, index) => {
-      console.log(`  \x1b[36m${index + 1})\x1b[0m ${PRESETS[key].name} (\x1b[90m${PRESETS[key].dest}\x1b[0m)`);
-    });
-    console.log(`  \x1b[36m${keys.length + 1})\x1b[0m All IDEs & Configurations`);
+  const ask = (q) => new Promise((resolve) => rl.question(q, resolve));
 
-    rl.question('\nEnter number [1-7] (default: 1): ', (answer) => {
-      rl.close();
-      const num = parseInt(answer.trim(), 10) || 1;
-      if (num >= 1 && num <= keys.length) {
-        resolve(keys[num - 1]);
-      } else if (num === keys.length + 1) {
-        resolve('all');
-      } else {
-        resolve('cursor');
-      }
-    });
+  console.log(`\x1b[1mSelect your target configuration:\x1b[0m`);
+  const keys = Object.keys(PRESETS);
+  keys.forEach((key, index) => {
+    console.log(`  \x1b[36m${index + 1})\x1b[0m ${PRESETS[key].name} (\x1b[90m${PRESETS[key].dest}\x1b[0m)`);
   });
+  console.log(`  \x1b[36m${keys.length + 1})\x1b[0m Complete Enterprise Suite (All IDEs + 80 Skills + 11 Protocols)`);
+
+  const rawAnswer = await ask(`\nEnter number [1-${keys.length + 1}] (default: 1): `);
+  const num = parseInt(rawAnswer.trim(), 10) || 1;
+
+  let chosenIDE = 'cursor';
+  let installSkillsFlag = false;
+  let installProtocolsFlag = false;
+
+  if (num === keys.length + 1) {
+    chosenIDE = 'all';
+    installSkillsFlag = true;
+    installProtocolsFlag = true;
+  } else if (num >= 1 && num <= keys.length) {
+    chosenIDE = keys[num - 1];
+    const qSkills = (await ask(`\n? Install 80 active domain skills into ./skills/? [Y/n] (default: Y): `)).trim();
+    installSkillsFlag = qSkills === '' || qSkills.toLowerCase().startsWith('y');
+
+    const qProtocols = (await ask(`? Install 11 Engineering Council protocols (*-ai.md)? [Y/n] (default: Y): `)).trim();
+    installProtocolsFlag = qProtocols === '' || qProtocols.toLowerCase().startsWith('y');
+  }
+
+  rl.close();
+  return { chosenIDE, installSkillsFlag, installProtocolsFlag };
+}
+
+function printManifest(dryRun) {
+  if (dryRun) {
+    console.log(`
+\x1b[1m\x1b[35m[DRY-RUN] Simulation complete. No changes written to disk.\x1b[0m
+\x1b[90mRun again without --dry-run to apply changes.\x1b[0m
+`);
+    return;
+  }
+
+  console.log(`
+\x1b[1m\x1b[32m✔ AIMASTER initialized successfully.\x1b[0m
+\x1b[90m────────────────────────────────────────────────────────────────────────\x1b[0m
+\x1b[1m📦 INSTALLATION SUMMARY:\x1b[0m`);
+
+  installedManifest.forEach((item) => {
+    const icon = item.status === 'installed' ? '\x1b[32m✔\x1b[0m' : '\x1b[33m⚠ (exists)\x1b[0m';
+    console.log(`  ${icon} \x1b[1m${item.name.padEnd(30)}\x1b[0m -> \x1b[36m${item.dest}\x1b[0m`);
+  });
+
+  console.log(`\x1b[90m────────────────────────────────────────────────────────────────────────\x1b[0m
+\x1b[1mNext Steps:\x1b[0m
+  1. Open your project in your AI IDE (Cursor, Windsurf, Claude, VS Code Copilot, etc.)
+  2. The AI assistant will automatically read your project's rules & protocols.
+  3. Explore specialized skills in \x1b[36m./skills/\x1b[0m or learn more at:
+     \x1b[36mhttps://github.com/Furkaxia/AiMaster\x1b[0m
+`);
 }
 
 async function main() {
@@ -396,9 +449,9 @@ async function main() {
   if (args.includes('-v') || args.includes('--version')) {
     try {
       const pkg = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8'));
-      console.log(`aimaster v${pkg.version}`);
+      console.log(`aimaster-os v${pkg.version}`);
     } catch {
-      console.log('aimaster v1.0.0-rc.1');
+      console.log('aimaster-os v1.0.0-rc.2');
     }
     process.exit(0);
   }
@@ -415,8 +468,10 @@ async function main() {
 
   const dryRun = args.includes('--dry-run');
   const force = args.includes('--force');
-  const withSkills = args.includes('--with-skills');
-  const withProtocols = args.includes('--with-protocols');
+  let withSkills = args.includes('--with-skills');
+  let withProtocols = args.includes('--with-protocols');
+  const noSkills = args.includes('--no-skills');
+  const noProtocols = args.includes('--no-protocols');
 
   console.log(BANNER);
   if (dryRun) {
@@ -434,11 +489,21 @@ async function main() {
   }
 
   if (!selectedIDE) {
-    if (process.stdout.isTTY) {
-      selectedIDE = await promptSelectIDE();
+    if (process.stdout.isTTY && process.stdin.isTTY) {
+      const config = await promptSelectConfiguration();
+      selectedIDE = config.chosenIDE;
+      if (!args.includes('--with-skills') && !noSkills) {
+        withSkills = config.installSkillsFlag;
+      }
+      if (!args.includes('--with-protocols') && !noProtocols) {
+        withProtocols = config.installProtocolsFlag;
+      }
     } else {
       selectedIDE = 'cursor';
     }
+  } else if (selectedIDE === 'all') {
+    if (!noSkills && !args.includes('--with-skills')) withSkills = true;
+    if (!noProtocols && !args.includes('--with-protocols')) withProtocols = true;
   }
 
   console.log(`\n\x1b[1mInitializing AIMASTER configuration for: \x1b[36m${selectedIDE.toUpperCase()}\x1b[0m\n`);
@@ -461,22 +526,11 @@ async function main() {
     await installSkills(force, dryRun);
   }
 
-  if (dryRun) {
-    console.log(`
-\x1b[1m\x1b[35m[DRY-RUN] Simulation complete. No changes written to disk.\x1b[0m
-\x1b[90mRun again without --dry-run to apply changes.\x1b[0m
-`);
-  } else {
-    console.log(`
-\x1b[1m\x1b[32m✔ AIMASTER initialized successfully.\x1b[0m
-\x1b[90mStart your AI IDE or open a new chat session to activate the Agentic Boardroom.\x1b[0m
-- Constitutional Reference: \x1b[36mRulesAI.md\x1b[0m
-- Documentation & Skills: \x1b[36mhttps://github.com/Furkaxia/AiMaster\x1b[0m
-`);
-  }
+  printManifest(dryRun);
 }
 
 main().catch((err) => {
   console.error('\x1b[31m✖ Error during initialization:\x1b[0m', err.message);
   process.exit(1);
 });
+

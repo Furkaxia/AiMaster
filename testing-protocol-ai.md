@@ -84,10 +84,22 @@ When addressing defects, execute this 4-step sequence:
 
 ---
 
-## 6. CANONICAL DELIVERY FORMAT (`🧪 [QA TEST ÖZETİ]`)
+## 6. CANONICAL DELIVERY FORMAT (`🧪 [QA TEST SUMMARY]` / `🧪 [QA TEST ÖZETİ]`)
 
 Conclude every task delivery strictly with the canonical QA summary block:
 
+```text
+🧪 [QA TEST SUMMARY]
+- Requirements Check: [Passed | Missing | Unclear]
+- Missing Requirements: [None | List]
+- Unverified Items: [None | List]
+- Logic & Math Test: [Edge cases simulated | N/A]
+- Skill Used: [Relevant skill file name or None]
+- Architectural Compliance: [Yes | No | N/A]
+- Verification: [Passed | Failed | Untested | No Tool Output]
+```
+
+*(For Turkish interactions, the localized equivalent is supported):*
 ```text
 🧪 [QA TEST ÖZETİ]
 - Gereksinim Kontrolü: [Geçti / Eksik / Belirsiz]

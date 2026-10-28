@@ -748,7 +748,7 @@ PRESET_FILES.forEach(preset => {
 
   // 5. Canonical QA test summary block
   checksCount++;
-  if (content.includes('🧪 [QA TEST ÖZETİ]')) {
+  if (content.includes('🧪 [QA TEST ÖZETİ]') || content.includes('🧪 [QA TEST SUMMARY]')) {
     logPass(`[${preset}] -> Kanonik QA test özeti şablonu mevcut`);
   } else {
     logFail(`[${preset}] -> Kanonik QA test özeti şablonu EKSİK!`);

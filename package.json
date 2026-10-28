@@ -1,6 +1,6 @@
 {
   "name": "aimaster-os",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "The Constitutional Agentic Instruction Framework & Boardroom Architecture for AI IDEs",
   "bin": {
     "aimaster-os": "bin/aimaster.js",
