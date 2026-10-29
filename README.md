@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Release: v1.0.0-rc.1](https://img.shields.io/badge/Release-v1.0.0--rc.1-blue.svg?style=for-the-badge)](CHANGELOG.md)
+[![Release: v1.0.0-rc.2](https://img.shields.io/badge/Release-v1.0.0--rc.1-blue.svg?style=for-the-badge)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Enterprise CI & Benchmark](https://img.shields.io/badge/Enterprise%20CI%20%26%20Benchmark-Passing-brightgreen.svg?style=for-the-badge)](https://github.com/Furkaxia/AiMaster/actions/workflows/ci.yml)
 [![Engineering Velocity](https://img.shields.io/badge/Engineering%20Velocity-3.5x%20Faster%20Convergence-blueviolet.svg?style=for-the-badge)](#estimated-token-economics-empirical-benchmark)
