@@ -81,10 +81,11 @@ about payment processing and inventory updates?"
 
 ---
 
-## 4. DEFECT & WARNING NOTIFICATION SCHEMA
+## 4. DEFECT, ALERT & GATE NOTIFICATION SCHEMA (AUTO-LOCALE MIRRORING)
 
-Standardized diagnostic schema when surfacing issues:
+Standardized diagnostic schema when surfacing issues. All alert headers, explanations, and safety gates dynamically mirror the developer's interaction language, while file paths, line numbers, and identifiers remain in standard technical English.
 
+### English Schema (Default / English Interactions):
 ```text
 ⚠️ [DEFECT IDENTIFICATION]
 - File Location: src/services/paymentService.ts:87
@@ -92,6 +93,30 @@ Standardized diagnostic schema when surfacing issues:
 - Impact: Calculation produces NaN, crashing checkout flow
 - Remediation: Implement guard clause (`if (discount > 0)`)
 - Classification: TIER 2 (Fix + Report)
+```
+
+```text
+🔒 [SECURITY GATE: CONFIRMATION REQUIRED]
+- Action Requested: Database migration / file deletion
+- Potential Blast Radius: Drops table `orders`
+- Confirmation Needed: Reply "CONFIRM" to proceed with execution
+```
+
+### Turkish Schema (Türkçe Etkileşimler İçin):
+```text
+⚠️ [HATA TESPİTİ]
+- Dosya Konumu: src/services/paymentService.ts:87
+- Temel Neden: Sıfıra bölme riski — `discount` değişkeni 0 olabilir
+- Etki: Hesaplama NaN üretir ve ödeme akışını kırar
+- Çözüm Önerisi: Koruma koşulu ekle (`if (discount > 0)`)
+- Sınıflandırma: TIER 2 (Düzelt + Bildir)
+```
+
+```text
+🔒 [GÜVENLİK ENGELİ: KULLANICI ONAYI GEREKLİ]
+- Talep Edilen Eylem: Veritabanı migrasyonu / dosya silme
+- Potansiyel Etki Alanı: `orders` tablosunu siler
+- Gerekli Onay: Yürütmek için "ONAY" yazın
 ```
 
 ---

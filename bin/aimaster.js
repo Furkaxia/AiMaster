@@ -28,6 +28,70 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+function detectLanguage() {
+  const args = process.argv.slice(2);
+  const langArg = args.find((a) => a.startsWith('--lang='));
+  if (langArg) {
+    const val = langArg.split('=')[1].toLowerCase();
+    return val.startsWith('tr') ? 'tr' : 'en';
+  }
+  const langIdx = args.indexOf('--lang');
+  if (langIdx !== -1 && args[langIdx + 1]) {
+    return args[langIdx + 1].toLowerCase().startsWith('tr') ? 'tr' : 'en';
+  }
+  if (args.includes('--tr')) return 'tr';
+  if (args.includes('--en')) return 'en';
+  if (process.env.AIMASTER_LANG) {
+    return process.env.AIMASTER_LANG.toLowerCase().startsWith('tr') ? 'tr' : 'en';
+  }
+  const envLocale = process.env.LANG || process.env.LC_ALL || process.env.LC_MESSAGES || '';
+  if (/^tr/i.test(envLocale)) return 'tr';
+  try {
+    const intlLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+    if (/^tr/i.test(intlLocale)) return 'tr';
+  } catch (e) {}
+  return 'en';
+}
+
+const LANG = detectLanguage();
+
+const MSG = {
+  en: {
+    selectConfig: 'Select your target configuration:',
+    completeSuite: 'Complete Enterprise Suite (All IDEs + 80 Skills + 11 Protocols)',
+    enterNumber: (max) => `\nEnter number [1-${max}] (default: 1): `,
+    askSkills: '\n? Install 80 active domain skills into ./skills/? [Y/n] (default: Y): ',
+    askProtocols: '? Install 11 Engineering Council protocols (*-ai.md)? [Y/n] (default: Y): ',
+    dryRunSummary: '[DRY-RUN] Simulation complete. No changes written to disk.',
+    dryRunHelp: 'Run again without --dry-run to apply changes.',
+    successTitle: '✔ AIMASTER initialized successfully.',
+    installSummary: '📦 INSTALLATION SUMMARY:',
+    nextSteps: 'Next Steps:',
+    step1: '1. Open your project in your AI IDE (Cursor, Windsurf, Antigravity, Copilot, etc.)',
+    step2: "2. The AI assistant will automatically read your project's rules & protocols.",
+    step3: '3. Explore specialized skills in ./skills/ or learn more at:',
+    backupCreated: (rel) => `📦 Safety Backup directory initialized -> ${rel}`,
+    initializing: (ide) => `\n\x1b[1mInitializing AIMASTER configuration for: \x1b[36m${ide}\x1b[0m\n`
+  },
+  tr: {
+    selectConfig: 'Hedef IDE ve çalışma ortamınızı seçin:',
+    completeSuite: 'Eksiksiz Kurumsal Paket (Tüm IDE\'ler + 80 Skill + 11 Protokol)',
+    enterNumber: (max) => `\nSeçiminiz [1-${max}] (varsayılan: 1): `,
+    askSkills: '\n? 80 aktif uzmanlık skill\'i ./skills/ klasörüne kurulsun mu? [E/h] (varsayılan: E): ',
+    askProtocols: '? 11 Mühendislik Konseyi protokolü (*-ai.md) kurulsun mu? [E/h] (varsayılan: E): ',
+    dryRunSummary: '[DRY-RUN] Simülasyon tamamlandı. Diske hiçbir dosya yazılmadı.',
+    dryRunHelp: 'Değişiklikleri uygulamak için komutu --dry-run olmadan tekrar çalıştırın.',
+    successTitle: '✔ AIMASTER başarıyla kuruldu.',
+    installSummary: '📦 KURULUM ÖZETİ:',
+    nextSteps: 'Sonraki Adımlar:',
+    step1: '1. Projenizi AI IDE\'nizde açın (Cursor, Windsurf, Antigravity, Copilot vb.)',
+    step2: '2. Yapay zeka asistanı kuralları ve protokolleri otomatik olarak kendi dilinizde okuyup uygulayacaktır.',
+    step3: '3. ./skills/ altındaki uzmanlık kurallarını keşfedin veya detayları inceleyin:',
+    backupCreated: (rel) => `📦 Güvenlik Yedekleme dizini oluşturuldu -> ${rel}`,
+    initializing: (ide) => `\n\x1b[1mAIMASTER yapılandırması başlatılıyor: \x1b[36m${ide}\x1b[0m\n`
+  }
+};
+
 function createSpinner(text) {
   const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
   const dots = ['●○○○○', '●●○○○', '●●●○○', '●●●●○', '●●●●●', '○●●●●', '○○●●●', '○○○●●', '○○○○●'];
@@ -219,7 +283,8 @@ function getOrCreateBackupDir() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     BACKUP_DIR = path.join(TARGET_DIR, `.aimaster-backup-${timestamp}`);
     fs.mkdirSync(BACKUP_DIR, { recursive: true });
-    console.log(`\x1b[36m📦 Safety Backup directory initialized -> ${path.relative(TARGET_DIR, BACKUP_DIR)}\x1b[0m`);
+    const t = MSG[LANG] || MSG.en;
+    console.log(`\x1b[36m${t.backupCreated(path.relative(TARGET_DIR, BACKUP_DIR))}\x1b[0m`);
   }
   return BACKUP_DIR;
 }
@@ -379,14 +444,15 @@ async function promptSelectConfiguration() {
 
   const ask = (q) => new Promise((resolve) => rl.question(q, resolve));
 
-  console.log(`\x1b[1mSelect your target configuration:\x1b[0m`);
+  const t = MSG[LANG] || MSG.en;
+  console.log(`\x1b[1m${t.selectConfig}\x1b[0m`);
   const keys = Object.keys(PRESETS);
   keys.forEach((key, index) => {
     console.log(`  \x1b[36m${index + 1})\x1b[0m ${PRESETS[key].name} (\x1b[90m${PRESETS[key].dest}\x1b[0m)`);
   });
-  console.log(`  \x1b[36m${keys.length + 1})\x1b[0m Complete Enterprise Suite (All IDEs + 80 Skills + 11 Protocols)`);
+  console.log(`  \x1b[36m${keys.length + 1})\x1b[0m ${t.completeSuite}`);
 
-  const rawAnswer = await ask(`\nEnter number [1-${keys.length + 1}] (default: 1): `);
+  const rawAnswer = await ask(t.enterNumber(keys.length + 1));
   const num = parseInt(rawAnswer.trim(), 10) || 1;
 
   let chosenIDE = 'cursor';
@@ -399,11 +465,11 @@ async function promptSelectConfiguration() {
     installProtocolsFlag = true;
   } else if (num >= 1 && num <= keys.length) {
     chosenIDE = keys[num - 1];
-    const qSkills = (await ask(`\n? Install 80 active domain skills into ./skills/? [Y/n] (default: Y): `)).trim();
-    installSkillsFlag = qSkills === '' || qSkills.toLowerCase().startsWith('y');
+    const qSkills = (await ask(t.askSkills)).trim().toLowerCase();
+    installSkillsFlag = qSkills === '' || qSkills.startsWith('y') || qSkills.startsWith('e');
 
-    const qProtocols = (await ask(`? Install 11 Engineering Council protocols (*-ai.md)? [Y/n] (default: Y): `)).trim();
-    installProtocolsFlag = qProtocols === '' || qProtocols.toLowerCase().startsWith('y');
+    const qProtocols = (await ask(t.askProtocols)).trim().toLowerCase();
+    installProtocolsFlag = qProtocols === '' || qProtocols.startsWith('y') || qProtocols.startsWith('e');
   }
 
   rl.close();
@@ -411,18 +477,19 @@ async function promptSelectConfiguration() {
 }
 
 function printManifest(dryRun) {
+  const t = MSG[LANG] || MSG.en;
   if (dryRun) {
     console.log(`
-\x1b[1m\x1b[35m[DRY-RUN] Simulation complete. No changes written to disk.\x1b[0m
-\x1b[90mRun again without --dry-run to apply changes.\x1b[0m
+\x1b[1m\x1b[35m${t.dryRunSummary}\x1b[0m
+\x1b[90m${t.dryRunHelp}\x1b[0m
 `);
     return;
   }
 
   console.log(`
-\x1b[1m\x1b[32m✔ AIMASTER initialized successfully.\x1b[0m
+\x1b[1m\x1b[32m${t.successTitle}\x1b[0m
 \x1b[90m────────────────────────────────────────────────────────────────────────\x1b[0m
-\x1b[1m📦 INSTALLATION SUMMARY:\x1b[0m`);
+\x1b[1m${t.installSummary}\x1b[0m`);
 
   installedManifest.forEach((item) => {
     const icon = item.status === 'installed' ? '\x1b[32m✔\x1b[0m' : '\x1b[33m⚠ (exists)\x1b[0m';
@@ -430,10 +497,10 @@ function printManifest(dryRun) {
   });
 
   console.log(`\x1b[90m────────────────────────────────────────────────────────────────────────\x1b[0m
-\x1b[1mNext Steps:\x1b[0m
-  1. Open your project in your AI IDE (Cursor, Windsurf, Claude, VS Code Copilot, etc.)
-  2. The AI assistant will automatically read your project's rules & protocols.
-  3. Explore specialized skills in \x1b[36m./skills/\x1b[0m or learn more at:
+\x1b[1m${t.nextSteps}\x1b[0m
+  ${t.step1}
+  ${t.step2}
+  ${t.step3}
      \x1b[36mhttps://github.com/Furkaxia/AiMaster\x1b[0m
 `);
 }
@@ -506,7 +573,8 @@ async function main() {
     if (!noProtocols && !args.includes('--with-protocols')) withProtocols = true;
   }
 
-  console.log(`\n\x1b[1mInitializing AIMASTER configuration for: \x1b[36m${selectedIDE.toUpperCase()}\x1b[0m\n`);
+  const t = MSG[LANG] || MSG.en;
+  console.log(t.initializing(selectedIDE.toUpperCase()));
 
   if (selectedIDE === 'all') {
     for (const key of Object.keys(PRESETS)) {

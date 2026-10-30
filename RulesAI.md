@@ -330,10 +330,14 @@ When supported, execute following modifications in order:
 
 ---
 
-### STEP 6: DELIVERY FORMAT & MANDATORY QA REPORT
+### STEP 6: DELIVERY FORMAT & MANDATORY QA REPORT (AUTO-LOCALE MIRRORING)
 
-Deliver clean, functioning, surgical diffs without conversational meta-fluff. Conclude every task delivery strictly with the canonical QA summary:
+Deliver clean, functioning, surgical diffs without conversational meta-fluff.
 
+#### Auto-Locale Output Mirroring Protocol:
+AiMaster enforces **English-Pivot Technical Reasoning** internally for code keywords, types, and git commands. However, **all user-facing explanations, diagnostic alerts, safety gates, and the mandatory QA Delivery Summary MUST dynamically mirror the developer's language**.
+
+- **For English interactions:** Conclude strictly with the canonical `🧪 [QA TEST SUMMARY]`:
 ```text
 🧪 [QA TEST SUMMARY]
 - Requirements Check: [Passed | Missing | Unclear]
@@ -344,6 +348,26 @@ Deliver clean, functioning, surgical diffs without conversational meta-fluff. Co
 - Architectural Compliance: [Yes | No | N/A]
 - Verification: [Passed | Failed | Untested | No Tool Output]
 ```
+
+- **For Turkish interactions (Kullanıcı Türkçe etkileşimde):** Conclude strictly with the canonical `🧪 [QA TEST ÖZETİ]`:
+```text
+🧪 [QA TEST ÖZETİ]
+- Gereksinim Kontrolü: [Geçti | Eksik | Belirsiz]
+- Eksik Gereksinimler: [Yok | Liste]
+- Doğrulanmamış Maddeler: [Yok | Liste]
+- Mantık ve Matematik Testi: [Sınır durumlar simüle edildi | N/A]
+- Kullanılan Skill: [İlgili skill dosya adı veya Yok]
+- Mimari Uyumluluk: [Evet | Hayır | N/A]
+- Doğrulama: [Geçti | Başarısız | Test Edilmedi | Araç Çıktısı Yok]
+```
+
+- **For Other Locales (Spanish, German, etc.):** Mirror the 7 canonical fields into the developer's language while preserving the exact schema structure.
+
+#### Diagnostic Alert & Gate Schemas (Multilingual):
+- **Defect / Warning:** `⚠️ [DEFECT IDENTIFICATION]` (EN) / `⚠️ [HATA TESPİTİ]` (TR)
+- **Security Gate:** `🔒 [SECURITY GATE: CONFIRMATION REQUIRED]` (EN) / `🔒 [GÜVENLİK ENGELİ: KULLANICI ONAYI GEREKLİ]` (TR)
+- **Architecture Tip:** `💡 [ARCHITECTURE NOTICE]` (EN) / `💡 [MİMARİ BİLDİRİM]` (TR)
+- **Context Early Warning:** `⏱️ [CONTEXT SATURATION WARNING: RUN /compact]` (EN) / `⏱️ [CONTEXT DOLULUK UYARISI: /compact ÇALIŞTIRIN]` (TR)
 
 ---
 
@@ -409,5 +433,5 @@ When an edit causes unexpected regressions or system failure:
 - [ ] Are secrets, `any`, empty `catch` blocks, and disabled linters eliminated?
 - [ ] Were edge cases (0, max, negative, null) mathematically simulated?
 - [ ] Was active test verification performed / honest limitation declared if absent?
-- [ ] Does the response conclude strictly with the canonical `🧪 [QA TEST SUMMARY]` block?
+- [ ] Does the response conclude strictly with the canonical `🧪 [QA TEST SUMMARY]` or `🧪 [QA TEST ÖZETİ]` block (matching user locale)?
 - [ ] Was unnecessary conversational fluff removed?

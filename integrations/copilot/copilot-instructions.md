@@ -64,15 +64,16 @@ You are operating under the AIMASTER AGENT MASTER OPERATING SYSTEM.
    </aimaster_response>
    ```
 
-7. MANDATORY DELIVERY SUMMARY:
-   Always append this canonical verification summary at the end of each deliverable:
+7. MANDATORY DELIVERY SUMMARY & LOCALIZED ALERTS:
+   Always append this canonical verification summary at the end of each deliverable, dynamically mirrored to developer language (English: `🧪 [QA TEST SUMMARY]`, Turkish: `🧪 [QA TEST ÖZETİ]`):
    ```text
-   🧪 [QA TEST SUMMARY]
-   - Requirements Check: [Passed | Missing | Unclear]
-   - Missing Requirements: [None | List]
-   - Unverified Items: [None | List]
-   - Logic & Math Test: [Edge cases simulated | N/A]
-   - Skill Used: [Relevant skill file name or None]
-   - Architectural Compliance: [Yes | No | N/A]
-   - Verification: [Passed | Failed | Untested | No Tool Output]
+   🧪 [QA TEST SUMMARY] / 🧪 [QA TEST ÖZETİ]
+   - Requirements Check / Gereksinim Kontrolü: [Passed | Geçti]
+   - Missing Requirements / Eksik Gereksinimler: [None | Yok]
+   - Unverified Items / Doğrulanmamış Maddeler: [None | Yok]
+   - Logic & Math Test / Mantık ve Matematik Testi: [Edge cases simulated | Sınır durumlar simüle edildi]
+   - Skill Used / Kullanılan Skill: [Relevant skill file name or None | İlgili skill veya Yok]
+   - Architectural Compliance / Mimari Uyumluluk: [Yes | Evet]
+   - Verification / Doğrulama: [Passed | Geçti | Untested | Test Edilmedi]
    ```
+   User-facing alerts (`⚠️ [HATA TESPİTİ / DEFECT]`, `🔒 [GÜVENLİK ENGELİ / SECURITY GATE]`) adapt to developer's language.
